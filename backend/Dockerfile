@@ -1,6 +1,6 @@
 ### Build Stage###
 # Get Gradle for JDK17 and run it on Alpine Linux
-FROM gradle:8-jdk17-alpine as build
+FROM gradle:8-jdk17 as build
 
 # Environment
 WORKDIR /app
@@ -14,7 +14,7 @@ COPY src src
 RUN ./gradlew bootJar --no-daemon
 
 # Production stage
-FROM eclipse-temurin:17-jre-alpine
+FROM openjdk:17
 
 # Production environment
 WORKDIR /app
