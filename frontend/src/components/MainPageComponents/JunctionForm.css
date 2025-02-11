@@ -49,7 +49,7 @@
 .junction-form {
     height: 100%;
     margin: 0; /* Remove default margins */
-    background-color: rgba(154, 191, 225, 0.95); /* Slightly transparent white */
+    background-color: rgba(255, 255, 255, 0.95); /* Slightly transparent white */
     border-radius: 8px;
 }
 
