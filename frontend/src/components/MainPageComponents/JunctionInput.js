@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './JunctionInput.css'
 
 // The component now accepts props for the direction names
 
@@ -44,9 +45,9 @@ function JunctionInput({
     };
 
     return (
-        <form className="p-4 max-w-md mx-auto border rounded shadow-sm mb-6">
-            <div className="mb-6">
-                <h3 className="font-medium mb-2">
+        <form className="junction-form">
+            <div className="incoming-section">
+                <h3 className="direction-heading">
                     Traffic {incomingDirection}
                 </h3>
                 <input
@@ -54,30 +55,28 @@ function JunctionInput({
                     value={totalIncoming}
                     onChange={(e) => handleTotalChange(e.target.value)}
                     placeholder={`Total vehicles ${incomingDirection}`}
-                    className="w-full border rounded px-3 py-2"
+                    className="input-field"
                 />
             </div>
 
-            <div className="space-y-4">
-                {/* Map through outgoing directions to create inputs */}
+            <div className="outgoing-section">
                 {[
                     { key: 'direction1', name: outgoingDirection1 },
                     { key: 'direction2', name: outgoingDirection2 },
                     { key: 'direction3', name: outgoingDirection3 }
                 ].map(({ key, name }) => (
-                    <div key={key}>
-                        <label className="block mb-2">
-                            <span className="font-medium">Exiting {name}:</span>
+                    <div key={key} className="direction-input">
+                        <label className="direction-label">
+                            <span className="label-text">Exiting {name}:</span>
                         </label>
                         <input
                             type="text"
                             value={outgoingFlows[key]}
                             onChange={(e) => handleOutgoingChange(key, e.target.value)}
-                            // placeholder={`Number of vehicles to ${name}`}
                             disabled={!totalIncoming}
-                            className={`w-full border rounded px-3 py-2 ${
-                                !totalIncoming ? 'bg-gray-100' :
-                                !isValid ? 'border-red-300' : 'border-green-300'
+                            className={`input-field ${
+                                !totalIncoming ? 'input-disabled' :
+                                !isValid ? 'input-invalid' : 'input-valid'
                             }`}
                         />
                     </div>
@@ -85,10 +84,10 @@ function JunctionInput({
             </div>
 
             {totalIncoming && (
-                <div className="mt-4 text-sm">
+                <div className="validation-message">
                     {isValid 
-                        ? <span className="text-green-600">Valid distribution of vehicles</span>
-                        : <span className="text-red-600">
+                        ? <span className="valid-text">Valid distribution of vehicles</span>
+                        : <span className="invalid-text">
                             Total vehicles from {incomingDirection} ({totalIncoming}) must equal sum of outgoing vehicles
                           </span>
                     }
@@ -96,6 +95,7 @@ function JunctionInput({
             )}
         </form>
     );
+
 }
 
 export default JunctionInput;

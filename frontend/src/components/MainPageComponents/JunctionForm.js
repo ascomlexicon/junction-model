@@ -1,44 +1,50 @@
 import React from 'react';
 import JunctionInput from './JunctionInput';
+import './JunctionForm.css';
 
 function JunctionForm(){
-   return(
-    <div className="container mx-auto p-4">
-        <h1 className="text-2xl font-bold mb-6">Junction Traffic Flow Model</h1>
-        
-        {/* Form for vehicles coming from North */}
-        <JunctionInput
-            incomingDirection="NorthBound"
-            outgoingDirection1="South"
-            outgoingDirection2="East"
-            outgoingDirection3="West"
-        />
-
-        {/* Form for vehicles coming from South */}
-        <JunctionInput
-            incomingDirection="SouthBound"
-            outgoingDirection1="North"
-            outgoingDirection2="East"
-            outgoingDirection3="West"
-        />
-
-        {/* Form for vehicles coming from East */}
-        <JunctionInput
-            incomingDirection="EastBound"
-            outgoingDirection1="Extiing North"
-            outgoingDirection2="South"
-            outgoingDirection3="West"
-        />
-
-        {/* Form for vehicles coming from West */}
-        <JunctionInput
-            incomingDirection="WestBound"
-            outgoingDirection1="North"
-            outgoingDirection2="South"
-            outgoingDirection3="East"
-        />
-    </div>
-   )
-}
-
-export default JunctionForm;
+    return(
+     <div className="junction-forms-container">
+         <h1 className="junction-title">Junction Traffic Flow Model</h1>
+         
+         <div className="forms-grid">
+             {/* First row */}
+             <div className="form-cell">
+                 <JunctionInput
+                     incomingDirection="NorthBound"
+                     outgoingDirection1="South"
+                     outgoingDirection2="East"
+                     outgoingDirection3="West"
+                 />
+             </div>
+             <div className="form-cell">
+                 <JunctionInput
+                     incomingDirection="SouthBound"
+                     outgoingDirection1="North"
+                     outgoingDirection2="East"
+                     outgoingDirection3="West"
+                 />
+             </div>
+             
+             {/* Second row */}
+             <div className="form-cell">
+                 <JunctionInput
+                     incomingDirection="EastBound"
+                     outgoingDirection1="Exiting North"
+                     outgoingDirection2="South"
+                     outgoingDirection3="West"
+                 />
+             </div>
+             <div className="form-cell">
+                 <JunctionInput
+                     incomingDirection="WestBound"
+                     outgoingDirection1="North"
+                     outgoingDirection2="South"
+                     outgoingDirection3="East"
+                 />
+             </div>
+         </div>
+     </div>
+    );
+ }
+ export default JunctionForm;
