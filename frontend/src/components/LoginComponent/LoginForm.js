@@ -12,7 +12,7 @@ function LoginForm() {
             <div className={styles.Form}>
                 <form>
                     <div className={styles.input}>
-                        <label>Username:</label>
+                        <label>Email:</label>
                         <input type="text" name="Email" required/>
                     </div>
                     <div className={styles.input}>

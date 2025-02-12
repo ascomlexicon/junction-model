@@ -1,15 +1,11 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import JunctionRankings from "../components/RankingsPageComponents/JunctionRankings";
 
-function Tester(){
+function RankingsPage(){
     return(
-        <div>
-        <h1>Another test</h1>
-        <button> <Link to ="/MainPage"> Main </Link></button>
-        </div>
-
+        <JunctionRankings/>
     )
 }
 
 
-export default Tester;
+export default RankingsPage;
