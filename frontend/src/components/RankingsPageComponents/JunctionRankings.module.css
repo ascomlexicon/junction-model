@@ -1,0 +1,97 @@
+.container {
+    display: flex;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+  }
+  
+  .leftPanel {
+    width: 400px;
+    background-color: #001F3F;
+    padding: 20px;
+    color: white;
+  }
+  
+  .rightPanel {
+    flex: 1;
+    background-color: #2C0052;
+    padding: 20px;
+    color: white;
+  }
+  
+  .title {
+    font-size: 24px;
+    margin-bottom: 5px;
+  }
+  
+  .subtitle {
+    font-size: 14px;
+    color: #ccc;
+    margin-bottom: 20px;
+  }
+  
+  .junctionList {
+    margin-bottom: 20px;
+  }
+  
+  .junctionRow {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+  }
+  
+  .highlighted {
+    background-color: #FFD700;
+    color: black;
+  }
+  
+  .score {
+    font-weight: bold;
+  }
+  
+  .backButton {
+    width: 100%;
+    padding: 15px;
+    background-color: #DC3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .criteriaTable, .trafficFlow {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+  }
+  
+  .criteriaTable th,
+  .criteriaTable td,
+  .trafficFlow th,
+  .trafficFlow td {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .criteriaTable th,
+  .trafficFlow th {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .weightings {
+    margin: 20px 0;
+  }
+  
+  .formulaBox {
+    background-color: white;
+    height: 40px;
+    border-radius: 4px;
+    margin: 10px 0;
+  }
+  
+  .overallScore {
+    font-size: 18px;
+    margin: 20px 0;
+  }
