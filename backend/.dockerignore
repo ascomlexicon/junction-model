@@ -1,0 +1,12 @@
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+*.log
+.env
+HELP.md
+README.md
+.git/
+.gitignore
+Dockerfile
+.dockerignore
+
