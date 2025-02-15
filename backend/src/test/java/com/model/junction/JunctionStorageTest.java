@@ -13,22 +13,22 @@ public class JunctionStorageTest {
   @BeforeEach
   public void testInit() {
     store = new JunctionStorage();
-    store.storeJunction("Junction 1", new Junction());
-    store.storeJunction("Junction 2", new Junction());
-    store.storeJunction("Junction 3", new Junction());
+    store.storeJunction(new Junction("Junction 1"));
+    store.storeJunction(new Junction("Junction 2"));
+    store.storeJunction(new Junction("Junction 3"));
   }
   
   @Test
   @DisplayName("Reject junctions with duplicate names.")
-  public void rejectJunctionsWithDuplicateNames() {
-    boolean didStore = store.storeJunction("Junction 1", new Junction());
+  public void rejectDuplicateJunctions() {
+    boolean didStore = store.storeJunction(new Junction("Junction 1"));
 
     Assertions.assertEquals(false, didStore, "The Junction storage should reject the request.");
   }
   
   @Test
-  @DisplayName("Give a junction a new name and remove its old one.")
-  public void replaceJunctionName() {
+  @DisplayName("Ensure that the store is accurate after a Junction name change.")
+  public void updateJunctionName() {
     store.renameJunction("Junction 1", "Junction 4");
     Set<String> names = store.getJunctionNames();
 
