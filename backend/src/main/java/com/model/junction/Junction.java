@@ -1,7 +1,8 @@
 package com.model.junction;
 
+import java.util.Objects;
 
-public class Junction implements Comparable<Junction> {
+public class Junction {
   // Attributes
   private String name;
 
@@ -15,12 +16,25 @@ public class Junction implements Comparable<Junction> {
     return name;
   }
 
-   public void setName(String name) {
+  public void setName(String name) {
     this.name = name;
   } 
   
-  // Implementations
-  public int compareTo(Junction other) {
-    return this.name.compareTo(other.getName()); 
+  // Comparison Methods
+  @Override
+  public boolean equals(Object other){
+    if (other == this) {
+      return true;
+    }
+    if (other == null) {
+      return false;
+    }
+    if (getClass() != other.getClass()) {
+      return false;
+    }
+    
+    Junction junction = (Junction) other;
+
+    return Objects.equals(getName(), junction.getName());
   }
 }
