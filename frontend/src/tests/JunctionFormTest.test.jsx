@@ -1,6 +1,5 @@
 import { render, screen } from '@testing-library/react';
 import JunctionForm from '../components/MainPageComponents/JunctionForm';
-import * as test from "node:test";
 
 test("Junction Form renders successfully", () => {
     render(<JunctionForm/>);
