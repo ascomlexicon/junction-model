@@ -4,42 +4,45 @@ import java.util.Set;
 import java.util.HashMap;
 
 public class JunctionStorage {
-  private HashMap<String, Junction> nameJunctionHashMap;
-  
+  // Attributes
+  HashMap<String, Junction> junctions;
+
+  // Constructor
   public JunctionStorage() {
-    this.nameJunctionHashMap = new HashMap<String, Junction>();
+    this.junctions = new HashMap<String, Junction>();
   }
 
   // Storage Updates
-  public boolean storeJunction(String name, Junction junction) {
-    if (this.nameJunctionHashMap.get(name) != null) {
+  public boolean storeJunction(Junction junction) {
+    if (junctions.containsKey(junction.getName())) {
       return false;
     }
-    this.nameJunctionHashMap.put(name, junction);
+    
+    junctions.put(junction.getName(), junction);
     return true;
   }
 
   public void renameJunction(String oldName, String newName) {
-    Junction currentJunction = this.nameJunctionHashMap.get(oldName);
-    if (currentJunction == null) {
+    if (!junctions.containsKey(oldName)) {
       return ;
     }
-    
-    this.storeJunction(newName, currentJunction);
-    this.nameJunctionHashMap.remove(oldName);
+
+    Junction junction = junctions.remove(oldName);
+    junction.setName(newName);
+    storeJunction(junction);
   }
   
   // Storage Retrieval
   public Junction getJunctionData(String name) {
-    return this.nameJunctionHashMap.get(name);
+    return junctions.get(name);
   }
 
   public Set<String> getJunctionNames() {
-    return this.nameJunctionHashMap.keySet();
+    return junctions.keySet();
   } 
 
   // Storage Information
   public boolean isEmpty() {
-    return this.nameJunctionHashMap.isEmpty();
+    return junctions.isEmpty();
   }
 }
