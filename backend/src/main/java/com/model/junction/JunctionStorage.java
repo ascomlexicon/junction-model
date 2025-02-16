@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 public class JunctionStorage {
   // Attributes
-  HashMap<String, Junction> junctions;
+  private HashMap<String, Junction> junctions;
 
   // Constructor
   public JunctionStorage() {
