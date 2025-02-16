@@ -12,12 +12,14 @@ function LoginForm() {
             <div className={styles.Form}>
                 <form>
                     <div className={styles.input}>
-                        <label>Email:</label>
-                        <input type="text" name="Email" required/>
+                        {/*Add relationship between label and form element with htmlFor*/}
+                        <label htmlFor="email">Email:</label>
+                        <input id="email" type="text" name="Email" required/>
                     </div>
                     <div className={styles.input}>
-                        <label>Password:</label>
-                        <input type="password" name="Password" required/>
+                        {/*Add relationship between label and form element with htmlFor*/}
+                        <label htmlFor="password">Password:</label>
+                        <input id="password" type="password" name="Password" required/>
                     </div>
                     <div className={styles.buttonContainer}>
                         <button>
