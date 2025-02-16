@@ -21,4 +21,24 @@ describe(LoginForm, () => {
         expect(screen.getByLabelText(/password:/i)).toBeInTheDocument();
         expect(screen.getByRole('button', { name: /login/i })).toBeInTheDocument();
     });
+
+    // TODO: Add more tests
+    // 1. Test if login button is disabled when email and password are empty
+    // 2. Test if login button is enabled when email and password are filled
+    // 3. Test if login button enabled when there is a correct email and password
+    // 4. Test if login button disabled when there is a incorrect email and password
+
+    test('allows email and password to be entered', () => {
+        render(<LoginFormWithRouter />);
+        
+        const emailInput = screen.getByLabelText(/email:/i);
+        const passwordInput = screen.getByLabelText(/password:/i);
+        
+        fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+        fireEvent.change(passwordInput, { target: { value: 'password123' } });
+        
+        expect(emailInput.value).toBe('test@example.com');
+        expect(passwordInput.value).toBe('password123');
+    });
+
 });
