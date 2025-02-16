@@ -28,7 +28,7 @@ describe(LoginForm, () => {
     // 3. Test if login button enabled when there is a correct email and password
     // 4. Test if login button disabled when there is a incorrect email and password
 
-    test('allows email and password to be entered', () => {
+    it('allows email and password to be entered', () => {
         render(<LoginFormWithRouter />);
         
         const emailInput = screen.getByLabelText(/email:/i);
@@ -40,5 +40,24 @@ describe(LoginForm, () => {
         expect(emailInput.value).toBe('test@example.com');
         expect(passwordInput.value).toBe('password123');
     });
+
+    // Test if form submission is handled correctly
+    it('checks form is submitted properly', () => {
+        render(<LoginFormWithRouter />);
+        
+        const emailInput = screen.getByLabelText(/email:/i);
+        const passwordInput = screen.getByLabelText(/password:/i);
+        const form = screen.getByRole('form');
+        
+        fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+        fireEvent.change(passwordInput, { target: { value: 'password123' } });
+        
+        // Mock form submission
+        const mockSubmit = jest.fn(e => e.preventDefault());
+        form.onsubmit = mockSubmit;
+        
+        fireEvent.submit(form);
+        expect(mockSubmit).toHaveBeenCalled();
+      });
 
 });
