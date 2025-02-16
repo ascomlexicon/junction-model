@@ -1,16 +1,24 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styles from './LoginForm.module.css';
 
-
 function LoginForm() {
+    const navigate = useNavigate();
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // TODO: For now this just ensures form is not-empty
+            // More formal validation can be added later
+        navigate('/MainPage');
+    };
+
     return (
         <div className={styles.container}>
             <div className={styles.Title}>
                 <h1>Junction Simulator</h1>
             </div>
             <div className={styles.Form}>
-                <form>
+                <form onSubmit={handleSubmit}>
                     <div className={styles.input}>
                         {/*Add relationship between label and form element with htmlFor*/}
                         <label htmlFor="email">Email:</label>
@@ -22,9 +30,7 @@ function LoginForm() {
                         <input id="password" type="password" name="Password" required/>
                     </div>
                     <div className={styles.buttonContainer}>
-                        <button>
-                            <Link to="/MainPage">Login</Link>
-                        </button>
+                        <button type="submit">Login</button>
                     </div>
                 </form>
             </div>
