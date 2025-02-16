@@ -22,14 +22,16 @@ public class JunctionStorage {
     return true;
   }
 
-  public void renameJunction(String oldName, String newName) {
-    if (!junctions.containsKey(oldName)) {
-      return ;
+  public boolean renameJunction(String oldName, String newName) {
+    if (!junctions.containsKey(oldName) || junctions.containsKey(newName)) {
+      return false;
     }
 
     Junction junction = junctions.remove(oldName);
     junction.setName(newName);
     storeJunction(junction);
+    
+    return true;
   }
   
   // Storage Retrieval
