@@ -18,7 +18,7 @@ function LoginForm() {
                 <h1>Junction Simulator</h1>
             </div>
             <div className={styles.Form}>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} role="form">
                     <div className={styles.input}>
                         {/*Add relationship between label and form element with htmlFor*/}
                         <label htmlFor="email">Email:</label>
