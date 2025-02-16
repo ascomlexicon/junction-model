@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 
-import java.util.Set;
-
 public class JunctionStorageTest {
   private JunctionStorage store;
 
@@ -27,12 +25,23 @@ public class JunctionStorageTest {
   }
   
   @Test
-  @DisplayName("Ensure that the store is accurate after a Junction name change.")
-  public void updateJunctionName() {
-    store.renameJunction("Junction 1", "Junction 4");
-    Set<String> names = store.getJunctionNames();
+  @DisplayName("Rename a junction to something unique.")
+  public void renameJunctionNameValid() {
+    boolean didChange = store.renameJunction("Junction 1", "Junction 4");
+    Junction junction1 = store.getJunctionData("Junction 1");
+    Junction junction4 = store.getJunctionData("Junction 4");
 
-    Assertions.assertEquals(names.contains("Junction 1"), false, "\"Junction 1\" should not be in the database.");
-    Assertions.assertEquals(names.contains("Junction 4"), true, "\"Junction 4\" should be in the database.");
+    Assertions.assertEquals(didChange, true, "Junction 1's name should now be Junction 4");
+    Assertions.assertNull(junction1, "\"Junction 1\" should not be in the store.");
+    Assertions.assertNotNull(junction4, "\"Junction 4\" should be in the store.");
+  }
+
+  @Test
+  @DisplayName("Rename a junction to a non-unique name.")
+  public void renameJunctionToDuplicateName() {
+    boolean didChange = store.renameJunction("Junction 1", "Junction 3");
+
+    Assertions.assertEquals(didChange, false, "No change should occur.");
+    Assertions.assertNotNull(store.getJunctionData("Junction 1"), "Junction 1 should still remain in the store.");
   }
 }
