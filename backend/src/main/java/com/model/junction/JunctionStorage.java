@@ -4,7 +4,8 @@ import java.util.Set;
 import java.util.HashMap;
 
 public class JunctionStorage {
-<<<<<<< HEAD
+
+
   // Attributes
   private HashMap<String, Junction> junctions;
 
@@ -33,7 +34,6 @@ public class JunctionStorage {
     storeJunction(junction);
     
     return true;
-=======
   private HashMap<String, Junction> nameJunctionHashMap;
   
   public JunctionStorage() {
@@ -57,32 +57,25 @@ public class JunctionStorage {
     
     this.storeJunction(newName, currentJunction);
     this.nameJunctionHashMap.remove(oldName);
->>>>>>> b38801e (Create a basic system to store a junctions)
   }
   
   // Storage Retrieval
   public Junction getJunctionData(String name) {
-<<<<<<< HEAD
     return junctions.get(name);
   }
 
   public Set<String> getJunctionNames() {
     return junctions.keySet();
-=======
     return this.nameJunctionHashMap.get(name);
   }
 
   public Set<String> getJunctionNames() {
     return this.nameJunctionHashMap.keySet();
->>>>>>> b38801e (Create a basic system to store a junctions)
   } 
 
   // Storage Information
   public boolean isEmpty() {
-<<<<<<< HEAD
-    return junctions.isEmpty();
-=======
     return this.nameJunctionHashMap.isEmpty();
->>>>>>> b38801e (Create a basic system to store a junctions)
+    return junctions.isEmpty();
   }
 }

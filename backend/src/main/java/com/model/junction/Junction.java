@@ -1,6 +1,5 @@
 package com.model.junction;
 
-<<<<<<< HEAD
 import java.util.Objects;
 
 public class Junction {
@@ -38,8 +37,4 @@ public class Junction {
 
     return Objects.equals(getName(), junction.getName());
   }
-=======
-public class Junction {
-  
->>>>>>> b38801e (Create a basic system to store a junctions)
 }
