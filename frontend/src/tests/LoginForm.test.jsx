@@ -11,15 +11,15 @@ const LoginFormWithRouter = () => (
 
 describe(LoginForm, () => {
   it("login form renders successfully", () => {
-      render(<LoginFormWithRouter />);
+    render(<LoginFormWithRouter />);
 
-      // Check if title is present
-      expect(screen.getByText('Junction Simulator')).toBeInTheDocument();
-      
-      // Check if form elements are present
-      expect(screen.getByLabelText(/email:/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/password:/i)).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /login/i })).toBeInTheDocument();
+    // Check if title is present
+    expect(screen.getByText('Junction Simulator')).toBeInTheDocument();
+    
+    // Check if form elements are present
+    expect(screen.getByLabelText(/email:/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/password:/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /login/i })).toBeInTheDocument();
   });
 
   // TODO: Add more tests
@@ -29,49 +29,49 @@ describe(LoginForm, () => {
   // 4. Test if login button disabled when there is a incorrect email and password
 
   it('allows email and password to be entered', () => {
-      render(<LoginFormWithRouter />);
-      
-      const emailInput = screen.getByLabelText(/email:/i);
-      const passwordInput = screen.getByLabelText(/password:/i);
-      
-      fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
-      fireEvent.change(passwordInput, { target: { value: 'password123' } });
-      
-      expect(emailInput.value).toBe('test@example.com');
-      expect(passwordInput.value).toBe('password123');
+    render(<LoginFormWithRouter />);
+    
+    const emailInput = screen.getByLabelText(/email:/i);
+    const passwordInput = screen.getByLabelText(/password:/i);
+    
+    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+    fireEvent.change(passwordInput, { target: { value: 'password123' } });
+    
+    expect(emailInput.value).toBe('test@example.com');
+    expect(passwordInput.value).toBe('password123');
   });
 
   // Test if form submission is handled correctly
   it('checks form is submitted properly', () => {
-      render(<LoginFormWithRouter />);
-      
-      const emailInput = screen.getByLabelText(/email:/i);
-      const passwordInput = screen.getByLabelText(/password:/i);
-      const form = screen.getByRole('form');
-      
-      fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
-      fireEvent.change(passwordInput, { target: { value: 'password123' } });
-      
-      // Mock form submission
-      const mockSubmit = jest.fn(e => e.preventDefault());
-      form.onsubmit = mockSubmit;
-      
-      fireEvent.submit(form);
-      expect(mockSubmit).toHaveBeenCalled();
-    });
-
-  it('validates required fields', () => {
-      render(<LoginFormWithRouter />);
-      
-      const emailInput = screen.getByLabelText(/email:/i);
-      const passwordInput = screen.getByLabelText(/password:/i);
-      
-      // Check if required attribute is present for both inputs
-      expect(emailInput).toHaveAttribute('required');
-      expect(passwordInput).toHaveAttribute('required');
+    render(<LoginFormWithRouter />);
+    
+    const emailInput = screen.getByLabelText(/email:/i);
+    const passwordInput = screen.getByLabelText(/password:/i);
+    const form = screen.getByRole('form');
+    
+    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+    fireEvent.change(passwordInput, { target: { value: 'password123' } });
+    
+    // Mock form submission
+    const mockSubmit = jest.fn(e => e.preventDefault());
+    form.onsubmit = mockSubmit;
+    
+    fireEvent.submit(form);
+    expect(mockSubmit).toHaveBeenCalled();
   });
 
-  test('ensures password field masks input', () => {
+  it('validates required fields', () => {
+    render(<LoginFormWithRouter />);
+    
+    const emailInput = screen.getByLabelText(/email:/i);
+    const passwordInput = screen.getByLabelText(/password:/i);
+    
+    // Check if required attribute is present for both inputs
+    expect(emailInput).toHaveAttribute('required');
+    expect(passwordInput).toHaveAttribute('required');
+  });
+
+  it('ensures password field masks input', () => {
     render(<LoginFormWithRouter />);
     
     const passwordInput = screen.getByLabelText(/password:/i);
