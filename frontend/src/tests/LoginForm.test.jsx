@@ -19,6 +19,8 @@ describe(LoginForm, () => {
   });
 
   it("login form renders successfully", () => {
+    render(<LoginFormWithRouter />);
+
     // Check if title is present
     expect(screen.getByText('Junction Simulator')).toBeInTheDocument();
     
@@ -33,7 +35,9 @@ describe(LoginForm, () => {
   // 3. Test if login button enabled when there is a correct email and password
   // 4. Test if login button disabled when there is a incorrect email and password
 
-  it('allows email and password to be entered', () => {    
+  it('allows email and password to be entered', () => {
+    render(<LoginFormWithRouter />);
+    
     const emailInput = screen.getByLabelText(/email:/i);
     const passwordInput = screen.getByLabelText(/password:/i);
     
@@ -45,7 +49,9 @@ describe(LoginForm, () => {
   });
 
   // Test if form submission is handled correctly
-  it('checks form is submitted properly', () => {    
+  it('checks form is submitted properly', () => {
+    render(<LoginFormWithRouter />);
+    
     const emailInput = screen.getByLabelText(/email:/i);
     const passwordInput = screen.getByLabelText(/password:/i);
     const form = screen.getByRole('form');
@@ -61,7 +67,9 @@ describe(LoginForm, () => {
     expect(mockSubmit).toHaveBeenCalled();
   });
 
-  it('validates required fields', () => {    
+  it('validates required fields', () => {
+    render(<LoginFormWithRouter />);
+    
     const emailInput = screen.getByLabelText(/email:/i);
     const passwordInput = screen.getByLabelText(/password:/i);
     
@@ -71,6 +79,8 @@ describe(LoginForm, () => {
   });
 
   it('ensures password field masks input', () => {
+    render(<LoginFormWithRouter />);
+    
     const passwordInput = screen.getByLabelText(/password:/i);
 
     // Checks the type of the password input field
