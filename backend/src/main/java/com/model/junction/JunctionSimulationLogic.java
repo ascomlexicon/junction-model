@@ -13,7 +13,11 @@ import java.util.Queue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+<<<<<<< HEAD
 /*
+=======
+
+>>>>>>> origin/feature/simulation-logic
 public class JunctionSimulationLogic {
     public static void main(String[] args) {
         int northboundVph = 450;
