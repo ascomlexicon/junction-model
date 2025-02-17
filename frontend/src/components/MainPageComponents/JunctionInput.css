@@ -1,0 +1,79 @@
+.junction-form {
+    padding: 20px;
+    max-width: 450px;
+    margin: 0 auto 24px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
+}
+
+.incoming-section {
+    margin-bottom: 24px;
+}
+
+.direction-heading {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.input-field {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    transition: border-color 0.2s ease;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+}
+
+.outgoing-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.direction-input {
+    margin-bottom: 16px;
+}
+
+.direction-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #333;
+}
+
+.input-disabled {
+    background-color: #f7f7f7;
+    cursor: not-allowed;
+}
+
+.input-invalid {
+    border-color: #b71717;
+}
+
+.input-valid {
+    border-color: #68d391;
+}
+
+.validation-message {
+    margin-top: 16px;
+    font-size: 14px;
+}
+
+.valid-text {
+    color: #38a169;
+}
+
+.invalid-text {
+    color: #c60808;
+}
