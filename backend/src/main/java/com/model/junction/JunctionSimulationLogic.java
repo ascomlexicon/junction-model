@@ -9,6 +9,53 @@
 
 // For now this simulation logic will cover a single junction quarter with 5 lanes. Extending it should be easy enough by just doing 4 quarters instead of 1
 
+// TODO: write a document containing inputs, outputs and tests we want now and features we are going to add.
+
+/* 
+CONFIGURABLE PARAMETER NOTE: Number of Lanes --------------------------------------------------------------------------------------------------------
+ 
+For the number of lanes, we will have to change the for loops because currently we are assuming there's a forwards lane, right turning lane and
+a left turn/forwards lane which means the configurable parameter has been set to 3. With 5 lanes there will be 3 forwards lanes, 1 left/forwards lane
+and then 1 right turn lane. Maybe we could change the right turn lane so that it is also a forwards lane.
+*/
+
+/* 
+CONFIGURABLE PARAMETER NOTE: Left Turn Lane ----------------------------------------------------------------------------------------------------------
+
+We might have to change the threading here a bit and call a new thread which is solely for cars in the left turn lane exiting the junction and this
+will be called when the opposing lane has a green light. 
+*/
+
+/* 
+CONFIGURABLE PARAMETER NOTE: Bus/Cycle Lane ----------------------------------------------------------------------------------------------------------
+
+DISCUSS WITH TEAM - CURRENTLY UNSURE OF HOW IT WILL WORK
+
+*/
+
+/* 
+CONFIGURABLE PARAMETER NOTE: Pedestrian Crossing ------------------------------------------------------------------------------------------------------
+
+See the TODO below on changing the car outflow into a runnable
+
+*/
+
+/* 
+CONFIGURABLE PARAMETER NOTE: Prioritised traffic flow -------------------------------------------------------------------------------------------------
+
+From my point of view (and having talked with a friend on this), this can mean two things: 
+1) This is just the order in which the traffic lights will be on so we can order it so that it is N, E, S, W or if we want to prioritise traffic 
+coming from the west then we could say W, N, E, S where W (west) will be the first traffic light to turn green and then north then east and finally south
+
+*/
+
+/* 
+TODO: To further extend this solution, I believe that turning the cars exiting thread into a runnable so we can adjust the time between calls to take
+into account the fact that we will have to implement a pedestrian crossing where there will not be a constant trafic light green time. So it won't be every
+minute for example it will be maybe once a minute and then with the crossing, add another minute to it so that the next call takes place in two.
+
+*/
+
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
