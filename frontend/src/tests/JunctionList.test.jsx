@@ -55,4 +55,30 @@ describe(JunctionList, () => {
     const junctionList = container.getElementsByClassName('junctionList')[0];
     expect(junctionList.children.length).toBe(0);
   });
+
+  it('renders the correct number of junctions', () => {
+    render(<JunctionList junctions={mockJunctions} onSelect={() => {}} />);
+    expect(screen.getAllByText(/Junction/)).toHaveLength(mockJunctions.length);
+  });
+
+  /* More important when getting from backend, as junctions
+  with higher scores need to be at top of leaderboard */
+  it('renders junctions in the correct order', () => {
+    render(<JunctionList junctions={mockJunctions} onSelect={() => {}} />);
+    const junctionElements = screen.getAllByText(/Junction/);
+    expect(junctionElements[0]).toHaveTextContent('Junction A');
+    expect(junctionElements[1]).toHaveTextContent('Junction B');
+    expect(junctionElements[2]).toHaveTextContent('Junction C');
+  });
+
+  // TODO: Other test ideas:
+    // Check for duplicate junction names
+
+  it('does not crash when clicking a junction if onSelect is not provided', () => {
+    render(<JunctionList junctions={mockJunctions} />); // No onSelect prop
+  
+    expect(() => {
+      fireEvent.click(screen.getByText('Junction A')); 
+    }).not.toThrow(); // Should not cause an error
+  });
 });
