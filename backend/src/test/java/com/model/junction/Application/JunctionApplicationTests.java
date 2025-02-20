@@ -1,4 +1,4 @@
-package com.model.junction;
+package com.model.junction.Application;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
