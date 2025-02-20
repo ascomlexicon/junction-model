@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import JunctionInput from './JunctionInput';
 import './JunctionForm.css';
+
+// Mock data, should not be used but was a placeholder to begin with
 import { mockJunctionData } from '../../mockJunctionData';
 
 function JunctionForm(){
@@ -17,6 +19,7 @@ function JunctionForm(){
   }, []);
 
   const submitVPHData = async () => {
+    // Data to be sent to the API (test run; real data will be from the form)
     const myData = {
       inNorth: 200,
       northToSouth: 100,
@@ -46,7 +49,7 @@ function JunctionForm(){
     });
 
     const data = await res.json();
-    console.log(data);
+    console.log(data); // Should return the data that was sent
   }
 
   return(
