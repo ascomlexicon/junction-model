@@ -1,7 +1,8 @@
 import React from 'react';
 import styles from './JunctionRankings.module.css';
 
-const JunctionList = ({ junctions, onSelect }) => {
+const JunctionList = ({ junctions, onSelect = () => {} }) => {
+    // TODO: Not sure why this is here @Josh
     const handleSelect =()=>{
         
     }
