@@ -9,6 +9,8 @@ function MainPage(){
         <div className="container">
             <div className="junction-visual">
                 {/* Junction graphic */}
+                {/* TODO: For this branch, this will contain the JSON that was sent to the backend, 
+                ensuring that data can be sent correctly */}
             </div>
             <div className="input-form">
                 <JunctionForm/>
