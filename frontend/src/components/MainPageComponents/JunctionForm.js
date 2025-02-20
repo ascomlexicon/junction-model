@@ -8,4 +8,5 @@ function JunctionForm(){
      </div>
     );
  }
- export default JunctionForm;
+
+export default JunctionForm;

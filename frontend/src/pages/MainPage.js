@@ -124,8 +124,6 @@ function MainPage() {
             <h1 className='main-title'>Junction Simulator</h1>
             <div className="junction-visual">
                 {/* Junction graphic */}
-                {/* TODO: For this branch, this will contain the JSON that was sent to the backend, 
-                ensuring that data can be sent correctly */}
             </div>
             <div className='menu'>
                 <Sidebar setActiveStep={setActiveStep} activeStep={activeStep} />
