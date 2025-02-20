@@ -71,14 +71,12 @@ describe(JunctionList, () => {
     expect(junctionElements[2]).toHaveTextContent('Junction C');
   });
 
-  // TODO: Other test ideas:
-    // Check for duplicate junction names
-
   it('does not crash when clicking a junction if onSelect is not provided', () => {
     render(<JunctionList junctions={mockJunctions} />); // No onSelect prop
-  
+    
     expect(() => {
       fireEvent.click(screen.getByText('Junction A')); 
     }).not.toThrow(); // Should not cause an error
   });
+  // TODO: Check for duplicate junction names (not sure how yet but will figure it out)
 });
