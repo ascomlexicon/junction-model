@@ -1,0 +1,73 @@
+.sidebar {
+    width: 100px;
+    background-color: #ffffff;
+    /* padding: 15px 10px; */
+    height: 100%;
+    border-right: 1px solid #eee;
+}
+
+.sidebar h2 {
+    color: #333;
+    font-size: 1rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
+.sidebar ul li {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background-color: #f5f5f5;
+    transition: all 0.3s ease;
+    text-align: center;
+    padding: 10px 5px;
+}
+
+/* Number styling */
+.sidebar ul li::before {
+    content: attr(data-number);
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #666;
+    margin-bottom: 5px;
+    transition: all 0.3s ease;
+}
+
+/* Text styling */
+.sidebar ul li span {
+    font-size: 0.7rem;
+    color: #333;
+    word-wrap: break-word;
+    max-width: 100%;
+    line-height: 1.2;
+}
+
+/* Active state styling */
+.sidebar ul li.active {
+    background-color: #00a6fb;
+}
+
+.sidebar ul li.active::before,
+.sidebar ul li.active span {
+    color: white;
+}
+
+/* Hover state */
+.sidebar ul li:hover:not(.active) {
+    background-color: #e0e0e0;
+    transform: translateY(-2px);
+}
