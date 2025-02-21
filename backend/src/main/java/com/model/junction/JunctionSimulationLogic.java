@@ -9,8 +9,6 @@
 
 // For now this simulation logic will cover a single junction quarter with 5 lanes. Extending it should be easy enough by just doing 4 quarters instead of 1
 
-// TODO: write a document containing inputs, outputs and tests we want now and features we are going to add.
-
 /* 
 CONFIGURABLE PARAMETER NOTE: Number of Lanes --------------------------------------------------------------------------------------------------------
  
@@ -79,7 +77,7 @@ class JunctionSimulationLogic {
     private static long exponentialTimeInterval = 0;
 
     public static void main(String[] args) {
-        int northboundVph = 450;
+        int northboundVph = 450; 
         int exitingNorth = 250;
         int exitingEast = 150;
         int exitingWest = 50;
@@ -151,10 +149,34 @@ class JunctionSimulationLogic {
             carsEntering.shutdown();
         }, 15, TimeUnit.SECONDS);
 
-        carsExiting.scheduleAtFixedRate(() -> {
+
+        /* MODIFICATIONS START HERE */
+
+        // Car entering task using recursive scheduling
+        Runnable exitCarsTask = new Runnable() {
+            @Override
+            public void run() {
+                if (carsExiting.isShutdown()) {
+                    return;
+                }
+               
+                trafficLightGreen(outboundCars, carsExiting);
+
+                // Reschedule the next entry, this calls immediately after trafficLightGreen and therefore doesn't wait for it to finish
+                carsExiting.schedule(this, 300, TimeUnit.MILLISECONDS);
+            }
+        };
+
+        /* MODIFICATIONS END HERE */
+
+        // 75 ms delay - will change it to i * 75
+        carsEntering.schedule(exitCarsTask, 75, TimeUnit.MILLISECONDS);
+
+        /*carsExiting.scheduleAtFixedRate(() -> {
             // Run burst of 3 traffic outflows at 25ms intervals every 250ms
             trafficLightGreen(outboundCars, carsExiting);
         }, 75, 250, TimeUnit.MILLISECONDS); // 75 is the delay and then 250 is the interval
+        */
         
         // Schedule shutdown 15 secs aftre simulation start
         carsExiting.schedule(() -> {
