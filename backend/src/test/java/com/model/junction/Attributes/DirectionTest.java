@@ -1,7 +1,10 @@
-package com.model.junction;
+package com.model.junction.Attributes;
 
 
 import org.junit.jupiter.api.Test;
+
+import com.model.junction.Attributes.Direction;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 
