@@ -1,4 +1,4 @@
-package com.model.junction;
+package com.model.junction.Application;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
