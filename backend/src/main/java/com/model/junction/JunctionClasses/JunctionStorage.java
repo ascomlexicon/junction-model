@@ -1,4 +1,4 @@
-package com.model.junction;
+package com.model.junction.JunctionClasses;
 
 import java.util.Set;
 import java.util.HashMap;
