@@ -1,8 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import JunctionForm from '../components/MainPageComponents/JunctionForm';
 
+// Most of the testing is done in the JunctionInput.test.jsx file
+// This test is just to make sure the form renders correctly
 describe(JunctionForm, () => {
-  it("junction Form renders successfully", () => {
+  it('junction Form renders successfully', () => {
     render(<JunctionForm/>);
 
     const title = screen.getByText(/Junction Traffic Flow Model/i);
@@ -17,5 +19,12 @@ describe(JunctionForm, () => {
     expect(southBound).toBeInTheDocument();
     expect(eastBound).toBeInTheDocument();
     expect(westBound).toBeInTheDocument();
+  });
+
+  it('junction form renders correct number of inputs', () => {
+    render(<JunctionForm/>);
+
+    const junctionInputs = screen.getAllByRole('textbox');
+    expect(junctionInputs).toHaveLength(16);
   });
 });
