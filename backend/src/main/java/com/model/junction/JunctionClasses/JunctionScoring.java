@@ -1,4 +1,4 @@
-
+package com.model.junction.JunctionClasses;
 /*  scoring for a junction quarter*/
 public class JunctionScoring {
 
