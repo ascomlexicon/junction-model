@@ -1,25 +1,43 @@
-import React , { useState}from 'react';
+import React, { useState } from 'react';
 import { Link } from "react-router-dom";
 import JunctionForm from '../components/MainPageComponents/JunctionForm';
 import '../styles/MainPage.css';
 import Sidebar from '../components/MainPageComponents/SideBar';
 import TrafficFlow from '../components/MainPageComponents/TrafficFlow';
-// import LaneCustomizationForm from '../components/LaneCustomizationForm';
+import LaneCustomisation from '../components/MainPageComponents/LaneCustomisation';
 // import PedestrianCrossingsForm from '../components/PedestrianCrossingsForm';
 // import LanePrioritizationForm from '../components/LanePrioritizationForm';
 // import SummaryForm from '../components/SummaryForm';
 
+// New component for instructions
+const InstructionsPage = () => {
+  return (
+    <div className="instructions-container">
+      <h2>Welcome to Junction Simulator</h2>
+      <p>This tool helps you design and simulate traffic junctions to optimize flow and safety.</p>
+      <p>To get started:</p>
+      <ol>
+        <li>Use the sidebar to navigate through different configuration steps</li>
+        <li>Start with Traffic Flow settings to configure junction types and traffic patterns</li>
+        <li>Customize lane configurations in the Lane Customisation section</li>
+        <li>View your completed junction in the visual display area above</li>
+      </ol>
+      <p>Click any option in the sidebar to begin designing your junction.</p>
+    </div>
+  );
+};
 
-function MainPage(){
-
-    const [activeStep, setActiveStep] = useState(0);
+function MainPage() {
+    const [activeStep, setActiveStep] = useState(-1); // Start at -1 for instructions
 
     const renderForm = () => {
         switch (activeStep) {
+            case -1:
+                return <InstructionsPage />;
             case 0:
                 return <TrafficFlow />;
-            // case 1:
-            //     return <LaneCustomizationForm />;
+            case 1:
+                return <LaneCustomisation />;
             // case 2:
             //     return <PedestrianCrossingsForm />;
             // case 3:
@@ -32,25 +50,6 @@ function MainPage(){
     };
 
     return(
-    // <div className="container">
-    //   <h1 className="main-title">Junction Simulator</h1>
-    //   <div className="main-content">        
-    //     <div className="traffic-flow-section">
-    //         <p>Hello</p>
-    //         <div className='input-form'>
-    //             <JunctionForm/>
-    //         </div>
-    //       <div className="action-buttons">
-    //         <button className="save-load-button">Save and Load</button>
-    //         <button className="reset-all-button">Reset All</button>
-    //       </div>
-    //     </div>
-        
-    //     <div className="rankings-link">
-    //       <Link to="/RankingsPage">See Junction Leaderboards</Link>
-    //     </div>
-    //   </div>
-    // </div>
         <div className="container">
             <h1 className='main-title'>Junction Simulator</h1>
             <div className="junction-visual">
@@ -58,26 +57,12 @@ function MainPage(){
                 <div className='Leaderboard'>See junction Leaderboard</div>
             </div>
             <div className='menu'>
-                {/* <div className="input-form">
-                    <JunctionForm/>
-                </div> */}
                 <Sidebar setActiveStep={setActiveStep} activeStep={activeStep} />
                 <div className="main-form">
                     {renderForm()}
                 </div>
-                {/* <div className='bottom-row'>
-                    <div className="action-buttons">
-                        <button className="run-button">Run</button>
-                        <button className="rankings-button">
-                            <Link to="/RankingsPage">See Junction Rankings</Link>
-                            <br/>
-                            <Link to = "/">Login</Link>
-                        </button>
-                    </div>
-                </div> */}
             </div>
         </div>
-
     )
 }
 

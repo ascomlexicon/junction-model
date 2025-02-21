@@ -48,7 +48,8 @@ function JunctionInput({
         <form className="junction-form">
             <div className="incoming-section">
                 <h3 className="direction-heading">
-                    Traffic {incomingDirection}
+                    {/* Traffic {incomingDirection} */}
+                    Entering
                 </h3>
                 <input
                     type="text"
@@ -67,7 +68,7 @@ function JunctionInput({
                 ].map(({ key, name }) => (
                     <div key={key} className="direction-input">
                         <label className="direction-label">
-                            <span className="label-text">Exiting {name}:</span>
+                            <span className="label-text">Exit {name}:</span>
                         </label>
                         <input
                             type="text"

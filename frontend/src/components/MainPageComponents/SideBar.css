@@ -3,7 +3,7 @@
     background-color: #ffffff;
     /* padding: 15px 10px; */
     height: 100%;
-    border-right: 1px solid #eee;
+    /* border-right: 1px solid #eee; */
 }
 
 .sidebar h2 {
@@ -24,6 +24,8 @@
 }
 
 .sidebar ul li {
+    border-style:solid ;
+    border-color: black;
     width: 80px;
     height: 80px;
     display: flex;
@@ -34,7 +36,7 @@
     background-color: #f5f5f5;
     transition: all 0.3s ease;
     text-align: center;
-    padding: 10px 5px;
+    padding: 5px 5px;
 }
 
 /* Number styling */

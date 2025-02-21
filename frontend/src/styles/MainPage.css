@@ -8,21 +8,23 @@
         'menu pic';
     height: 100vh;
     max-width: 1200px;
-    /* margin: 0 auto; */
-    background-color: #faf6ed;
-    overflow: hidden; /* Prevent container from scrolling */
+    margin: 0 auto;
+    background-color: #ffffff;
+    overflow: hidden;
 }
 
 .menu, .junction-visual {
     height: 100%;
-    overflow: hidden; /* Change to hidden to prevent automatic expansion */
+    overflow: hidden;
     display: grid;
+    border-style: solid;
+    border-color: rgb(2, 2, 2);
 }
 
 .menu {
     grid-area: menu;
     display: grid;
-    grid-template-columns: auto 1fr; /* Changed to auto for sidebar width */
+    grid-template-columns: auto 1fr;
     background-color: #ffffff;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -31,22 +33,14 @@
 .main-form {
     grid-column: 2;
     grid-row: 1;
-    background-color: #373f6d;
+    background-color: #ffffff;
     color: rgb(15, 15, 15);
     border-radius: 10px;
-    padding: 20px;
     margin: 10px;
-    height: calc(100% - 20px); /* Subtract padding to prevent overflow */
-    overflow-y: auto; /* Enable vertical scrolling */
-    overflow-x: hidden; /* Prevent horizontal scrolling */
-    display: flex;
-    flex-direction: column;
-}
-
-/* Make sure the content inside main-form is properly contained */
-.main-form > * {
-    width: 100%;
-    max-width: 100%;
+    height: calc(100% - 20px);
+    overflow-y: auto;
+    overflow-x: hidden;
+   
 }
 
 /* Update junction visual to maintain fixed size */
@@ -65,4 +59,5 @@
     grid-area: header;
     margin: 0;
     padding: 20px;
+    justify-self: center;
 }
