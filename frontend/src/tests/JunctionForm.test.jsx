@@ -1,9 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import JunctionForm from '../components/MainPageComponents/JunctionForm';
 
-// TODO: Need to add more tests for this component if possible
 describe(JunctionForm, () => {
-  it("Junction Form renders successfully", () => {
+  it("junction Form renders successfully", () => {
     render(<JunctionForm/>);
 
     const title = screen.getByText(/Junction Traffic Flow Model/i);
