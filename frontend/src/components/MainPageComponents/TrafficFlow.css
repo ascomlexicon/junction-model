@@ -27,6 +27,7 @@
     width: 100%;
     max-width: 280px;
     margin: 0;
+    justify-content: center;
 }
 
 /* Individual form cell */

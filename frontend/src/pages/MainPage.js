@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from "react-router-dom";
-import JunctionForm from '../components/MainPageComponents/JunctionForm';
 import '../styles/MainPage.css';
 import Sidebar from '../components/MainPageComponents/SideBar';
 import TrafficFlow from '../components/MainPageComponents/TrafficFlow';
 import LaneCustomisation from '../components/MainPageComponents/LaneCustomisation';
-// import PedestrianCrossingsForm from '../components/PedestrianCrossingsForm';
-// import LanePrioritizationForm from '../components/LanePrioritizationForm';
-// import SummaryForm from '../components/SummaryForm';
+import PedestrianCrossing from '../components/MainPageComponents/PedestrianCrossing';
+import LanePrioritisation from '../components/MainPageComponents/LanePrioritisation';
 
 // New component for instructions
 const InstructionsPage = () => {
@@ -28,24 +26,87 @@ const InstructionsPage = () => {
 };
 
 function MainPage() {
-    const [activeStep, setActiveStep] = useState(-1); // Start at -1 for instructions
+    const [activeStep, setActiveStep] = useState(-1);
+    
+    // State to store form data
+    const [formData, setFormData] = useState({
+      trafficFlow: {},
+      laneCustomisation: {},
+      pedestrianCrossing: {},
+      lanePrioritisation: {}
+    });
+    
+    // Save form data
+    const saveFormData = (formName, data) => {
+      setFormData(prev => ({
+        ...prev,
+        [formName]: data
+      }));
+    };
+    
+    // Reset specific form
+    const resetForm = (formName) => {
+      setFormData(prev => ({
+        ...prev,
+        [formName]: {}
+      }));
+    };
+    
+    // Reset all forms
+    const resetAllForms = () => {
+      setFormData({
+        trafficFlow: {},
+        laneCustomisation: {},
+        pedestrianCrossing: {},
+        lanePrioritisation: {}
+      });
+    };
 
     const renderForm = () => {
         switch (activeStep) {
             case -1:
                 return <InstructionsPage />;
             case 0:
-                return <TrafficFlow />;
+                return (
+                  <TrafficFlow 
+                    setActiveStep={setActiveStep}
+                    saveFormData={saveFormData}
+                    resetAllForms={resetAllForms}
+                    formData={formData.trafficFlow}
+                  />
+                );
             case 1:
-                return <LaneCustomisation />;
-            // case 2:
-            //     return <PedestrianCrossingsForm />;
-            // case 3:
-            //     return <LanePrioritizationForm />;
-            // case 4:
-            //     return <SummaryForm />;
+                return (
+                  <LaneCustomisation 
+                    setActiveStep={setActiveStep}
+                    saveFormData={saveFormData}
+                    resetForm={resetForm}
+                    resetAllForms={resetAllForms}
+                    formData={formData.laneCustomisation}
+                  />
+                );
+            case 2:
+                return (
+                  <PedestrianCrossing 
+                    setActiveStep={setActiveStep}
+                    saveFormData={saveFormData}
+                    resetForm={resetForm}
+                    resetAllForms={resetAllForms}
+                    formData={formData.pedestrianCrossing}
+                  />
+                );
+            case 3:
+                return (
+                  <LanePrioritisation 
+                    setActiveStep={setActiveStep}
+                    saveFormData={saveFormData}
+                    resetForm={resetForm}
+                    resetAllForms={resetAllForms}
+                    formData={formData.lanePrioritisation}
+                  />
+                );
             default:
-                return <p>h</p>;
+                return <p>Unknown step</p>;
         }
     };
 
@@ -63,7 +124,7 @@ function MainPage() {
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
-export default MainPage
+export default MainPage;
