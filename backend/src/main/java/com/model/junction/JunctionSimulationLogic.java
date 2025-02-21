@@ -43,10 +43,8 @@ See the TODO below on changing the car outflow into a runnable
 /* 
 CONFIGURABLE PARAMETER NOTE: Prioritised traffic flow -------------------------------------------------------------------------------------------------
 
-From my point of view (and having talked with a friend on this), this can mean two things: 
-1) This is just the order in which the traffic lights will be on so we can order it so that it is N, E, S, W or if we want to prioritise traffic 
+What I think this is is just the order in which the traffic lights will be on so we can order it so that it is N, E, S, W or if we want to prioritise traffic 
 coming from the west then we could say W, N, E, S where W (west) will be the first traffic light to turn green and then north then east and finally south
-
 */
 
 /* 
