@@ -80,4 +80,13 @@ describe(LoginForm, () => {
     expect(passwordInput).toHaveAttribute('type', 'password');
   });
 
+  it('ensures email field is of correct type', () => {
+    render(<LoginFormWithRouter />);
+    
+    const passwordInput = screen.getByLabelText(/email:/i);
+
+    // Checks the type of the password input field
+    expect(passwordInput).toHaveAttribute('type', 'email');
+  });
+
 });
