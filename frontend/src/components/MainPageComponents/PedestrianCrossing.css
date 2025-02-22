@@ -1,0 +1,66 @@
+/* PedestrianCrossings.css */
+.pedestrian-crossings-container {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    width: 100%;
+  }
+  
+  .pedestrian-crossings-container h2 {
+    margin-top: 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .info-box {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+  }
+  
+  .info-box h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+  
+  .info-box ul {
+    margin: 0;
+    padding-left: 20px;
+  }
+  
+  .crossing-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .control-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .control-row label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    font-size: 16px;
+    color: #333;
+  }
+  
+  .control-row input[type="checkbox"] {
+    margin-left: 10px;
+    width: 20px;
+    height: 20px;
+  }
+  
+  .control-row input[type="number"] {
+    margin-left: 10px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 80px;
+    text-align: center;
+  }

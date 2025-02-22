@@ -2,9 +2,6 @@ import React from 'react';
 import styles from './JunctionRankings.module.css';
 
 const JunctionList = ({ junctions, onSelect }) => {
-    const handleSelect =()=>{
-        
-    }
     return(
     <div className={styles.junctionList}>
         {junctions.map(junction => (
