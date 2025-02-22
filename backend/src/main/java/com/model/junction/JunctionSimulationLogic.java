@@ -26,8 +26,8 @@ will be called when the opposing lane has a green light.
 
 /* 
 CONFIGURABLE PARAMETER NOTE: Bus/Cycle Lane ----------------------------------------------------------------------------------------------------------
-
-DISCUSS WITH TEAM - CURRENTLY UNSURE OF HOW IT WILL WORK
+The bus lane will work by essentially funcitoning as a left turn lane and if it allows buses to go forwards or to the right then cars wont't
+be allowed to go left and if it allows buses to go right then cars on the right side lanes can only go right too.
 
 */
 
@@ -58,152 +58,154 @@ import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 class JunctionSimulationLogic {
-    private static int count = 0;
-    private static boolean trafficLight = false;
-    // counts the number of cars that have left a junction quarter
-    private static int quarterCarsExited = 0;
-    // the average wait time for a junction quarter
-    // we will modify this by doing: (quarterCarsExited * averageWaitTime + (new car's wait time)) / ++quarterCarsExited
-    private static long averageWaitTime = 0;
-    // before removing cars check if waiting time is larger than the max
-    private static long maximumWaitingTime = 0;
-    // before removing cars determine max Queue
-    private static int maximumQueueLength = 0;
-    // variables used to calculate intervals (generated using negative exponential distribution)
-    static Random random = new Random();
-    private static double interArrivalTime = 0; // In seconds
-    private static long exponentialTimeInterval = 0;
+  // all longs and integers have been replaced with AtomicInteger and AtomicLong because this allows us to update them in the threads
+  // safely without race conditions being a thing because otherwise the variables might be overwritten
+  private static final AtomicInteger count = new AtomicInteger(0); // Counts the number of cars that have entered a junction quarter
+  private static final AtomicInteger quarterCarsExited = new AtomicInteger(0);
+  private static final AtomicLong averageWaitTime = new AtomicLong(0);
+  private static final AtomicLong maximumWaitingTime = new AtomicLong(0);
+  private static final AtomicInteger maximumQueueLength = new AtomicInteger(0);
+  private static final Random random = new Random(); // Random number generator
+  private static double interArrivalTime = 0; // Inter-arrival time in seconds
+  private static long exponentialTimeInterval = 0; // Exponential time interval
 
-    public static void main(String[] args) {
-        int northboundVph = 450; 
-        int exitingNorth = 250;
-        int exitingEast = 150;
-        int exitingWest = 50;
+  public static void main(String[] args) {
+    int northboundVph = 600; // vph for northbound traffic
+    int exitingNorth = 350; // cars exiting north
+    int exitingEast = 150; // cars exiting east
+    int exitingWest = 100; // cars exiting west
 
-        // This is the simulation time in hours currently, an hour in the simulation will translate to 15 seconds in real time
-        int simulationTime = 2;
+    int simulationTime = 1; // simulation time in hours (15 seconds real time per hour)
 
-        Queue<Long>[] outboundCars = new Queue[3];
-
-        for (int i = 0; i < outboundCars.length; i++) {
-            outboundCars[i] = new LinkedList<>();
-        }
-
-        // Create a scheduled executor service with a single thread
-        ScheduledExecutorService carsEntering = Executors.newScheduledThreadPool(1);
-        ScheduledExecutorService carsExiting = Executors.newScheduledThreadPool(1);
-
-        // Car entering task using recursive scheduling
-        Runnable enterCarsTask = new Runnable() {
-            @Override
-            public void run() {
-                if (carsEntering.isShutdown()) {
-                    return;
-                }
-
-                // Add cars to each lane
-                for (int i = 0; i < exitingEast / 60; i++) {
-                    System.out.println("Car entered lane 0 at " + System.currentTimeMillis());
-                    outboundCars[0].add(System.nanoTime());
-                    count++;
-                }
-
-                for (int i = 0; i < exitingNorth / 60; i++) {
-                    if (outboundCars[1].size() > outboundCars[2].size() && outboundCars[1].size() > 30) {
-                        System.out.println("Car entered lane 2 at " + System.currentTimeMillis());
-                        outboundCars[2].add(System.nanoTime());
-                        count++;
-                    } else {
-                        System.out.println("Car entered lane 1 at " + System.currentTimeMillis());
-                        outboundCars[1].add(System.nanoTime());
-                        count++;
-                    }
-                }
-
-                for (int i = 0; i < exitingWest / 60; i++) {
-                    System.out.println("Car entered lane 2 at " + System.currentTimeMillis());
-                    outboundCars[2].add(System.nanoTime());
-                    count++;
-                }
-
-                // Generate the next arrival time (negative Exponential Distribution)
-                interArrivalTime = -Math.log(1.0 - random.nextDouble()) / ((3600.0 / northboundVph));
-                exponentialTimeInterval = (long) (interArrivalTime * 2 * 1000);
-
-                System.out.println("Time until next car: " + exponentialTimeInterval + "ms");
-
-                // Reschedule the next entry
-                carsEntering.schedule(this, exponentialTimeInterval, TimeUnit.MILLISECONDS);
-            }
-        };
-
-        // Start entering cars
-        carsEntering.schedule(enterCarsTask, 0, TimeUnit.MILLISECONDS);
-
-        // Optionally, schedule a shutdown after some time
-        carsEntering.schedule(() -> {
-            System.out.println("shutting down" + count);
-            System.out.println("AWT = " + averageWaitTime + ", MQL = " + maximumQueueLength + ", MWL = " + maximumWaitingTime);
-            carsEntering.shutdown();
-        }, 15, TimeUnit.SECONDS);
-
-
-        /* MODIFICATIONS START HERE */
-
-        // Car entering task using recursive scheduling
-        Runnable exitCarsTask = new Runnable() {
-            @Override
-            public void run() {
-                if (carsExiting.isShutdown()) {
-                    return;
-                }
-               
-                trafficLightGreen(outboundCars, carsExiting);
-
-                // Reschedule the next entry, this calls immediately after trafficLightGreen and therefore doesn't wait for it to finish
-                carsExiting.schedule(this, 300, TimeUnit.MILLISECONDS);
-            }
-        };
-
-        /* MODIFICATIONS END HERE */
-
-        // 75 ms delay - will change it to i * 75
-        carsEntering.schedule(exitCarsTask, 75, TimeUnit.MILLISECONDS);
-
-        /*carsExiting.scheduleAtFixedRate(() -> {
-            // Run burst of 3 traffic outflows at 25ms intervals every 250ms
-            trafficLightGreen(outboundCars, carsExiting);
-        }, 75, 250, TimeUnit.MILLISECONDS); // 75 is the delay and then 250 is the interval
-        */
-        
-        // Schedule shutdown 15 secs aftre simulation start
-        carsExiting.schedule(() -> {
-            System.out.println("carsExiting thread shutting down");
-            carsExiting.shutdown();
-        }, 15, TimeUnit.SECONDS);
+    Queue<Long>[] outboundCars = new Queue[3];
+    for (int i = 0; i < outboundCars.length; i++) {
+      outboundCars[i] = new LinkedList<>();
     }
 
-    public static void exitQueue(long enterTime) {
-        if (enterTime != null)
-        {
-            long waitingTime = System.nanoTime() - enterTime;
-            // compute MWT AWT
-            maximumWaitingTime = Math.max(maximumWaitingTime, waitingTime);
-            averageWaitTime = ((averageWaitTime * quarterCarsExited) + waitingTime) / (++quarterCarsExited);
-        }
-    }
+    // our scheduled executor services
+    ScheduledExecutorService carsEntering = Executors.newScheduledThreadPool(1);
+    ScheduledExecutorService carsExiting = Executors.newScheduledThreadPool(1);
 
-    private static void trafficLightGreen(Queue<Car>[] outboundCars, ScheduledExecutorService carsExiting) {
-        for (int i = 0; i < 20; i++) {
-            carsExiting.schedule(() -> {
-                for (int j = 0; j < 2; j++) {
+    Runnable enterCarsTask =
+        new Runnable() {
+          @Override
+          public void run() {
+            if (carsEntering.isShutdown()) {
+              return;
+            }
+
+            // Add cars to each lane
+            for (int i = 0; i < exitingEast / 64; i++) {
+              outboundCars[0].add(System.nanoTime());
+              count.incrementAndGet();
+              maximumQueueLength.updateAndGet(
+                  currentMax -> Math.max(currentMax, outboundCars[0].size()));
+            }
+
+            for (int i = 0; i < exitingNorth / 64; i++) {
+              if (outboundCars[1].size() > outboundCars[2].size() && outboundCars[1].size() > 30) {
+                outboundCars[2].add(System.nanoTime());
+                count.incrementAndGet();
+                maximumQueueLength.updateAndGet(
+                    currentMax -> Math.max(currentMax, outboundCars[2].size()));
+              } else {
+                outboundCars[1].add(System.nanoTime());
+                count.incrementAndGet();
+                maximumQueueLength.updateAndGet(
+                    currentMax -> Math.max(currentMax, outboundCars[1].size()));
+              }
+            }
+
+            for (int i = 0; i < exitingWest / 64; i++) {
+              outboundCars[2].add(System.nanoTime());
+              count.incrementAndGet();
+              maximumQueueLength.updateAndGet(
+                  currentMax -> Math.max(currentMax, outboundCars[2].size()));
+            }
+
+            // Generate the next arrival time (negative Exponential Distribution)
+            interArrivalTime = -Math.log(1.0 - random.nextDouble()) / ((3600.0 / northboundVph));
+            exponentialTimeInterval = (long) (interArrivalTime * 1000);  // Reduced delay
+
+            // Reschedule the next entry with shorter delay
+            carsEntering.schedule(this, exponentialTimeInterval, TimeUnit.MILLISECONDS);
+          }
+        };
+
+    // runnable for exiting cars
+    Runnable exitCarsTask =
+        new Runnable() {
+          @Override
+          public void run() {
+            if (carsExiting.isShutdown()) {
+              return;
+            }
+
+            long threadStartTime = System.nanoTime();
+
+            // Schedule 40 cars to exit over 75 milliseconds
+            for (int i = 0; i < 40; i++) {
+              final int carIndex = i;
+              carsExiting.schedule(
+                  () -> {
                     exitQueue(outboundCars[0].poll());
                     exitQueue(outboundCars[1].poll());
                     exitQueue(outboundCars[2].poll());
-                }
-            }, i * 2, TimeUnit.MILLISECONDS);
-        }
+                  },
+                  (long) (carIndex * (75.0 / 40)),
+                  TimeUnit.MILLISECONDS); // spread car exits over 75 ms
+            }
+            
+            long actualGreenLightTime = System.nanoTime() - threadStartTime;
+
+            // reschedule the next greenlight after 300 milliseconds but also take into account the traffic light green time
+            carsExiting.schedule(this, 300000000 - actualGreenLightTime, TimeUnit.NANOSECONDS);
+          }
+        };
+
+    // start entering and exiting cars
+    carsEntering.schedule(enterCarsTask, 0, TimeUnit.MILLISECONDS);
+    carsExiting.schedule(exitCarsTask, 75, TimeUnit.MILLISECONDS);  // Reduced initial delay
+
+    // scheduling shutdown of carsEntering
+    carsEntering.schedule(
+        () -> {
+          System.out.println("Shutting down carsEntering. Total cars entered: " + count.get());
+          System.out.println(
+              "Average Wait Time = "
+                  + averageWaitTime.get() / 1000000
+                  + "ms, Maximum Queue Length = "
+                  + maximumQueueLength.get()
+                  + ", Maximum Wait Time = "
+                  + maximumWaitingTime.get() / 1000000
+                  + "ms");
+          carsEntering.shutdown();
+        },
+        simulationTime * 15,
+        TimeUnit.SECONDS);
+
+    // scheduling the shutdown of carsExiting
+    carsExiting.schedule(
+        () -> {
+          System.out.println("Shutting down carsExiting");
+          carsExiting.shutdown();
+        },
+        simulationTime * 15,
+        TimeUnit.SECONDS);
+  }
+
+  // updates our metrics when cars exit the queue
+  public static void exitQueue(Long enterTime) {
+    if (enterTime != null) {
+      long waitingTime = System.nanoTime() - enterTime;
+      maximumWaitingTime.updateAndGet(currentMax -> Math.max(currentMax, waitingTime));
+      int exitedCars = quarterCarsExited.incrementAndGet();
+      averageWaitTime.updateAndGet(
+          currentAvg -> ((currentAvg * (exitedCars - 1)) + waitingTime) / exitedCars);
     }
+  }
 }
