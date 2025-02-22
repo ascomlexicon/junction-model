@@ -1,24 +1,69 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import './LanePrioritisation.css';
+import SaveNextButton from '../ButtonComponents/SaveNextButton';
+import BackButton from '../ButtonComponents/BackButton';
+import ResetLaneChangesButton from '../ButtonComponents/ResetLaneChangesButton';
+import ResetAllButton from '../ButtonComponents/ResetAllButton';
 
-function LanePrioritisation() {
-  const [enablePrioritization, setEnablePrioritization] = useState(false);
-  const [directions, setDirections] = useState([
-    { id: 'north', content: 'North' },
-    { id: 'south', content: 'South' },
-    { id: 'east', content: 'East' },
-    { id: 'west', content: 'West' }
-  ]);
+function LanePrioritisation({ setActiveStep, saveFormData, resetForm, resetAllForms, formData = {} }) {
+  // Initialize state with passed formData or default values
+  const [prioritisationData, setPrioritisationData] = useState(() => {
+    return Object.keys(formData).length > 0 ? formData : {
+      enablePrioritization: false,
+      directions: [
+        { id: 'north', content: 'North' },
+        { id: 'south', content: 'South' },
+        { id: 'east', content: 'East' },
+        { id: 'west', content: 'West' }
+      ]
+    };
+  });
+
+  // Always valid since prioritization is optional
+  const [isValid, setIsValid] = useState(true);
+
+  const handleEnablePrioritization = (e) => {
+    setPrioritisationData(prev => ({
+      ...prev,
+      enablePrioritization: e.target.checked
+    }));
+  };
 
   const handleOnDragEnd = (result) => {
     if (!result.destination) return;
     
-    const items = Array.from(directions);
+    const items = Array.from(prioritisationData.directions);
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
     
-    setDirections(items);
+    setPrioritisationData(prev => ({
+      ...prev,
+      directions: items
+    }));
+  };
+
+  // Handle button click events
+  const handleSaveNext = () => {
+    saveFormData('lanePrioritisation', prioritisationData);
+    setActiveStep(4); // Move to Summary step
+  };
+
+  const handleBack = () => {
+    setActiveStep(2); // Go back to PedestrianCrossing
+  };
+
+  const handleResetChanges = () => {
+    resetForm('lanePrioritisation');
+    setPrioritisationData({
+      enablePrioritization: false,
+      directions: [
+        { id: 'north', content: 'North' },
+        { id: 'south', content: 'South' },
+        { id: 'east', content: 'East' },
+        { id: 'west', content: 'West' }
+      ]
+    });
   };
 
   return (
@@ -41,13 +86,13 @@ function LanePrioritisation() {
             <input
               id="add-prioritization"
               type="checkbox"
-              checked={enablePrioritization}
-              onChange={(e) => setEnablePrioritization(e.target.checked)}
+              checked={prioritisationData.enablePrioritization}
+              onChange={handleEnablePrioritization}
             />
           </label>
         </div>
 
-        {enablePrioritization && (
+        {prioritisationData.enablePrioritization && (
           <div className="directions-container">
             <h3>Directions</h3>
             <p className="drag-instructions">Drag to reorder (top = highest priority, bottom = lowest)</p>
@@ -60,7 +105,7 @@ function LanePrioritisation() {
                     {...provided.droppableProps}
                     ref={provided.innerRef}
                   >
-                    {directions.map((direction, index) => (
+                    {prioritisationData.directions.map((direction, index) => (
                       <Draggable 
                         key={direction.id} 
                         draggableId={direction.id} 
@@ -90,6 +135,14 @@ function LanePrioritisation() {
             </div>
           </div>
         )}
+      </div>
+      
+      {/* Button container */}
+      <div className="button-container">
+        <BackButton onClick={handleBack} label="Back to Pedestrian Crossings" />
+        <ResetLaneChangesButton onClick={handleResetChanges} />
+        <ResetAllButton onClick={resetAllForms} />
+        <SaveNextButton onClick={handleSaveNext} disabled={!isValid} />
       </div>
     </div>
   );

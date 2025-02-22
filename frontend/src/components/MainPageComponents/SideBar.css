@@ -8,7 +8,7 @@
 
 .sidebar h2 {
     color: #333;
-    font-size: 1rem;
+    font-size: .5rem;
     margin-bottom: 20px;
     text-align: center;
 }
@@ -26,7 +26,7 @@
 .sidebar ul li {
     border-style:solid ;
     border-color: black;
-    width: 80px;
+    width: 90px;
     height: 80px;
     display: flex;
     flex-direction: column;
@@ -42,7 +42,7 @@
 /* Number styling */
 .sidebar ul li::before {
     content: attr(data-number);
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: bold;
     color: #666;
     margin-bottom: 5px;

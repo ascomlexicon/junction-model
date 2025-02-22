@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import JunctionInput from './JunctionInput';
 import './TrafficFlow.css';
 import ResetVPHButton from '../ButtonComponents/ResetVPHButton';
@@ -6,13 +6,40 @@ import SaveNextButton from '../ButtonComponents/SaveNextButton';
 import ResetAllButton from '../ButtonComponents/ResetAllButton';
 import BackButton from '../ButtonComponents/BackButton';
 
-function TrafficFlow({ isFirstForm = true, onSaveNext, onBack, onResetAll }) {
-    const [trafficData, setTrafficData] = useState({
-        north: { south: 0, east: 0, west: 0 },
-        south: { north: 0, east: 0, west: 0 },
-        east: { north: 0, south: 0, west: 0 },
-        west: { north: 0, south: 0, east: 0 }
+function TrafficFlow({ setActiveStep, saveFormData, resetForm, resetAllForms, formData = {} }) {
+    // Initialize state with passed formData or default values
+    const [trafficData, setTrafficData] = useState(() => {
+        return Object.keys(formData).length > 0 ? formData : {
+            north: { south: 0, east: 0, west: 0 },
+            south: { north: 0, east: 0, west: 0 },
+            east: { north: 0, south: 0, west: 0 },
+            west: { north: 0, south: 0, east: 0 }
+        };
     });
+
+    // Validation state
+    const [isValid, setIsValid] = useState(false);
+
+    // Validate the inputs whenever trafficData changes
+    useEffect(() => {
+        validateForm();
+    }, [trafficData]);
+
+    // Validate that at least one direction has traffic flow
+    const validateForm = () => {
+        let hasTraffic = false;
+        
+        // Check if any direction has values greater than 0
+        Object.values(trafficData).forEach(direction => {
+            Object.values(direction).forEach(value => {
+                if (value > 0) {
+                    hasTraffic = true;
+                }
+            });
+        });
+        
+        setIsValid(hasTraffic);
+    };
 
     // Handle input updates from JunctionInput components
     const handleInputUpdate = (incomingDirection, data) => {
@@ -24,6 +51,7 @@ function TrafficFlow({ isFirstForm = true, onSaveNext, onBack, onResetAll }) {
 
     // Reset VPH data for all forms
     const handleResetVPH = () => {
+        resetForm('trafficFlow');
         setTrafficData({
             north: { south: 0, east: 0, west: 0 },
             south: { north: 0, east: 0, west: 0 },
@@ -34,19 +62,25 @@ function TrafficFlow({ isFirstForm = true, onSaveNext, onBack, onResetAll }) {
 
     // Save and proceed to next form
     const handleSaveNext = () => {
-        if (onSaveNext) {
-            onSaveNext('trafficFlow', trafficData);
+        if (isValid) {
+            saveFormData('trafficFlow', trafficData);
+            setActiveStep(1); // Move to Lane Customisation
         }
+    };
+
+    // Handle back button (going back to instructions)
+    const handleBack = () => {
+        setActiveStep(-1); // Go back to InstructionsPage
     };
 
     return(
         <div className="junction-forms-container">
-            <h1 className="junction-title">Junction Traffic Flow Model</h1>
             <div className="instructions">
                 <h2>Instructions</h2>
                 <ul>
-                    <li>Restrictions on this page</li>
+                    <li>Enter vehicle flow rates between junctions</li>
                     <li>Values must be greater than 0</li>
+                    <li>At least one direction must have traffic</li>
                 </ul>
             </div>
             <div className="forms-grid">
@@ -101,12 +135,10 @@ function TrafficFlow({ isFirstForm = true, onSaveNext, onBack, onResetAll }) {
 
             {/* Button Container */}
             <div className="button-container">
-                {!isFirstForm && (
-                    <BackButton onBack={onBack} />
-                )}
-                <ResetVPHButton onReset={handleResetVPH} />
-                <ResetAllButton onResetAll={onResetAll} />
-                <SaveNextButton onSave={handleSaveNext} />
+                <BackButton onClick={handleBack} label="Back to Instructions" />
+                <ResetVPHButton onClick={handleResetVPH} />
+                <ResetAllButton onClick={resetAllForms} />
+                <SaveNextButton onClick={handleSaveNext} disabled={!isValid} />
             </div>
         </div>
     );

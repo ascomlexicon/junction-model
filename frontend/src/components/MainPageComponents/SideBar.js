@@ -2,30 +2,31 @@ import React from 'react';
 import './SideBar.css';
 
 const Sidebar = ({ setActiveStep, activeStep }) => {
-    const steps = [
-        "Traffic Flow",
-        "Lane Customization",
-        "Pedestrian Crossings",
-        "Lane Prioritization",
-        "Summary"
-    ];
+  // Define menu items with their labels and corresponding step numbers
+  const menuItems = [
+    { label: 'Traffic Flow', step: 0 },
+    { label: 'Lane Customisation', step: 1 },
+    { label: 'Pedestrian Crossing', step: 2 },
+    { label: 'Lane Prioritisation', step: 3 },
+    { label: 'Summary', step: 4 }
+  ];
 
-    return (
-        <div className="sidebar">
-            <ul>
-                {steps.map((step, index) => (
-                    <li 
-                        key={index} 
-                        className={activeStep === index ? "active" : ""} 
-                        onClick={() => setActiveStep(index)}
-                        data-number={index + 1}
-                    >
-                        <span>{step}</span>
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
+  return (
+    <div className="sidebar">
+      <ul className="sidebar-menu">
+        {menuItems.map((item) => (
+          <li
+            key={item.step}
+            className={`sidebar-item ${activeStep === item.step ? 'active' : ''}`}
+            onClick={() => setActiveStep(item.step)}
+          >
+            {item.label}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 };
 
 export default Sidebar;
+

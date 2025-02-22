@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Link } from "react-router-dom";
 import '../styles/MainPage.css';
 import Sidebar from '../components/MainPageComponents/SideBar';
 import TrafficFlow from '../components/MainPageComponents/TrafficFlow';
 import LaneCustomisation from '../components/MainPageComponents/LaneCustomisation';
 import PedestrianCrossing from '../components/MainPageComponents/PedestrianCrossing';
 import LanePrioritisation from '../components/MainPageComponents/LanePrioritisation';
+import Summary from '../components/MainPageComponents/Summary';
 
 // New component for instructions
 const InstructionsPage = () => {
@@ -60,6 +60,8 @@ function MainPage() {
         pedestrianCrossing: {},
         lanePrioritisation: {}
       });
+      // Optionally navigate back to first step
+      setActiveStep(0);
     };
 
     const renderForm = () => {
@@ -103,6 +105,13 @@ function MainPage() {
                     resetForm={resetForm}
                     resetAllForms={resetAllForms}
                     formData={formData.lanePrioritisation}
+                  />
+                );
+            case 4:
+                return (
+                  <Summary 
+                    formData={formData}
+                    setActiveStep={setActiveStep}
                   />
                 );
             default:

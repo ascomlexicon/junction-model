@@ -5,8 +5,15 @@
     flex-direction: column;
     align-items: center;
     background-color: #ffffff;
-    padding: 10px;
     box-sizing: border-box;
+    position: relative; /* Added for absolute positioning of reset all button */
+}
+
+/* Reset All button positioning */
+.button-container .reset-all-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
 }
 
 /* Title styling */
@@ -16,18 +23,20 @@
     font-weight: bold;
     margin-bottom: 1rem;
     text-align: left;
+    display: flex;
+    justify-content: space-between;
 }
 
 /* Grid for form layout */
 .forms-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-columns:1fr 1fr ;
     gap: 20px;
     width: 100%;
     max-width: 280px;
     margin: 0;
     justify-content: center;
+    margin-bottom: 20px; /* Added space for buttons */
 }
 
 /* Individual form cell */
@@ -44,19 +53,44 @@
 
 .form-cell h1 {
     font-size: 1rem;
-    /* margin-bottom: rem; */
     border-bottom: 2px solid #333;
     text-align: center;
     width: 80%;
 }
 
-/* Adjustments for junction form inside each cell */
+/* Button container styling */
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 280px;
+    
+}
+
+/* Individual button positioning */
+.button-container BackButton {
+    order: 1; /* Left side */
+}
+
+.button-container SaveNextButton {
+    order: 2; /* Middle */
+}
+
+.button-container ResetVPHButton {
+    order: 3; /* Right side */
+}
+
+/* Optional: Add some spacing between buttons */
+.button-container > * {
+    margin: 0 5px;
+}
+
+/* Junction form styling */
 .junction-form {
     width: 100%;
     max-width: 200px;
-    padding: 10px;
     background: white;
     border-radius: 6px;
     text-align: center;
 }
-

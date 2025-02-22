@@ -1,43 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import './JunctionInput.css'
 
-// The component now accepts props for the direction names
-
 function JunctionInput({ 
-
-    incomingDirection,    // The direction vehicles are coming from
-    outgoingDirection1,   // First possible exit direction
-    outgoingDirection2,   // Second possible exit direction
-    outgoingDirection3    // Third possible exit direction
+    incomingDirection,    
+    outgoingDirection1,   
+    outgoingDirection2,   
+    outgoingDirection3,
+    onUpdate,            // Add onUpdate prop
+    values              // Add values prop for controlled inputs
 }) {
-
-    // We now only need state for the numbers, since directions come from props
+    // Initialize state from props
     const [totalIncoming, setTotalIncoming] = useState('');
     const [outgoingFlows, setOutgoingFlows] = useState({
-        direction1: '',
-        direction2: '',
-        direction3: ''
+        [outgoingDirection1.toLowerCase()]: values?.[outgoingDirection1.toLowerCase()] || '',
+        [outgoingDirection2.toLowerCase()]: values?.[outgoingDirection2.toLowerCase()] || '',
+        [outgoingDirection3.toLowerCase()]: values?.[outgoingDirection3.toLowerCase()] || ''
     });
     const [isValid, setIsValid] = useState(false);
 
-    // This effect validates that outgoing flows sum to total incoming
+    // Validate totals and notify parent of changes
     useEffect(() => {
         const sum = Object.values(outgoingFlows)
             .reduce((acc, val) => acc + (parseInt(val) || 0), 0);
-        setIsValid(sum === parseInt(totalIncoming));
-    }, [outgoingFlows, totalIncoming]);
+        const isValidTotal = sum === parseInt(totalIncoming);
+        setIsValid(isValidTotal);
 
-    // Handle changes to outgoing flow inputs with number validation
+        // Only update parent if we have valid numbers
+        if (isValidTotal && totalIncoming) {
+            onUpdate(outgoingFlows);
+        }
+    }, [outgoingFlows, totalIncoming, onUpdate]);
+
+    // Handle changes to outgoing flow inputs
     const handleOutgoingChange = (direction, value) => {
         if (value === '' || (/^\d+$/.test(value) && parseInt(value) >= 0)) {
-            setOutgoingFlows(prev => ({
-                ...prev,
-                [direction]: value
-            }));
+            const newFlows = {
+                ...outgoingFlows,
+                [direction.toLowerCase()]: value
+            };
+            setOutgoingFlows(newFlows);
         }
     };
 
-    // Handle total incoming vehicles change with number validation
+    // Handle total incoming vehicles change
     const handleTotalChange = (value) => {
         if (value === '' || (/^\d+$/.test(value) && parseInt(value) >= 0)) {
             setTotalIncoming(value);
@@ -47,10 +52,7 @@ function JunctionInput({
     return (
         <form className="junction-form">
             <div className="incoming-section">
-                <h3 className="direction-heading">
-                    {/* Traffic {incomingDirection} */}
-                    Entering
-                </h3>
+                <h3 className="direction-heading">Entering</h3>
                 <input
                     type="text"
                     value={totalIncoming}
@@ -62,18 +64,18 @@ function JunctionInput({
 
             <div className="outgoing-section">
                 {[
-                    { key: 'direction1', name: outgoingDirection1 },
-                    { key: 'direction2', name: outgoingDirection2 },
-                    { key: 'direction3', name: outgoingDirection3 }
-                ].map(({ key, name }) => (
-                    <div key={key} className="direction-input">
+                    { direction: outgoingDirection1 },
+                    { direction: outgoingDirection2 },
+                    { direction: outgoingDirection3 }
+                ].map(({ direction }) => (
+                    <div key={direction} className="direction-input">
                         <label className="direction-label">
-                            <span className="label-text">Exit {name}:</span>
+                            <span className="label-text">Exit {direction}:</span>
                         </label>
                         <input
                             type="text"
-                            value={outgoingFlows[key]}
-                            onChange={(e) => handleOutgoingChange(key, e.target.value)}
+                            value={outgoingFlows[direction.toLowerCase()]}
+                            onChange={(e) => handleOutgoingChange(direction, e.target.value)}
                             disabled={!totalIncoming}
                             className={`input-field ${
                                 !totalIncoming ? 'input-disabled' :
@@ -96,7 +98,6 @@ function JunctionInput({
             )}
         </form>
     );
-
 }
 
 export default JunctionInput;

@@ -1,10 +1,89 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './PedestrianCrossing.css';
+import SaveNextButton from '../ButtonComponents/SaveNextButton';
+import BackButton from '../ButtonComponents/BackButton';
+import ResetLaneChangesButton from '../ButtonComponents/ResetLaneChangesButton';
+import ResetAllButton from '../ButtonComponents/ResetAllButton';
 
-function PedestrianCrossings() {
-  const [addCrossings, setAddCrossings] = useState(false);
-  const [crossingDuration, setCrossingDuration] = useState('');
-  const [requestsPerHour, setRequestsPerHour] = useState('');
+function PedestrianCrossing({ setActiveStep, saveFormData, resetForm, resetAllForms, formData = {} }) {
+  // Initialize state with passed formData or default values
+  const [crossingData, setCrossingData] = useState(() => {
+    return Object.keys(formData).length > 0 ? formData : {
+      addCrossings: false,
+      crossingDuration: '',
+      requestsPerHour: '',
+    };
+  });
+
+  const [isValid, setIsValid] = useState(true);
+
+  // Check validity when form data changes
+  useEffect(() => {
+    validateForm();
+  }, [crossingData]);
+
+  const validateForm = () => {
+    // If crossings aren't added, form is valid
+    if (!crossingData.addCrossings) {
+      setIsValid(true);
+      return;
+    }
+    
+    // If crossings are added, both duration and requests need values
+    const durationValid = crossingData.crossingDuration !== '' && 
+                          !isNaN(crossingData.crossingDuration) && 
+                          crossingData.crossingDuration >= 5 && 
+                          crossingData.crossingDuration <= 60;
+                          
+    const requestsValid = crossingData.requestsPerHour !== '' && 
+                         !isNaN(crossingData.requestsPerHour) && 
+                         crossingData.requestsPerHour >= 0 && 
+                         crossingData.requestsPerHour <= 1000;
+                         
+    setIsValid(durationValid && requestsValid);
+  };
+
+  const handleAddCrossingsChange = (e) => {
+    setCrossingData(prev => ({
+      ...prev,
+      addCrossings: e.target.checked
+    }));
+  };
+
+  const handleCrossingDurationChange = (e) => {
+    setCrossingData(prev => ({
+      ...prev,
+      crossingDuration: e.target.value
+    }));
+  };
+
+  const handleRequestsPerHourChange = (e) => {
+    setCrossingData(prev => ({
+      ...prev,
+      requestsPerHour: e.target.value
+    }));
+  };
+
+  // Handle button click events
+  const handleSaveNext = () => {
+    if (isValid) {
+      saveFormData('pedestrianCrossing', crossingData);
+      setActiveStep(3); // Move to the next step (LanePrioritisation)
+    }
+  };
+
+  const handleBack = () => {
+    setActiveStep(1); // Go back to LaneCustomisation
+  };
+
+  const handleResetChanges = () => {
+    resetForm('pedestrianCrossing');
+    setCrossingData({
+      addCrossings: false,
+      crossingDuration: '',
+      requestsPerHour: '',
+    });
+  };
 
   return (
     <div className="pedestrian-crossings-container">
@@ -26,13 +105,13 @@ function PedestrianCrossings() {
             <input
               id="add-crossings"
               type="checkbox"
-              checked={addCrossings}
-              onChange={(e) => setAddCrossings(e.target.checked)}
+              checked={crossingData.addCrossings}
+              onChange={handleAddCrossingsChange}
             />
           </label>
         </div>
 
-        {addCrossings && (
+        {crossingData.addCrossings && (
           <>
             <div className="control-row">
               <label htmlFor="crossing-duration">
@@ -42,8 +121,9 @@ function PedestrianCrossings() {
                   type="number"
                   min="5"
                   max="60"
-                  value={crossingDuration}
-                  onChange={(e) => setCrossingDuration(e.target.value)}
+                  value={crossingData.crossingDuration}
+                  onChange={handleCrossingDurationChange}
+                  className={crossingData.addCrossings && (!crossingData.crossingDuration || crossingData.crossingDuration < 5 || crossingData.crossingDuration > 60) ? 'invalid' : 'valid'}
                 />
               </label>
             </div>
@@ -56,16 +136,25 @@ function PedestrianCrossings() {
                   type="number"
                   min="0"
                   max="1000"
-                  value={requestsPerHour}
-                  onChange={(e) => setRequestsPerHour(e.target.value)}
+                  value={crossingData.requestsPerHour}
+                  onChange={handleRequestsPerHourChange}
+                  className={crossingData.addCrossings && (!crossingData.requestsPerHour || crossingData.requestsPerHour < 0 || crossingData.requestsPerHour > 1000) ? 'invalid' : 'valid'}
                 />
               </label>
             </div>
           </>
         )}
       </div>
+      
+      {/* Button container */}
+      <div className="button-container">
+        <BackButton onClick={handleBack} label="Back to Lane Customisation" />
+        <ResetLaneChangesButton onClick={handleResetChanges} />
+        <ResetAllButton onClick={resetAllForms} />
+        <SaveNextButton onClick={handleSaveNext} disabled={!isValid} />
+      </div>
     </div>
   );
 }
 
-export default PedestrianCrossings;
+export default PedestrianCrossing;
