@@ -3,6 +3,8 @@ import JunctionRankings from '../components/RankingsPageComponents/JunctionRanki
 import { BrowserRouter } from 'react-router-dom';
 import '@testing-library/jest-dom';
 
+// TODO: Waiting on new UI designs before continuing with these tests
+
 // TODO: Additional tests:
 // 1. Check junctionlist renders (with correct junctions?)
 // 2. Check score breakdown renders (with correct junction name and score?)
