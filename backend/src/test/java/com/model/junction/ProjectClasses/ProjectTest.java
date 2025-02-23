@@ -58,6 +58,7 @@ public class ProjectTest {
   public void initialiseProjectVPH() {
     System.out.println("------------------------------------------------------------------");
     System.out.println("TEST 1\n");
+
     System.out.println("Starting VPH data: " + testProject.getVehichlePerHourData());
     boolean addProjectVPH = testProject.setVehiclePerHourData(createControlVPHData());
     
@@ -72,6 +73,7 @@ public class ProjectTest {
   public void updateImmutableProjectVPH() {
     System.out.println("------------------------------------------------------------------");
     System.out.println("TEST 2\n");
+
     testProject.setVehiclePerHourData(createControlVPHData());
     HashMap<Direction, HashMap<Direction, Integer>> currentHashMap = testProject.getVehichlePerHourData();
     
@@ -93,5 +95,46 @@ public class ProjectTest {
       currentHashMap.toString(),
       "The hashmap contents must be equal."
     );
+  }
+  
+  @Test
+  @DisplayName("Return true for projects with the same VPH data")
+  public void compareEqualProjectVPH() {
+    System.out.println("------------------------------------------------------------------");
+    System.out.println("TEST 3\n");
+
+    Project otherProject = new Project("Other Project");
+    testProject.setVehiclePerHourData(createControlVPHData());
+    otherProject.setVehiclePerHourData(createControlVPHData());
+    boolean isEqualData = testProject.equalVPHData(otherProject);
+    
+    System.out.println("Test Project Data: " + testProject.getVehichlePerHourData().toString());
+    System.out.println("Other Project Data: " + otherProject.getVehichlePerHourData().toString());
+    
+    Assertions.assertEquals(isEqualData, true, "Both projects have the same data");
+  }
+
+  @Test
+  @DisplayName("Return false for projects with different VPH data")
+  public void compareDifferentProjectVPH() {
+    System.out.println("------------------------------------------------------------------");
+    System.out.println("TEST 4\n");
+    
+    HashMap<Direction, HashMap<Direction, Integer>> differentHashMap = createControlVPHData();
+    HashMap<Direction, Integer> northEntry = differentHashMap.get(Direction.NORTH);
+    for (Direction d : northEntry.keySet()) {
+      northEntry.put(d, northEntry.get(d) * 2);
+    }
+    differentHashMap.put(Direction.NORTH, northEntry);
+
+    Project otherProject = new Project("Other Project");
+    testProject.setVehiclePerHourData(createControlVPHData());
+    otherProject.setVehiclePerHourData(differentHashMap);
+    boolean isEqualData = testProject.equalVPHData(otherProject);
+    
+    System.out.println("Test Project Data: " + testProject.getVehichlePerHourData().toString());
+    System.out.println("Other Project Data: " + otherProject.getVehichlePerHourData().toString());
+    
+    Assertions.assertEquals(isEqualData, false, "The projects have different data");
   }
 }
