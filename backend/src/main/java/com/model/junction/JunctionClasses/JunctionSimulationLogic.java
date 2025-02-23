@@ -20,12 +20,22 @@ class JunctionSimulationLogic {
   private static final Random random = new Random(); // Random number generator
   private static double interArrivalTime = 0; // Inter-arrival time in seconds
   private static long exponentialTimeInterval = 0; // Exponential time interval
+  private static long simulationStartTime = System.nanoTime(); // Start time of the simulation
 
   public static void main(String[] args) {
     int northboundVph = 600; // vph for northbound traffic
     int exitingNorth = 350; // cars exiting north
     int exitingEast = 150; // cars exiting east
     int exitingWest = 100; // cars exiting west
+
+    // PUFFIN CROSSING:
+    boolean puffinCrossing = true; // Puffin crossing is enabled
+    int puffinCrossingDuration = 100; // Puffin crossing time in seconds
+    int puffinCrossingsPerHour = 6; // Number of crossings per hour
+
+    final int crossingsPerHour = puffinCrossingsPerHour + 1; // Add 1 to crossings per hour to account for the first crossing
+    final long crossingInterval = convertToSimulationTime(3600 / crossingsPerHour); // Time interval between crossings in nanoseconds
+    final long crossingDuration = convertToSimulationTime(puffinCrossingDuration); // Time taken to cross the road in nanoseconds
 
     // PRIORITIESED TRAFFIC FLOW: To implement this, we need to give each of the lanes a priority from 0-4 and this will determine the green light
     // length for each lane. Below are the times (time is done in real life seconds, not simulation seconds)
@@ -40,7 +50,7 @@ class JunctionSimulationLogic {
 
     int directionIndex = 0; // index for the direction of the lane where North = 0, East = 1, South = 2, West = 3
     int greenLightOnTime = 0; // The time the green light is on for the lane in seconds
-    long priorityArray[] = {0, 3, 4, 2}; // priority array for the lanes where indexes are North, East, South, West
+    long priorityArray[] = {2, 3, 4, 1}; // priority array for the lanes where indexes are North, East, South, West
 
     switch ((int) priorityArray[directionIndex]) {
       case 0:
@@ -66,19 +76,19 @@ class JunctionSimulationLogic {
     for (int i = 0; i < priorityArray.length; i++) {
       switch ((int) priorityArray[i]) {
         case 0:
-          priorityArray[i] = 5L * 1_000_000_000 / 240; // Convert to nanoseconds and simulation time, need to do long calculations to avoid overflow
+          priorityArray[i] = convertToSimulationTime(5);
           break;
         case 1:
-          priorityArray[i] = 10L * 1_000_000_000 / 240;
+          priorityArray[i] = convertToSimulationTime(10);
           break;
         case 2:
-          priorityArray[i] = 20L * 1_000_000_000 / 240;
+          priorityArray[i] = convertToSimulationTime(20);
           break;
         case 3:
-          priorityArray[i] = 30L * 1_000_000_000 / 240;
+          priorityArray[i] = convertToSimulationTime(30);
           break;
         case 4:
-          priorityArray[i] = 45L * 1_000_000_000 / 240;
+          priorityArray[i] = convertToSimulationTime(45);
           break;
       }
       System.out.println("Priority for direction " + i + " is " + priorityArray[i] + " nanoseconds");
@@ -100,6 +110,8 @@ class JunctionSimulationLogic {
     // our scheduled executor services
     ScheduledExecutorService carsEntering = Executors.newScheduledThreadPool(1);
     ScheduledExecutorService carsExiting = Executors.newScheduledThreadPool(1);
+
+    // simulationStartTime =  // start time of the simulation
 
     Runnable enterCarsTask =
         new Runnable() {
@@ -161,7 +173,7 @@ class JunctionSimulationLogic {
             // assuming 2 cars leave per second
             int carsLeaving = greenLightOnTimeFinal * 2;
 
-            // Schedule 40 cars to exit over {the priority time} seconds
+            // Schedule {carsLeaving} cars to exit over {the priority time} seconds
             for (int i = 0; i < carsLeaving; i++) {
               final int carIndex = i;
               carsExiting.schedule(
@@ -175,14 +187,16 @@ class JunctionSimulationLogic {
             }
             
             long actualGreenLightTime = System.nanoTime() - threadStartTime;
+            long timeToNextGreen = calculateTimeToNextGreen(trafficLightCycleFinal - actualGreenLightTime, puffinCrossing, crossingsPerHour, crossingInterval, crossingDuration);
 
-            // reschedule the next greenlight after 300 milliseconds but also take into account the traffic light green time
-            carsExiting.schedule(this, trafficLightCycleFinal - actualGreenLightTime, TimeUnit.NANOSECONDS);
+            carsExiting.schedule(this, timeToNextGreen, TimeUnit.NANOSECONDS);
           }
         };
 
     // start entering and exiting cars
     carsEntering.schedule(enterCarsTask, 0, TimeUnit.MILLISECONDS);
+
+    // NEED TO MODIFY THIS _____________________________________________________________________________________________________________________________
     carsExiting.schedule(exitCarsTask, 75, TimeUnit.MILLISECONDS);  // Reduced initial delay
 
     // scheduling shutdown of carsEntering
@@ -221,5 +235,29 @@ class JunctionSimulationLogic {
       averageWaitTime.updateAndGet(
           currentAvg -> ((currentAvg * (exitedCars - 1)) + waitingTime) / exitedCars);
     }
+  }
+
+  // calculates the time to the next green light
+  private static long calculateTimeToNextGreen(long currentWaitTime, boolean puffinCrossing, int crossingsPerHour, long crossingInterval, long crossingDuration){
+    long nextGreenTime = System.nanoTime() + currentWaitTime;
+
+    if (puffinCrossing){
+      for (int i = 1; i < crossingsPerHour; i++){
+        long intervalStart = simulationStartTime + crossingInterval * i;
+        long intervalEnd = intervalStart + crossingDuration;
+
+        // need the 100000000 because this takes into account small time differences and so acts as a buffer
+        if (intervalEnd - nextGreenTime > -100000000 && nextGreenTime - intervalStart > -100000000){
+          System.out.println("Puffin crossing is active");
+          return currentWaitTime + crossingDuration;
+        }
+      }
+    }
+    return currentWaitTime;
+  }
+
+  // converts real time to simulation time (1 second real time = 240 seconds simulation time)
+  private static long convertToSimulationTime(long realTime){
+    return realTime * 1_000_000_000 / 240;
   }
 }
