@@ -1,8 +1,10 @@
 package com.model.junction.ProjectClasses;
 
 import java.util.HashMap;
+import java.util.ArrayList;
 
 import com.model.junction.Attributes.Direction;
+import com.model.junction.JunctionClasses.Junction;
 import com.model.junction.JunctionClasses.JunctionStorage;
 
 public class Project {
@@ -37,6 +39,33 @@ public class Project {
     }
     
     return false;
+  }
+  
+  public HashMap<Direction, Integer> getTotalOutboundVPHData() {
+    HashMap<Direction, Integer> outboundVPHData = new HashMap<Direction, Integer>();
+    
+    for (Direction direction : Direction.values()) {
+      ArrayList<Integer> exitAmounts = new ArrayList<Integer>(vehiclePerHourData.get(direction).values());
+      Integer outboundTotal = exitAmounts.stream().mapToInt(Integer::intValue).sum();
+      
+      outboundVPHData.put(direction, outboundTotal);
+    }
+    
+    return outboundVPHData;
+  }
+  
+  public JunctionStorage getJunctions() {
+    return junctions;
+  }
+
+  public void addJunction(Junction junction) {
+    junctions.storeJunction(junction);
+  }
+  
+  // Conversions
+  @Override
+  public String toString() {
+    return "[ProjectObject(title=" + getProjectTitle() +")]";
   }
 
   // Comparators
