@@ -30,6 +30,7 @@ function MainPage() {
     const [activeStep, setActiveStep] = useState(-1);
     
     // Initialize complete JSON structure
+    // See jsonFileFormat.json for notes on structure
     const [completeJSON, setCompleteJSON] = useState({
       leftTurnLanes: [false, false, false, false],
       lanesEntering: [0, 0, 0, 0],
@@ -68,6 +69,24 @@ function MainPage() {
         Object.assign(newJSON, formData.trafficFlow);
       }
       
+      if (Object.keys(formData.laneCustomisation).length > 0) {
+        // Update lane customisation fields
+        const {
+            leftTurnLanes,
+            lanesEntering,
+            lanesExiting,
+            isBusOrCycle,
+            busCycleLaneDuration
+        } = formData.laneCustomisation;
+        
+        Object.assign(newJSON, {
+            leftTurnLanes,
+            lanesEntering,
+            lanesExiting,
+            isBusOrCycle,
+            busCycleLaneDuration
+        });
+      }
       // Add other form data updates here as needed
 
       setCompleteJSON(newJSON);
