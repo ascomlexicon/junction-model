@@ -4,8 +4,6 @@ import java.util.Set;
 import java.util.HashMap;
 
 public class JunctionStorage {
-
-
   // Attributes
   private HashMap<String, Junction> junctions;
 
