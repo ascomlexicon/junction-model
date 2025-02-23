@@ -64,10 +64,31 @@ function PedestrianCrossing({ setActiveStep, saveFormData, resetForm, resetAllFo
     }));
   };
 
+  // Format lane data to match required JSON structure
+  const formatPedestrianDataToJSON = () => {
+    // Determine if there are pedestrian crossings
+    const isCrossings = crossingData.addCrossings;
+
+    const crossingDuration = (() => {
+      return parseInt(crossingData.crossingDuration);
+    })();
+
+    const crossingRequestsPerHour = (() => {
+      return parseInt(crossingData.requestsPerHour);
+    })();
+
+    return {
+      isCrossings,
+      crossingDuration,
+      crossingRequestsPerHour
+    };
+  };
+
   // Handle button click events
   const handleSaveNext = () => {
     if (isValid) {
-      saveFormData('pedestrianCrossing', crossingData);
+      const formattedData = formatPedestrianDataToJSON();
+      saveFormData('pedestrianCrossing', formattedData);
       setActiveStep(3); // Move to the next step (LanePrioritisation)
     }
   };

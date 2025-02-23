@@ -87,6 +87,21 @@ function MainPage() {
             busCycleLaneDuration
         });
       }
+
+      if (Object.keys(formData.pedestrianCrossing).length > 0) {
+        // Update pedestrian crossing fields
+        const {
+            isCrossings,
+            crossingDuration,
+            crossingRequestsPerHour
+        } = formData.pedestrianCrossing;
+        
+        Object.assign(newJSON, {
+          isCrossings,
+          crossingDuration,
+          crossingRequestsPerHour,
+        });
+      }
       // Add other form data updates here as needed
 
       setCompleteJSON(newJSON);
