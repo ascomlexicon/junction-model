@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/MainPage.css';
 import Sidebar from '../components/MainPageComponents/SideBar';
 import TrafficFlow from '../components/MainPageComponents/TrafficFlow';
@@ -6,6 +6,7 @@ import LaneCustomisation from '../components/MainPageComponents/LaneCustomisatio
 import PedestrianCrossing from '../components/MainPageComponents/PedestrianCrossing';
 import LanePrioritisation from '../components/MainPageComponents/LanePrioritisation';
 import Summary from '../components/MainPageComponents/Summary';
+import JSONViewer from './JSONViewer';
 
 // New component for instructions
 const InstructionsPage = () => {
@@ -28,6 +29,23 @@ const InstructionsPage = () => {
 function MainPage() {
     const [activeStep, setActiveStep] = useState(-1);
     
+    // Initialize complete JSON structure
+    const [completeJSON, setCompleteJSON] = useState({
+      leftTurnLanes: [false, false, false, false],
+      lanesEntering: [0, 0, 0, 0],
+      lanesExiting: [0, 0, 0, 0],
+      isBusOrCycle: "none",
+      busCycleLaneDuration: [0, 0, 0, 0],
+      lanePrioritisation: [],
+      isCrossings: false,
+      crossingDuration: 0,
+      crossingRequestsPerHour: 0,
+      vphNorth: [],
+      vphSouth: [],
+      vphEast: [],
+      vphWest: []
+    });
+    
     // State to store form data
     const [formData, setFormData] = useState({
       trafficFlow: {},
@@ -36,6 +54,25 @@ function MainPage() {
       lanePrioritisation: {}
     });
     
+    // Update JSON whenever form data changes
+    useEffect(() => {
+      updateJSON();
+    }, [formData]);
+
+    // Function to update complete JSON
+    const updateJSON = () => {
+      const newJSON = { ...completeJSON };
+      
+      // Update with traffic flow data if it exists
+      if (Object.keys(formData.trafficFlow).length > 0) {
+        Object.assign(newJSON, formData.trafficFlow);
+      }
+      
+      // Add other form data updates here as needed
+
+      setCompleteJSON(newJSON);
+    };
+
     // Save form data
     const saveFormData = (formName, data) => {
       setFormData(prev => ({
@@ -131,6 +168,7 @@ function MainPage() {
                     {renderForm()}
                 </div>
             </div>
+            <JSONViewer data={completeJSON} />
         </div>
     );
 }
