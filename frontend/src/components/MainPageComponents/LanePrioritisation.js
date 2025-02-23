@@ -43,9 +43,26 @@ function LanePrioritisation({ setActiveStep, saveFormData, resetForm, resetAllFo
     }));
   };
 
+  // Convert lane prioritisation to required JSON format
+  const formatLanePrioritiesToJSON = () => {
+    let lanePrioritisation = [];
+
+    if (prioritisationData.enablePrioritization) {
+      lanePrioritisation = prioritisationData.directions.map((direction, index) => ({
+        direction: direction.id,
+        priority: index + 1
+      }));
+    }
+
+    return {
+        lanePrioritisation: lanePrioritisation
+    };
+  };
+
   // Handle button click events
   const handleSaveNext = () => {
-    saveFormData('lanePrioritisation', prioritisationData);
+    const formattedData = formatLanePrioritiesToJSON();
+    saveFormData('lanePrioritisation', formattedData);
     setActiveStep(4); // Move to Summary step
   };
 

@@ -102,8 +102,16 @@ function MainPage() {
           crossingRequestsPerHour,
         });
       }
-      // Add other form data updates here as needed
 
+      if (Object.keys(formData.lanePrioritisation).length > 0) {
+        // Update lane prioritisation fields
+        const lanePrioritisation = formData.lanePrioritisation.lanePrioritisation;
+
+        Object.assign(newJSON, {
+          lanePrioritisation
+        });
+      }
+      
       setCompleteJSON(newJSON);
     };
 
