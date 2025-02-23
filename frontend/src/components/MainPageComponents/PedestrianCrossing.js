@@ -69,6 +69,7 @@ function PedestrianCrossing({ setActiveStep, saveFormData, resetForm, resetAllFo
     // Determine if there are pedestrian crossings
     const isCrossings = crossingData.addCrossings;
 
+    // Add crossing duration and requests to JSON
     const crossingDuration = (() => {
       return parseInt(crossingData.crossingDuration);
     })();
@@ -87,7 +88,7 @@ function PedestrianCrossing({ setActiveStep, saveFormData, resetForm, resetAllFo
   // Handle button click events
   const handleSaveNext = () => {
     if (isValid) {
-      const formattedData = formatPedestrianDataToJSON();
+      const formattedData = formatPedestrianDataToJSON(); // Formats data to JSON
       saveFormData('pedestrianCrossing', formattedData);
       setActiveStep(3); // Move to the next step (LanePrioritisation)
     }
