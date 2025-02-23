@@ -41,6 +41,42 @@ function TrafficFlow({ setActiveStep, saveFormData, resetForm, resetAllForms, fo
         setIsValid(hasTraffic);
     };
 
+    // Convert traffic data to required JSON format
+    const formatTrafficDataToJSON = () => {
+        const formatDirectionData = (direction, data) => {
+            const exits = {
+                north: { key: 'exitNorth', value: parseInt(data.north) || 0 },
+                south: { key: 'exitSouth', value: parseInt(data.south) || 0 },
+                east: { key: 'exitEast', value: parseInt(data.east) || 0 },
+                west: { key: 'exitWest', value: parseInt(data.west) || 0 }
+            };
+
+            // Calculate total entering vehicles
+            const enterTotal = Object.values(data).reduce((sum, val) => sum + (parseInt(val) || 0), 0);
+
+            // Create the entry object with all possible exits except the entry direction
+            const entry = {
+                enter: enterTotal
+            };
+
+            // Add all exits except for the entry direction
+            Object.entries(exits).forEach(([exitDir, exitData]) => {
+                if (exitDir !== direction) {
+                    entry[exitData.key] = exitData.value;
+                }
+            });
+
+            return [entry];
+        };
+
+        return {
+            vphNorth: formatDirectionData('north', trafficData.north),
+            vphSouth: formatDirectionData('south', trafficData.south),
+            vphEast: formatDirectionData('east', trafficData.east),
+            vphWest: formatDirectionData('west', trafficData.west)
+        };
+    };
+
     // Handle input updates from JunctionInput components
     const handleInputUpdate = (incomingDirection, data) => {
         setTrafficData(prevData => ({
@@ -63,7 +99,8 @@ function TrafficFlow({ setActiveStep, saveFormData, resetForm, resetAllForms, fo
     // Save and proceed to next form
     const handleSaveNext = () => {
         if (isValid) {
-            saveFormData('trafficFlow', trafficData);
+            const formattedData = formatTrafficDataToJSON();
+            saveFormData('trafficFlow', formattedData);
             setActiveStep(1); // Move to Lane Customisation
         }
     };
