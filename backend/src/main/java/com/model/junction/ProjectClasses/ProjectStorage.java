@@ -1,26 +1,46 @@
 package com.model.junction.ProjectClasses;
 
-import java.util.HashSet;
+import java.util.HashMap;
+
+import com.model.junction.Attributes.Direction;
 
 import org.springframework.stereotype.Repository;
 
-import jakarta.annotation.PostConstruct;
-
 @Repository
 public class ProjectStorage {
-  private HashSet<Project> projects;
+  private HashMap<String, Project> projects;
   
+  // Constructors
   public ProjectStorage() {
-    this.projects = new HashSet<Project>();
-  }
-  
-  @PostConstruct
-  private void init() {
-    this.projects.add(new Project("Project 1"));
+    this.projects = new HashMap<String, Project>();
   }
   
   // Accessors and Mutators
-  public HashSet<Project> getProjects() {
+  public HashMap<String, Project> getAllProjects() {
     return projects;
+  }
+  
+  public Project getProject(String title) {
+    return projects.get(title);
+  }
+  
+  // Project Operations
+  public void createNewProject(HashMap<Direction, HashMap<Direction, Integer>> vphData) {
+    Project projectToCreate = new Project("Project " + (projects.size() + 1));
+    projectToCreate.setVehiclePerHourData(vphData);
+
+    projects.put(projectToCreate.getProjectTitle(), projectToCreate);
+  }
+
+  public boolean renameProject(String oldName, String newName) {
+    if (!projects.containsKey(oldName) || projects.containsKey(newName)) {
+      return false;
+    }
+    
+    Project renameProject = projects.remove(oldName); 
+    renameProject.setProjectTitle(newName);
+    projects.put(newName, renameProject);
+    
+    return true;
   }
 }
