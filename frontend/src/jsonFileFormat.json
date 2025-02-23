@@ -1,0 +1,64 @@
+{
+  // Array of directions where there is a left turn lane
+  // [North, South, East, West] - in this example, only North has a left turn lane
+  "leftTurnLanes": [true, false, false, false],
+  // [North, South, East, West] - never null
+  "lanesEntering": [2, 3, 4, 1],
+  "lanesExiting": [1, 2, 3, 4],
+  // Either bus, cycle or none
+  "isBusOrCycle": "bus",
+  // 0 = no bus/cycle lane, otherwise the vph for that lane is entered
+  // [North, South, East, West]
+  "busCycleLaneDuration": [0, 0, 20, 0],
+  // [North, South, East, West]
+  // If no prioritisation, then empty array
+  "lanePrioritisation": [1, 2, 3, 4],
+  // Pedestrian crossings
+  "isCrossings": true,
+  "crossingDuration": 1,
+  "crossingRequestsPerHour": 10,
+  // vph for each direction has its own entry, always non-empty
+  "vphNorth": [
+    {
+      "enter": 200,
+      "exitSouth": 100,
+      "exitEast": 50,
+      "exitWest": 50
+    }
+  ],
+  "vphSouth": [
+    {
+      "enter": 200,
+      "exitNorth": 100,
+      "exitEast": 50,
+      "exitWest": 50
+    }
+  ],
+  "vphEast": [
+    {
+      "enter": 200,
+      "exitSouth": 100,
+      "exitNorth": 50,
+      "exitWest": 50
+    }
+  ],
+  "vphWest": [
+    {
+      "enter": 200,
+      "exitSouth": 100,
+      "exitEast": 50,
+      "exitNorth": 50
+    }
+  ]
+}
+
+
+1. store vph for each direction
+7. duration of crossing
+8. number of crossings per hour
+9. lane prioritisation order
+6. bus/cycle lane duration AND directions
+5. bus/cycle lanes
+2. lanes entering the junction
+3. lanes exiting the junction
+4. left turn lanes
