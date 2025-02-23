@@ -122,6 +122,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
   };
 
   // Get the currently selected special lane direction
+  // FIXME: Issue with Object.entries, suggests we need to have some type of default value
   const getSelectedDirection = () => {
     const busLaneDirection = Object.entries(laneData.busLane).find(([_, value]) => value)?.[0];
     const cycleLaneDirection = Object.entries(laneData.cycleLane).find(([_, value]) => value)?.[0];

@@ -3,6 +3,7 @@ import './Summary.css';
 import BackButton from '../ButtonComponents/BackButton';
 import { useNavigate } from 'react-router-dom';
 
+// TODO: Rather than accessing from formData, try to refactor to access from JSON instead
 function Summary({ formData, setActiveStep }) {
   const { trafficFlow, laneCustomisation, pedestrianCrossing, lanePrioritisation } = formData;
   const navigate = useNavigate();
@@ -12,6 +13,10 @@ function Summary({ formData, setActiveStep }) {
     e.preventDefault();
     // TODO: For now this just ensures form is not-empty
         // More formal validation can be added later
+
+    // TODO: Send JSON data to backend for simulation
+    // const myData = ...
+
     navigate('/RankingsPage');
 };
   
