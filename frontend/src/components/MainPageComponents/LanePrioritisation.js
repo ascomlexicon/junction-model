@@ -52,7 +52,7 @@ function LanePrioritisation({ setActiveStep, saveFormData, resetForm, resetAllFo
     }
 
     return {
-        lanePrioritisation: lanePrioritisation
+        lanePrioritisation
     };
   };
 

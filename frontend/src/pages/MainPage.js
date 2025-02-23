@@ -32,11 +32,11 @@ function MainPage() {
     // Initialize complete JSON structure
     // See jsonFileFormat.json for notes on structure
     const [completeJSON, setCompleteJSON] = useState({
-      leftTurnLanes: [false, false, false, false],
-      lanesEntering: [0, 0, 0, 0],
-      lanesExiting: [0, 0, 0, 0],
+      leftTurnLanes: [],
+      lanesEntering: [],
+      lanesExiting: [],
       isBusOrCycle: "none",
-      busCycleLaneDuration: [0, 0, 0, 0],
+      busCycleLaneDuration: [],
       lanePrioritisation: [],
       isCrossings: false,
       crossingDuration: 0,
@@ -104,18 +104,15 @@ function MainPage() {
       }
 
       if (Object.keys(formData.lanePrioritisation).length > 0) {
-        // Update lane prioritisation fields
-        const lanePrioritisation = formData.lanePrioritisation.lanePrioritisation;
-
-        Object.assign(newJSON, {
-          lanePrioritisation
-        });
+        // Update lane prioritisation field
+        Object.assign(newJSON, formData.lanePrioritisation);
       }
       
       setCompleteJSON(newJSON);
     };
 
     // Save form data
+    // TODO: Maybe can get rid of this if we use the form data directly from JSON
     const saveFormData = (formName, data) => {
       setFormData(prev => ({
         ...prev,
@@ -123,16 +120,63 @@ function MainPage() {
       }));
     };
     
-    // Reset specific form
+    // Reset specific form and JSON data for the form
     const resetForm = (formName) => {
+      const newJSON = { ...completeJSON };
+
+      switch (formName) {
+        case 'trafficFlow':
+          newJSON.vphNorth = [];
+          newJSON.vphSouth = [];
+          newJSON.vphEast = [];
+          newJSON.vphWest = [];
+          break;
+        case 'laneCustomisation':
+          newJSON.leftTurnLanes = [false, false, false, false];
+          newJSON.lanesEntering = [0, 0, 0, 0];
+          newJSON.lanesExiting = [0, 0, 0, 0];
+          newJSON.isBusOrCycle = "none";
+          newJSON.busCycleLaneDuration = [0, 0, 0, 0];
+          break;
+        case 'pedestrianCrossing':
+          newJSON.isCrossings = false;
+          newJSON.crossingDuration = 0;
+          newJSON.crossingRequestsPerHour = 0;
+          break;
+        case 'lanePrioritisation':
+          newJSON.lanePrioritisation = [];
+          break;
+        default:
+          break;
+      }
+
+      setCompleteJSON(newJSON);
+
       setFormData(prev => ({
         ...prev,
         [formName]: {}
       }));
     };
     
-    // Reset all forms
+    // Reset all forms, as well as the JSON file being configured
     const resetAllForms = () => {
+      // Resets all JSON information
+      setCompleteJSON({
+        leftTurnLanes: [],
+        lanesEntering: [],
+        lanesExiting: [],
+        isBusOrCycle: "none",
+        busCycleLaneDuration: [],
+        lanePrioritisation: [],
+        isCrossings: false,
+        crossingDuration: 0,
+        crossingRequestsPerHour: 0,
+        vphNorth: [],
+        vphSouth: [],
+        vphEast: [],
+        vphWest: []
+      });
+
       setFormData({
         trafficFlow: {},
         laneCustomisation: {},
@@ -152,6 +196,7 @@ function MainPage() {
                   <TrafficFlow 
                     setActiveStep={setActiveStep}
                     saveFormData={saveFormData}
+                    resetForm={resetForm}
                     resetAllForms={resetAllForms}
                     formData={formData.trafficFlow}
                   />
