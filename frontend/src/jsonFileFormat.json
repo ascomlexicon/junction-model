@@ -10,9 +10,9 @@
   // 0 = no bus/cycle lane, otherwise the vph for that lane is entered
   // [North, South, East, West]
   "busCycleLaneDuration": [0, 0, 20, 0],
-  // [North, South, East, West]
   // If no prioritisation, then empty array
-  "lanePrioritisation": [1, 2, 3, 4],
+  // Here, east is priority 1, and west is priority 4
+  "lanePrioritisation": ["east", "south", "north", "west"],
   // Pedestrian crossings
   "isCrossings": true,
   "crossingDuration": 1,

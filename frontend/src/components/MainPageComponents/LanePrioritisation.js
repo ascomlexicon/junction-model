@@ -48,10 +48,7 @@ function LanePrioritisation({ setActiveStep, saveFormData, resetForm, resetAllFo
     let lanePrioritisation = [];
 
     if (prioritisationData.enablePrioritization) {
-      lanePrioritisation = prioritisationData.directions.map((direction, index) => ({
-        direction: direction.id,
-        priority: index + 1
-      }));
+      lanePrioritisation = prioritisationData.directions.map(direction => direction.content);
     }
 
     return {
