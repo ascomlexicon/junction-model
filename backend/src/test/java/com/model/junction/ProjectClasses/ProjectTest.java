@@ -1,7 +1,9 @@
 package com.model.junction.ProjectClasses;
 
 import com.model.junction.Attributes.Direction;
+import com.model.junction.JunctionClasses.Junction;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.junit.jupiter.api.Test;
@@ -57,7 +59,7 @@ public class ProjectTest {
   @DisplayName("A fresh project can have its VPH data initialised.")
   public void initialiseProjectVPH() {
     System.out.println("------------------------------------------------------------------");
-    System.out.println("TEST 1\n");
+    System.out.println("Initialise a fresh project's VPH data.\n");
 
     System.out.println("Starting VPH data: " + testProject.getVehichlePerHourData());
     boolean addProjectVPH = testProject.setVehiclePerHourData(createControlVPHData());
@@ -72,7 +74,7 @@ public class ProjectTest {
   @DisplayName("A project with initialised VPH data cannot change.")
   public void updateImmutableProjectVPH() {
     System.out.println("------------------------------------------------------------------");
-    System.out.println("TEST 2\n");
+    System.out.println("Attempt to change an already intialised project.\n");
 
     testProject.setVehiclePerHourData(createControlVPHData());
     HashMap<Direction, HashMap<Direction, Integer>> currentHashMap = testProject.getVehichlePerHourData();
@@ -101,7 +103,7 @@ public class ProjectTest {
   @DisplayName("Return true for projects with the same VPH data")
   public void compareEqualProjectVPH() {
     System.out.println("------------------------------------------------------------------");
-    System.out.println("TEST 3\n");
+    System.out.println("Compare projects of the same VPH.\n");
 
     Project otherProject = new Project("Other Project");
     testProject.setVehiclePerHourData(createControlVPHData());
@@ -118,7 +120,7 @@ public class ProjectTest {
   @DisplayName("Return false for projects with different VPH data")
   public void compareDifferentProjectVPH() {
     System.out.println("------------------------------------------------------------------");
-    System.out.println("TEST 4\n");
+    System.out.println("Compare projects with different VPH data\n");
     
     HashMap<Direction, HashMap<Direction, Integer>> differentHashMap = createControlVPHData();
     HashMap<Direction, Integer> northEntry = differentHashMap.get(Direction.NORTH);
@@ -136,5 +138,52 @@ public class ProjectTest {
     System.out.println("Other Project Data: " + otherProject.getVehichlePerHourData().toString());
     
     Assertions.assertEquals(isEqualData, false, "The projects have different data");
+  }
+  
+  @Test
+  @DisplayName("Return the correct sums for each the outbound VPH of each direction.")
+  public void returnVPHSums() {
+    System.out.println("------------------------------------------------------------------");
+    System.out.println("Return the sums of the outbound VPHs for each cardinal direction\n");
+
+    HashMap<Direction, Integer> correctSums = new HashMap<Direction, Integer>();
+    correctSums.put(Direction.NORTH, 300);
+    correctSums.put(Direction.EAST, 150);
+    correctSums.put(Direction.SOUTH, 250);
+    correctSums.put(Direction.WEST, 100);
+    
+    System.out.println("Expected Result: " + correctSums.toString());
+    
+    testProject.setVehiclePerHourData(createControlVPHData());
+    HashMap<Direction, Integer> testSums = testProject.getTotalOutboundVPHData();
+    System.out.println("Actual Result: " + testSums.toString());
+    
+    Assertions.assertEquals(correctSums, testSums, "The hashmaps should have the same contents.");
+  }
+  
+  @Test
+  @DisplayName("Return a sorted list of junctions in the project.")
+  public void returnSortedListOfJunctions() {
+    System.out.println("------------------------------------------------------------------");
+    System.out.println("Return a list of junctions sorted by score\n");
+
+    Junction junction1 = new Junction("J1", 10.0);
+    Junction junction2 = new Junction("J2", 73.0);
+    Junction junction3 = new Junction("J3", 48.0);
+    
+    ArrayList<Junction> expectedList = new ArrayList<Junction>();
+    expectedList.add(junction1);
+    expectedList.add(junction3);
+    expectedList.add(junction2);
+    
+    System.out.println("Expected Result: " + expectedList.toString());
+
+    testProject.addJunction(junction1);
+    testProject.addJunction(junction2);
+    testProject.addJunction(junction3);
+    ArrayList<Junction> sortedList = testProject.getScoreSortedJunctions();
+    System.out.println("Actual Result: " + sortedList.toString());
+    
+    Assertions.assertEquals(expectedList, sortedList, "The junctions should be sorted.");
   }
 }
