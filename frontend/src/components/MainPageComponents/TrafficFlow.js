@@ -24,21 +24,25 @@ function TrafficFlow({ setActiveStep, saveFormData, resetForm, resetAllForms, fo
             // Transform JSON format into the component's internal format
             return {
                 north: {
+                    enter: formData.vphNorth[0]?.enter || 0, 
                     south: formData.vphNorth[0]?.exitSouth || 0,
                     east: formData.vphNorth[0]?.exitEast || 0,
                     west: formData.vphNorth[0]?.exitWest || 0
                 },
                 south: {
+                    enter: formData.vphSouth[0]?.enter || 0,
                     north: formData.vphSouth[0]?.exitNorth || 0,
                     east: formData.vphSouth[0]?.exitEast || 0,
                     west: formData.vphSouth[0]?.exitWest || 0
                 },
                 east: {
+                    enter: formData.vphEast[0]?.enter || 0,
                     north: formData.vphEast[0]?.exitNorth || 0,
                     south: formData.vphEast[0]?.exitSouth || 0,
                     west: formData.vphEast[0]?.exitWest || 0
                 },
                 west: {
+                    enter: formData.vphWest[0]?.enter || 0,
                     north: formData.vphWest[0]?.exitNorth || 0,
                     south: formData.vphWest[0]?.exitSouth || 0,
                     east: formData.vphWest[0]?.exitEast || 0
@@ -47,10 +51,10 @@ function TrafficFlow({ setActiveStep, saveFormData, resetForm, resetAllForms, fo
         }
         // Default empty state if no valid formData
         return {
-            north: { south: 0, east: 0, west: 0 },
-            south: { north: 0, east: 0, west: 0 },
-            east: { north: 0, south: 0, west: 0 },
-            west: { north: 0, south: 0, east: 0 }
+            north: { enter: 0, south: 0, east: 0, west: 0 },
+            south: { enter: 0, north: 0, east: 0, west: 0 },
+            east: { enter: 0, north: 0, south: 0, west: 0 },
+            west: { enter: 0, north: 0, south: 0, east: 0 }
         };
     });
 
@@ -89,11 +93,10 @@ function TrafficFlow({ setActiveStep, saveFormData, resetForm, resetAllForms, fo
             };
 
             // Calculate total entering vehicles
-            const enterTotal = Object.values(data).reduce((sum, val) => sum + (parseInt(val) || 0), 0);
+            // const enterTotal = Object.values(data).reduce((sum, val) => sum + (parseInt(val) || 0), 0);
 
-            // Create the entry object with all possible exits except the entry direction
             const entry = {
-                enter: enterTotal
+                enter: parseInt(data.enter) || 0
             };
 
             // Add all exits except for the entry direction
@@ -126,10 +129,10 @@ function TrafficFlow({ setActiveStep, saveFormData, resetForm, resetAllForms, fo
     const handleResetVPH = () => {
         resetForm('trafficFlow');
         setTrafficData({
-            north: { south: 0, east: 0, west: 0 },
-            south: { north: 0, east: 0, west: 0 },
-            east: { north: 0, south: 0, west: 0 },
-            west: { north: 0, south: 0, east: 0 }
+            north: { enter: 0, south: 0, east: 0, west: 0 },
+            south: { enter: 0, north: 0, east: 0, west: 0 },
+            east: { enter: 0, north: 0, south: 0, west: 0 },
+            west: { enter: 0, north: 0, south: 0, east: 0 }
         });
     };
 
