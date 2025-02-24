@@ -112,7 +112,9 @@ function MainPage() {
     };
 
     // Save form data
-    // TODO: Maybe can get rid of this if we use the form data directly from JSON
+    // TODO: Change the way in which this is used
+      //  This saves multiple copies of the JSON file in the state
+      // We only need to save the form data once, need to rethink design, starting with traffic flow
     const saveFormData = (formName, data) => {
       setFormData(prev => ({
         ...prev,
