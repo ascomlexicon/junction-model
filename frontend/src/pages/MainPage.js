@@ -198,9 +198,8 @@ function MainPage() {
                     saveFormData={saveFormData}
                     resetForm={resetForm}
                     resetAllForms={resetAllForms}
-                    formData={formData.trafficFlow}
-                    // formData = {completeJSON} TODO: Use this instead of formData, however
-                    // will need to update the form components to use the JSON data directly
+                    // formData={formData.trafficFlow}
+                    formData = {completeJSON}
                   />
                 );
             case 1:

@@ -8,8 +8,45 @@ import BackButton from '../ButtonComponents/BackButton';
 
 function TrafficFlow({ setActiveStep, saveFormData, resetForm, resetAllForms, formData = {} }) {
     // Initialize state with passed formData or default values
+    // const [trafficData, setTrafficData] = useState(() => {
+    //     return Object.keys(formData).length > 0 ? formData : {
+    //         north: { south: 0, east: 0, west: 0 },
+    //         south: { north: 0, east: 0, west: 0 },
+    //         east: { north: 0, south: 0, west: 0 },
+    //         west: { north: 0, south: 0, east: 0 }
+    //     };
+    // });
+
+    // Initialize state with passed formData or default values
     const [trafficData, setTrafficData] = useState(() => {
-        return Object.keys(formData).length > 0 ? formData : {
+        // Check if formData has the expected JSON structure
+        if (formData.vphNorth && formData.vphSouth && formData.vphEast && formData.vphWest) {
+            // Transform JSON format into the component's internal format
+            return {
+                north: {
+                    south: formData.vphNorth[0]?.exitSouth || 0,
+                    east: formData.vphNorth[0]?.exitEast || 0,
+                    west: formData.vphNorth[0]?.exitWest || 0
+                },
+                south: {
+                    north: formData.vphSouth[0]?.exitNorth || 0,
+                    east: formData.vphSouth[0]?.exitEast || 0,
+                    west: formData.vphSouth[0]?.exitWest || 0
+                },
+                east: {
+                    north: formData.vphEast[0]?.exitNorth || 0,
+                    south: formData.vphEast[0]?.exitSouth || 0,
+                    west: formData.vphEast[0]?.exitWest || 0
+                },
+                west: {
+                    north: formData.vphWest[0]?.exitNorth || 0,
+                    south: formData.vphWest[0]?.exitSouth || 0,
+                    east: formData.vphWest[0]?.exitEast || 0
+                }
+            };
+        }
+        // Default empty state if no valid formData
+        return {
             north: { south: 0, east: 0, west: 0 },
             south: { north: 0, east: 0, west: 0 },
             east: { north: 0, south: 0, west: 0 },
