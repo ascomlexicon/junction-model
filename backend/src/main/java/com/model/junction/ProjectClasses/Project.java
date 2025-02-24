@@ -27,7 +27,7 @@ public class Project {
     this.projectTitle = newTitle;
   }
   
-  public HashMap<Direction, HashMap<Direction, Integer>> getVehichlePerHourData() {
+  public HashMap<Direction, HashMap<Direction, Integer>> getVehiclePerHourData() {
     return this.vehiclePerHourData;
   }
 
@@ -75,8 +75,8 @@ public class Project {
   // Comparators
   public boolean equalVPHData(Project other) {
     int equalityCounter = 0;
-    HashMap<Direction, HashMap<Direction, Integer>> thisHashMap = getVehichlePerHourData();
-    HashMap<Direction, HashMap<Direction, Integer>> otherHashMap = other.getVehichlePerHourData();
+    HashMap<Direction, HashMap<Direction, Integer>> thisHashMap = getVehiclePerHourData();
+    HashMap<Direction, HashMap<Direction, Integer>> otherHashMap = other.getVehiclePerHourData();
 
     for (Direction direction : Direction.values()) {
       HashMap<Direction, Integer> thisEntry = thisHashMap.get(direction);

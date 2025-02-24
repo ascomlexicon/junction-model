@@ -61,13 +61,13 @@ public class ProjectTest {
     System.out.println("------------------------------------------------------------------");
     System.out.println("Initialise a fresh project's VPH data.\n");
 
-    System.out.println("Starting VPH data: " + testProject.getVehichlePerHourData());
+    System.out.println("Starting VPH data: " + testProject.getVehiclePerHourData());
     boolean addProjectVPH = testProject.setVehiclePerHourData(createControlVPHData());
     
-    System.out.println("New VPH data: " + testProject.getVehichlePerHourData().toString());
+    System.out.println("New VPH data: " + testProject.getVehiclePerHourData().toString());
     
     Assertions.assertEquals(addProjectVPH, true, "The project should add the data");
-    Assertions.assertNotNull(testProject.getVehichlePerHourData());
+    Assertions.assertNotNull(testProject.getVehiclePerHourData());
   }
 
   @Test
@@ -77,7 +77,7 @@ public class ProjectTest {
     System.out.println("Attempt to change an already intialised project.\n");
 
     testProject.setVehiclePerHourData(createControlVPHData());
-    HashMap<Direction, HashMap<Direction, Integer>> currentHashMap = testProject.getVehichlePerHourData();
+    HashMap<Direction, HashMap<Direction, Integer>> currentHashMap = testProject.getVehiclePerHourData();
     
     HashMap<Direction, Integer> northEntry = currentHashMap.get(Direction.NORTH);
     for (Direction d : northEntry.keySet()) {
@@ -89,11 +89,11 @@ public class ProjectTest {
     boolean hasUpdatedVPH = testProject.setVehiclePerHourData(newHashMap);
     
     System.out.println("Old VPH Data: " + currentHashMap.toString());
-    System.out.println("New VPH Data: " + testProject.getVehichlePerHourData().toString());
+    System.out.println("New VPH Data: " + testProject.getVehiclePerHourData().toString());
     
     Assertions.assertEquals(hasUpdatedVPH, false, "The hashmap should not update");
     Assertions.assertEquals(
-      testProject.getVehichlePerHourData().toString(),
+      testProject.getVehiclePerHourData().toString(),
       currentHashMap.toString(),
       "The hashmap contents must be equal."
     );
@@ -110,8 +110,8 @@ public class ProjectTest {
     otherProject.setVehiclePerHourData(createControlVPHData());
     boolean isEqualData = testProject.equalVPHData(otherProject);
     
-    System.out.println("Test Project Data: " + testProject.getVehichlePerHourData().toString());
-    System.out.println("Other Project Data: " + otherProject.getVehichlePerHourData().toString());
+    System.out.println("Test Project Data: " + testProject.getVehiclePerHourData().toString());
+    System.out.println("Other Project Data: " + otherProject.getVehiclePerHourData().toString());
     
     Assertions.assertEquals(isEqualData, true, "Both projects have the same data");
   }
@@ -134,8 +134,8 @@ public class ProjectTest {
     otherProject.setVehiclePerHourData(differentHashMap);
     boolean isEqualData = testProject.equalVPHData(otherProject);
     
-    System.out.println("Test Project Data: " + testProject.getVehichlePerHourData().toString());
-    System.out.println("Other Project Data: " + otherProject.getVehichlePerHourData().toString());
+    System.out.println("Test Project Data: " + testProject.getVehiclePerHourData().toString());
+    System.out.println("Other Project Data: " + otherProject.getVehiclePerHourData().toString());
     
     Assertions.assertEquals(isEqualData, false, "The projects have different data");
   }
