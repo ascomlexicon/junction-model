@@ -1,6 +1,6 @@
 .container {
     display: flex;
-    min-height: 100vh;
+    height: 100vh;
     font-family: Arial, sans-serif;
   }
   
@@ -16,6 +16,7 @@
     background-color: #2C0052;
     padding: 20px;
     color: white;
+    overflow-y: scroll;
   }
   
   .title {
