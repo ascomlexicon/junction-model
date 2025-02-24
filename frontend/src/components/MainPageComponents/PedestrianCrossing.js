@@ -8,7 +8,14 @@ import ResetAllButton from '../ButtonComponents/ResetAllButton';
 function PedestrianCrossing({ setActiveStep, saveFormData, resetForm, resetAllForms, formData = {} }) {
   // Initialize state with passed formData or default values
   const [crossingData, setCrossingData] = useState(() => {
-    return Object.keys(formData).length > 0 ? formData : {
+    if (formData.isCrossings) {
+      return {
+        addCrossings: true,
+        crossingDuration: formData.crossingDuration,
+        requestsPerHour: formData.crossingRequestsPerHour,
+      };
+    }
+    return {
       addCrossings: false,
       crossingDuration: '',
       requestsPerHour: '',
@@ -44,9 +51,12 @@ function PedestrianCrossing({ setActiveStep, saveFormData, resetForm, resetAllFo
   };
 
   const handleAddCrossingsChange = (e) => {
+    const checked = e.target.checked;
     setCrossingData(prev => ({
       ...prev,
-      addCrossings: e.target.checked
+      addCrossings: checked,
+      crossingDuration: checked ? prev.crossingDuration : 0,
+      requestsPerHour: checked ? prev.requestsPerHour : 0,
     }));
   };
 

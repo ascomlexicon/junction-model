@@ -221,7 +221,7 @@ function MainPage() {
                     saveFormData={saveFormData}
                     resetForm={resetForm}
                     resetAllForms={resetAllForms}
-                    formData={formData.pedestrianCrossing}
+                    formData={completeJSON}
                   />
                 );
             case 3:
