@@ -1,5 +1,6 @@
 package com.model.junction.Application;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,8 +18,8 @@ public class JunctionController {
   }
 
   @GetMapping("api/projects")
-  public HashSet<Project> getProjects() {
-      return this.projectStorage.getProjects();
+  public HashMap<String, Project> getProjects() {
+      return this.projectStorage.getAllProjects();
   }
 }
 
