@@ -5,6 +5,12 @@ import java.util.Objects;
 public class Junction {
   // Attributes
   private String name;
+  
+  private EastJunction East;
+  private WestJunction West;
+  private SouthJunction South;
+  private String JunctionName;
+    
 
   // Constructors
   public Junction(String junctionName) {
