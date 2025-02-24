@@ -37,6 +37,7 @@ function MainPage() {
       lanesExiting: [],
       isBusOrCycle: "none",
       busCycleLaneDuration: [],
+      enablePrioritisation: false,
       lanePrioritisation: [],
       isCrossings: false,
       crossingDuration: 0,
@@ -104,8 +105,16 @@ function MainPage() {
       }
 
       if (Object.keys(formData.lanePrioritisation).length > 0) {
+        const {
+            enablePrioritisation,
+            lanePrioritisation,
+        } = formData.lanePrioritisation;
+
         // Update lane prioritisation field
-        Object.assign(newJSON, formData.lanePrioritisation);
+        Object.assign(newJSON, {
+          enablePrioritisation,
+          lanePrioritisation
+        });
       }
       
       setCompleteJSON(newJSON);
@@ -146,6 +155,7 @@ function MainPage() {
           newJSON.crossingRequestsPerHour = 0;
           break;
         case 'lanePrioritisation':
+          newJSON.enablePrioritisation = false;
           newJSON.lanePrioritisation = [];
           break;
         default:
@@ -200,7 +210,6 @@ function MainPage() {
                     saveFormData={saveFormData}
                     resetForm={resetForm}
                     resetAllForms={resetAllForms}
-                    // formData={formData.trafficFlow}
                     formData = {completeJSON}
                   />
                 );
@@ -231,7 +240,7 @@ function MainPage() {
                     saveFormData={saveFormData}
                     resetForm={resetForm}
                     resetAllForms={resetAllForms}
-                    formData={formData.lanePrioritisation}
+                    formData={completeJSON}
                   />
                 );
             case 4:

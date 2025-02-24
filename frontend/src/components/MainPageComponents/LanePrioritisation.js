@@ -9,8 +9,23 @@ import ResetAllButton from '../ButtonComponents/ResetAllButton';
 function LanePrioritisation({ setActiveStep, saveFormData, resetForm, resetAllForms, formData = {} }) {
   // Initialize state with passed formData or default values
   const [prioritisationData, setPrioritisationData] = useState(() => {
-    return Object.keys(formData).length > 0 ? formData : {
-      enablePrioritization: false,
+    // return Object.keys(formData).length > 0 ? formData : {
+    //   enablePrioritisation: false,
+    //   directions: [
+    //     { id: 'north', content: 'North' },
+    //     { id: 'south', content: 'South' },
+    //     { id: 'east', content: 'East' },
+    //     { id: 'west', content: 'West' }
+    //   ]
+    // };
+    if (formData.enablePrioritisation) {
+      return {
+        enablePrioritisation: true,
+        directions: formData.lanePrioritisation.map((direction, index) => ({ id: direction, content: direction }))
+      };
+    }
+    return {
+      enablePrioritisation: false,
       directions: [
         { id: 'north', content: 'North' },
         { id: 'south', content: 'South' },
@@ -23,10 +38,10 @@ function LanePrioritisation({ setActiveStep, saveFormData, resetForm, resetAllFo
   // Always valid since prioritization is optional
   const [isValid, setIsValid] = useState(true);
 
-  const handleEnablePrioritization = (e) => {
+  const handleenablePrioritisation = (e) => {
     setPrioritisationData(prev => ({
       ...prev,
-      enablePrioritization: e.target.checked
+      enablePrioritisation: e.target.checked
     }));
   };
 
@@ -46,13 +61,17 @@ function LanePrioritisation({ setActiveStep, saveFormData, resetForm, resetAllFo
   // Convert lane prioritisation to required JSON format
   const formatLanePrioritiesToJSON = () => {
     let lanePrioritisation = [];
+    if (!prioritisationData.enablePrioritisation) {
+      return { enablePrioritisation: false, lanePrioritisation };
+    }
 
-    if (prioritisationData.enablePrioritization) {
+    if (prioritisationData.enablePrioritisation) {
       lanePrioritisation = prioritisationData.directions.map(direction => direction.content);
     }
 
     return {
-        lanePrioritisation
+      enablePrioritisation: true,
+      lanePrioritisation: lanePrioritisation
     };
   };
 
@@ -70,7 +89,7 @@ function LanePrioritisation({ setActiveStep, saveFormData, resetForm, resetAllFo
   const handleResetChanges = () => {
     resetForm('lanePrioritisation');
     setPrioritisationData({
-      enablePrioritization: false,
+      enablePrioritisation: false,
       directions: [
         { id: 'north', content: 'North' },
         { id: 'south', content: 'South' },
@@ -100,13 +119,13 @@ function LanePrioritisation({ setActiveStep, saveFormData, resetForm, resetAllFo
             <input
               id="add-prioritization"
               type="checkbox"
-              checked={prioritisationData.enablePrioritization}
-              onChange={handleEnablePrioritization}
+              checked={prioritisationData.enablePrioritisation}
+              onChange={handleenablePrioritisation}
             />
           </label>
         </div>
 
-        {prioritisationData.enablePrioritization && (
+        {prioritisationData.enablePrioritisation && (
           <div className="directions-container">
             <h3>Directions</h3>
             <p className="drag-instructions">Drag to reorder (top = highest priority, bottom = lowest)</p>
