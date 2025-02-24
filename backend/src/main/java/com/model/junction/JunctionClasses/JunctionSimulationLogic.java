@@ -325,7 +325,7 @@ class JunctionSimulationLogic {
       outboundCars[bestLane].add(System.nanoTime());
       count.incrementAndGet();
       maximumQueueLength.updateAndGet(
-        currentMax -> Math.max(currentMax, outboundCars[0].size()));    
+        currentMax -> Math.max(currentMax, outboundCars[bestLane].size()));  
     }
   }
 
