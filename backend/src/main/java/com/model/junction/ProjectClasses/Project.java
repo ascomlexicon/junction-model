@@ -54,8 +54,12 @@ public class Project {
     return outboundVPHData;
   }
   
-  public JunctionStorage getJunctions() {
-    return junctions;
+  public ArrayList<Junction> getScoreSortedJunctions() {
+    ArrayList<Junction> junctionList = junctions.getAllJunctions();
+    junctionList.sort( 
+        (junction1, junction2) -> { return junction1.getScore().compareTo(junction2.getScore()); } 
+    );
+    return junctionList;
   }
 
   public void addJunction(Junction junction) {
