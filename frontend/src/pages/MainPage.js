@@ -144,10 +144,15 @@ function MainPage() {
           break;
         case 'laneCustomisation':
           newJSON.leftTurnLanes = [false, false, false, false];
-          newJSON.lanesEntering = [0, 0, 0, 0];
-          newJSON.lanesExiting = [0, 0, 0, 0];
+          newJSON.lanesEntering = [];
+          newJSON.lanesExiting = [];
           newJSON.isBusOrCycle = "none";
-          newJSON.busCycleLaneDuration = [0, 0, 0, 0];
+          newJSON.busCycleLaneDuration = [{
+            "vphSpecialNorth": [],
+            "vphSpecialSouth": [],
+            "vphSpecialEast": [],
+            "vphSpecialWest": []
+          }];
           break;
         case 'pedestrianCrossing':
           newJSON.isCrossings = false;
@@ -221,6 +226,7 @@ function MainPage() {
                     resetForm={resetForm}
                     resetAllForms={resetAllForms}
                     formData={formData.laneCustomisation}
+                    // formData={completeJSON}
                   />
                 );
             case 2:

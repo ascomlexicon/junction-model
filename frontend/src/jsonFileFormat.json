@@ -7,9 +7,29 @@
   "lanesExiting": [1, 2, 3, 4],
   // Either bus, cycle or none
   "isBusOrCycle": "bus",
-  // 0 = no bus/cycle lane, otherwise the vph for that lane is entered
-  // [North, South, East, West]
-  "busCycleLaneDuration": [0, 0, 20, 0],
+  "busCycleLaneDuration": [
+    {
+      "vphSpecialNorth": [
+        {
+          "enter": 200,
+          "exitSouth": 100,
+          "exitEast": 50,
+          "exitWest": 50
+        }
+      ],
+      "vphSpecialSouth": [
+        {
+          "enter": 200,
+          "exitNorth": 100,
+          "exitEast": 50,
+          "exitWest": 50
+        }
+      ],
+      // Left empty if there is no bus lane coming from that direction
+      "vphSpecialEast": [],
+      "vphSpecialWest": [],
+    }
+  ],
   // If no prioritisation, then empty array
   // Here, east is priority 1, and west is priority 4
   "lanePrioritisation": ["east", "south", "north", "west"],
