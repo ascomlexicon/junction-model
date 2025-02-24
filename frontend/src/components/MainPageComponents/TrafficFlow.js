@@ -6,17 +6,8 @@ import SaveNextButton from '../ButtonComponents/SaveNextButton';
 import ResetAllButton from '../ButtonComponents/ResetAllButton';
 import BackButton from '../ButtonComponents/BackButton';
 
+// formData is now the JSON file containing information for the junction the user is configuring
 function TrafficFlow({ setActiveStep, saveFormData, resetForm, resetAllForms, formData = {} }) {
-    // Initialize state with passed formData or default values
-    // const [trafficData, setTrafficData] = useState(() => {
-    //     return Object.keys(formData).length > 0 ? formData : {
-    //         north: { south: 0, east: 0, west: 0 },
-    //         south: { north: 0, east: 0, west: 0 },
-    //         east: { north: 0, south: 0, west: 0 },
-    //         west: { north: 0, south: 0, east: 0 }
-    //     };
-    // });
-
     // Initialize state with passed formData or default values
     const [trafficData, setTrafficData] = useState(() => {
         // Check if formData has the expected JSON structure
@@ -91,9 +82,6 @@ function TrafficFlow({ setActiveStep, saveFormData, resetForm, resetAllForms, fo
                 east: { key: 'exitEast', value: parseInt(data.east) || 0 },
                 west: { key: 'exitWest', value: parseInt(data.west) || 0 }
             };
-
-            // Calculate total entering vehicles
-            // const enterTotal = Object.values(data).reduce((sum, val) => sum + (parseInt(val) || 0), 0);
 
             const entry = {
                 enter: parseInt(data.enter) || 0

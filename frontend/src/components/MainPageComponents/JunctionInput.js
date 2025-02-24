@@ -10,7 +10,7 @@ function JunctionInput({
     values              // Add values prop for controlled inputs
 }) {
     // Initialize state from props
-    const [totalIncoming, setTotalIncoming] = useState('');
+    const [totalIncoming, setTotalIncoming] = useState(values?.enter || '');
     const [outgoingFlows, setOutgoingFlows] = useState({
         [outgoingDirection1.toLowerCase()]: values?.[outgoingDirection1.toLowerCase()] || '',
         [outgoingDirection2.toLowerCase()]: values?.[outgoingDirection2.toLowerCase()] || '',
@@ -27,7 +27,7 @@ function JunctionInput({
 
         // Only update parent if we have valid numbers
         if (isValidTotal && totalIncoming) {
-            onUpdate(outgoingFlows);
+            onUpdate({enter: totalIncoming, ...outgoingFlows});
         }
     }, [outgoingFlows, totalIncoming, onUpdate]);
 
@@ -73,7 +73,7 @@ function JunctionInput({
                             <span className="label-text">Exit {direction}:</span>
                         </label>
                         <input
-                            type="text"
+                            type="text" 
                             value={outgoingFlows[direction.toLowerCase()]}
                             onChange={(e) => handleOutgoingChange(direction, e.target.value)}
                             disabled={!totalIncoming}
