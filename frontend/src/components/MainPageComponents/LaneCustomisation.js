@@ -10,10 +10,10 @@ import ResetAllButton from '../ButtonComponents/ResetAllButton';
 const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllForms, formData = {} }) => {
   // Initialize state with passed formData or default values
   const [laneData, setLaneData] = useState(() => {
-    const busCycleLaneDuration = [];
-    const leftTurnLanes = [];
+    let busCycleLaneDuration = [];
+    let leftTurnLanes = [];
 
-    if (formData.isBusOrCycle == "bus" || formData.isBusOrCycle == "cycle") {
+    if (formData.isBusOrCycle === "bus" || formData.isBusOrCycle === "cycle") {
       busCycleLaneDuration = formData.busCycleLaneDuration;
     } else {
       busCycleLaneDuration = [{
@@ -128,8 +128,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
       return {
         ...prev,
         busLane: newBusLane,
-        cycleLane: newCycleLane,
-        specialLaneFlow: {}
+        cycleLane: newCycleLane
       };
     });
   };
@@ -175,22 +174,22 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
     })();
 
     // Calculate bus/cycle lane durations
-    const busCycleLaneDuration = directions.map(dir => {
-      if (laneData.busLane[dir] || laneData.cycleLane[dir]) {
-        // Get the total flow from specialLaneFlow if it exists
-        const flow = Object.values(laneData.specialLaneFlow)
-          .reduce((sum, val) => sum + (parseInt(val) || 0), 0);
-        return flow || 0;
-      }
-      return 0;
-    });
+    // const busCycleLaneDuration = directions.map(dir => {
+    //   if (laneData.busLane[dir] || laneData.cycleLane[dir]) {
+    //     // Get the total flow from specialLaneFlow if it exists
+    //     const flow = Object.values(laneData.specialLaneFlow)
+    //       .reduce((sum, val) => sum + (parseInt(val) || 0), 0);
+    //     return flow || 0;
+    //   }
+    //   return 0;
+    // });
 
     return {
       leftTurnLanes,
       lanesEntering,
       lanesExiting,
       isBusOrCycle,
-      busCycleLaneDuration
+      busCycleLaneDuration: laneData.busCycleLaneDuration
     };
   };
 
