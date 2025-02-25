@@ -10,46 +10,59 @@ import ResetAllButton from '../ButtonComponents/ResetAllButton';
 const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllForms, formData = {} }) => {
   // Initialize state with passed formData or default values
   const [laneData, setLaneData] = useState(() => {
-    return Object.keys(formData).length > 0 ? formData : {
+    const busCycleLaneDuration = [];
+    const leftTurnLanes = [];
+
+    if (formData.isBusOrCycle == "bus" || formData.isBusOrCycle == "cycle") {
+      busCycleLaneDuration = formData.busCycleLaneDuration;
+    } else {
+      busCycleLaneDuration = [{
+        "vphSpecialNorth": [],
+        "vphSpecialSouth": [],
+        "vphSpecialEast": [],
+        "vphSpecialWest": []
+      }]
+    }
+    
+    if (formData.leftTurnLanes.length > 0) {
+      leftTurnLanes = formData.leftTurnLanes;
+    } else {
+      leftTurnLanes = {
+        north: false,
+        south: false,
+        east: false,
+        west: false
+      };
+    }
+
+    return {
       entering: {
-        north: '',
-        south: '',
-        east: '',
-        west: ''
+        north: formData.lanesEntering['north'] || '',
+        south: formData.lanesEntering['south'] || '',
+        east: formData.lanesEntering['east'] || '',
+        west: formData.lanesEntering['west'] || ''
       },
       exiting: {
-        north: '',
-        south: '',
-        east: '',
-        west: ''
+        north: formData.lanesExiting['north'] || '',
+        south: formData.lanesExiting['south'] || '',
+        east: formData.lanesExiting['east'] || '',
+        west: formData.lanesExiting['west'] || ''
       },
-      leftTurn: {
-        north: false,
-        south: false,
-        east: false,
-        west: false
-      },
+      leftTurn: leftTurnLanes,
+      busCycleLaneDuration: busCycleLaneDuration,
       busLane: {
-        north: false,
-        south: false,
-        east: false,
-        west: false
+        north: busCycleLaneDuration.vphSpecialNorth.length > 0,
+        south: busCycleLaneDuration.vphSpecialSouth.length > 0,
+        east: busCycleLaneDuration.vphSpecialEast.length > 0,
+        west: busCycleLaneDuration.vphSpecialWest.length > 0
       },
       cycleLane: {
-        north: false,
-        south: false,
-        east: false,
-        west: false
-      },
-      specialLaneFlow: {} // New state for special lane traffic flow
-    };
-    // if (formData.isBusOrCycle == "bus" || formData.isBusOrCycle == "cycle") {
-    //   let busCycleLaneDuration = [];
-    //   if (formData.busCycleLaneDuration) {
-    //     busCycleLaneDuration = formData.busCycleLaneDuration;
-    //   }
-    // }
-
+        north: busCycleLaneDuration.vphSpecialNorth.length > 0,
+        south: busCycleLaneDuration.vphSpecialSouth.length > 0,
+        east: busCycleLaneDuration.vphSpecialEast.length > 0,
+        west: busCycleLaneDuration.vphSpecialWest.length > 0
+      }
+    }
   });
 
   const [isValid, setIsValid] = useState(false);
@@ -122,10 +135,14 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
   };
 
   // Handle JunctionInput updates
-  const handleJunctionInputUpdate = (flows) => {
+  const handleJunctionInputUpdate = (incomingDirection, flows) => {
     setLaneData(prev => ({
       ...prev,
-      specialLaneFlow: flows
+      busCycleLaneDuration: {
+        ...prev.busCycleLaneDuration,
+        // Update only the selected direction with new flows
+        [`vphSpecial${incomingDirection.charAt(0).toUpperCase() + incomingDirection.slice(1)}`]: flows
+      }
     }));
   };
 
@@ -326,8 +343,9 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
                     outgoingDirection1={remainingDirections[0]}
                     outgoingDirection2={remainingDirections[1]}
                     outgoingDirection3={remainingDirections[2]}
-                    onUpdate={handleJunctionInputUpdate}
-                    values={laneData.specialLaneFlow}
+                    onUpdate={(data) => handleJunctionInputUpdate(direction, data)}
+                    // Pass only the data for the selected direction
+                    values={laneData.busCycleLaneDuration[direction]}
                   />
                 );
               }
