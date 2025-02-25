@@ -5,34 +5,35 @@ import { useNavigate } from 'react-router-dom';
 
 // TODO: Rather than accessing from formData, try to refactor to access from JSON instead
 function Summary({ completeJSON, setActiveStep }) {
-  // const { 
-  //   leftTurnLanes,
-  //   lanesEntering,
-  //   lanesExiting,
-  //   isBusOrCycle,
-  //   busCycleLaneDuration,
-  //   lanePrioritisation,
-  //   isCrossings,
-  //   crossingDuration,
-  //   crossingRequestsPerHour,
-  //   vphNorth,
-  //   vphSouth,
-  //   vphEast,
-  //   vphWest
-  // } = completeJSON;
-  
   const navigate = useNavigate();
-  
-  const handleClick = (e) => {
-    e.preventDefault();
-    // TODO: For now this just ensures form is not-empty
-        // More formal validation can be added later
 
-    // TODO: Send JSON data to backend for simulation
-    // const myData = ...
+  const handleClick = async (e) => {
+    e.preventDefault();
+    try {
+      // TODO: Set API endpoint URL
+      const response = await fetch('/api/simulate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(completeJSON)
+      });
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      
+      // Optionally, handle the returned data:
+      // TODO: This is only for testing
+      const result = await response.json();
+      console.log('Simulation result:', result);
+      
+      // TODO: Will probably have an intermediate page which is a loading screen
+      navigate('/RankingsPage');
+    } catch (error) {
+      console.error('Error sending JSON data:', error);
+    }
 
     navigate('/RankingsPage');
-};
+  };
   
   const handleBack = () => {
     setActiveStep(3); // Go back to LanePrioritisation
@@ -41,7 +42,7 @@ function Summary({ completeJSON, setActiveStep }) {
   // Calculate total vehicles per hour for traffic flow summary
   const calculateTotalVPH = () => {
     // FIXME: Returning undefined, not sure why
-    return completeJSON.vphNorth.enter + completeJSON.vphSouth.enter + completeJSON.vphEast.enter + completeJSON.vphWest.enter;;
+    return completeJSON.vphNorth.enter + completeJSON.vphSouth.enter + completeJSON.vphEast.enter + completeJSON.vphWest.enter;
   };
   
   return (
@@ -79,7 +80,7 @@ function Summary({ completeJSON, setActiveStep }) {
         )}
       </div>
       
-      {/* <div className="summary-section">
+      <div className="summary-section">
         <h3>Lane Configuration</h3>
         {Object.keys(laneCustomisation || {}).length > 0 ? (
           <div className="summary-content">
@@ -170,7 +171,7 @@ function Summary({ completeJSON, setActiveStep }) {
         ) : (
           <p className="no-data">No lane prioritisation configured</p>
         )}
-      </div> */}
+      </div>
       
       <div className="button-container">
         <BackButton onClick={handleBack} label="Back to Lane Prioritisation" />
