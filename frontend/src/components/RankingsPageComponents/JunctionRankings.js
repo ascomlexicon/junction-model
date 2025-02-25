@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import styles from './JunctionRankings.module.css';
 import JunctionList from './JunctionList';
 import ScoreBreakdown from './ScoreBreakdown';
-import ConfigurableParameters from './ConfigurableParameters';
 import { Link } from "react-router-dom";
 import VPHDisplayForm from './VPHDisplayForm';
 
