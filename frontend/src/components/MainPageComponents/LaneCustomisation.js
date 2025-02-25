@@ -24,7 +24,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
       }]
     }
     
-    if (formData.leftTurnLanes.length > 0) {
+    if (formData.leftTurnLanes) {
       leftTurnLanes = formData.leftTurnLanes;
     } else {
       leftTurnLanes = {
@@ -35,32 +35,33 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
       };
     }
 
+    console.log(busCycleLaneDuration);
     return {
       entering: {
-        north: formData.lanesEntering['north'] || '',
-        south: formData.lanesEntering['south'] || '',
-        east: formData.lanesEntering['east'] || '',
-        west: formData.lanesEntering['west'] || ''
+        north: (formData.lanesEntering && formData.lanesEntering['north']) || '',
+        south: (formData.lanesEntering && formData.lanesEntering['south']) || '',
+        east: (formData.lanesEntering && formData.lanesEntering['east']) || '',
+        west: (formData.lanesEntering && formData.lanesEntering['west']) || ''
       },
       exiting: {
-        north: formData.lanesExiting['north'] || '',
-        south: formData.lanesExiting['south'] || '',
-        east: formData.lanesExiting['east'] || '',
-        west: formData.lanesExiting['west'] || ''
+        north: (formData.lanesEntering && formData.lanesExiting['north'] )|| '',
+        south: (formData.lanesEntering && formData.lanesExiting['south'] )|| '',
+        east: (formData.lanesEntering && formData.lanesExiting['east'] )|| '',
+        west: (formData.lanesEntering && formData.lanesExiting['west'] )|| ''
       },
       leftTurn: leftTurnLanes,
       busCycleLaneDuration: busCycleLaneDuration,
       busLane: {
-        north: busCycleLaneDuration.vphSpecialNorth.length > 0,
-        south: busCycleLaneDuration.vphSpecialSouth.length > 0,
-        east: busCycleLaneDuration.vphSpecialEast.length > 0,
-        west: busCycleLaneDuration.vphSpecialWest.length > 0
+        north: busCycleLaneDuration[0].vphSpecialNorth.length > 0,
+        south: busCycleLaneDuration[0].vphSpecialSouth.length > 0,
+        east: busCycleLaneDuration[0].vphSpecialEast.length > 0,
+        west: busCycleLaneDuration[0].vphSpecialWest.length > 0
       },
       cycleLane: {
-        north: busCycleLaneDuration.vphSpecialNorth.length > 0,
-        south: busCycleLaneDuration.vphSpecialSouth.length > 0,
-        east: busCycleLaneDuration.vphSpecialEast.length > 0,
-        west: busCycleLaneDuration.vphSpecialWest.length > 0
+        north: busCycleLaneDuration[0].vphSpecialNorth.length > 0,
+        south: busCycleLaneDuration[0].vphSpecialSouth.length > 0,
+        east: busCycleLaneDuration[0].vphSpecialEast.length > 0,
+        west: busCycleLaneDuration[0].vphSpecialWest.length > 0
       }
     }
   });
