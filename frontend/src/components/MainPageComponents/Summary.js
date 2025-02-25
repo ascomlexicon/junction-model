@@ -106,6 +106,25 @@ function Summary({ formData, setActiveStep }) {
               ))}
             </ul>
             
+            <h4>Bus/Cycle Lanes</h4>
+              {formData.isBusOrCycle === "none" && (
+                <>
+                  <p>No bus/cycle lanes</p>
+                </>
+              )}
+              {formData.isBusOrCycle !== "none" && (
+                <>
+                  <p>Bus or Cycle: {formData.isBusOrCycle.toUpperCase()}</p>
+                  <ul>
+                    {Object.entries(formData.busCycleLaneDuration).map(([direction, duration]) => (
+                      <li key={`duration-${direction}`}>
+                        {direction.charAt(0).toUpperCase() + direction.slice(1)}: {duration} seconds
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
+
             {/* <h4>Special Lanes</h4>
             <p>Bus Lanes:</p>
             <ul>
