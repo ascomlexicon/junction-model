@@ -91,22 +91,23 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
     }));
   };
 
-  // FIXME: Change this so that multiple lanes of the same type can be selected
-    // Eg bus lane both north, south and east
   const handleSpecialLaneChange = (type, direction) => {
     setLaneData(prev => {
-      const newBusLane = prev.busLane;
+      const newBusLane = { ...prev.busLane };;
       
-      const newCycleLane = prev.cycleLane;
+      const newCycleLane = { ...prev.cycleLane };;
 
-      if ((type === 'busLane' && prev.busLane[direction]) || 
-          (type === 'cycleLane' && prev.cycleLane[direction])) {
-        // Keep all lanes false
+      if (type === 'busLane') {
+        newBusLane[direction] = !prev.busLane[direction];
+        if (newBusLane[direction]) {
+          // If bus lane is selected, clear cycle lane
+          Object.keys(newCycleLane).forEach(dir => newCycleLane[dir] = false);
+        }
       } else {
-        if (type === 'busLane') {
-          newBusLane[direction] = true;
-        } else {
-          newCycleLane[direction] = true;
+        newCycleLane[direction] = !prev.cycleLane[direction];
+        if (newCycleLane[direction]) {
+          // If cycle lane is selected, clear bus lane
+          Object.keys(newBusLane).forEach(dir => newBusLane[dir] = false);
         }
       }
 
