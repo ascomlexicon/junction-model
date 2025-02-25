@@ -157,14 +157,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
   );
 
   // Format lane data to match required JSON structure
-  const formatLaneDataToJSON = () => {
-    const directions = ['north', 'south', 'east', 'west'];
-    
-    // Convert to arrays in the correct order
-    const leftTurnLanes = directions.map(dir => laneData.leftTurn[dir]);
-    const lanesEntering = directions.map(dir => parseInt(laneData.entering[dir]) || 0);
-    const lanesExiting = directions.map(dir => parseInt(laneData.exiting[dir]) || 0);
-    
+  const formatLaneDataToJSON = () => {    
     // Determine if bus or cycle lane is selected
     const isBusOrCycle = (() => {
       const hasBusLane = Object.values(laneData.busLane).some(val => val);
@@ -174,21 +167,10 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
       return "none";
     })();
 
-    // Calculate bus/cycle lane durations
-    // const busCycleLaneDuration = directions.map(dir => {
-    //   if (laneData.busLane[dir] || laneData.cycleLane[dir]) {
-    //     // Get the total flow from specialLaneFlow if it exists
-    //     const flow = Object.values(laneData.specialLaneFlow)
-    //       .reduce((sum, val) => sum + (parseInt(val) || 0), 0);
-    //     return flow || 0;
-    //   }
-    //   return 0;
-    // });
-
     return {
-      leftTurnLanes,
-      lanesEntering,
-      lanesExiting,
+      leftTurnLanes: laneData.leftTurn,
+      lanesEntering: laneData.entering,
+      lanesExiting: laneData.exiting,
       isBusOrCycle,
       busCycleLaneDuration: laneData.busCycleLaneDuration
     };
