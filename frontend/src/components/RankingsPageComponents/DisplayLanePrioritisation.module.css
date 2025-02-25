@@ -1,0 +1,43 @@
+.lanePrioritisationContainer {
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #f9f9f9;
+    text-align: center;
+  }
+  
+  .staticData {
+    padding: 15px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    color: #333;
+  }
+  
+  .directionsList {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+  }
+  
+  .directionItem {
+    padding: 10px;
+    background: #e6e6e6;
+    margin: 5px 0;
+    border-radius: 4px;
+  }
+  
+  .subjectToChange {
+    font-size: 14px;
+    color: #666;
+    margin-top: 10px;
+  }
+  
+  .noPrioritisation {
+    font-size: 16px;
+    color: #666;
+  }
+  

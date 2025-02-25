@@ -17,6 +17,7 @@
     color: white;
     justify-self: center;
   }
+
   .side {
     grid-area: side;
     background-color: #2C0052;
