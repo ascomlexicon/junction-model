@@ -36,7 +36,12 @@ function MainPage() {
       lanesEntering: [],
       lanesExiting: [],
       isBusOrCycle: "none",
-      busCycleLaneDuration: [],
+      busCycleLaneDuration: [{
+        "vphSpecialNorth": [],
+        "vphSpecialSouth": [],
+        "vphSpecialEast": [],
+        "vphSpecialWest": []
+      }],
       enablePrioritisation: false,
       lanePrioritisation: [],
       isCrossings: false,
@@ -143,7 +148,7 @@ function MainPage() {
           newJSON.vphWest = [];
           break;
         case 'laneCustomisation':
-          newJSON.leftTurnLanes = [false, false, false, false];
+          newJSON.leftTurnLanes = [];
           newJSON.lanesEntering = [];
           newJSON.lanesExiting = [];
           newJSON.isBusOrCycle = "none";
@@ -183,7 +188,12 @@ function MainPage() {
         lanesEntering: [],
         lanesExiting: [],
         isBusOrCycle: "none",
-        busCycleLaneDuration: [],
+        busCycleLaneDuration: [{
+          "vphSpecialNorth": [],
+          "vphSpecialSouth": [],
+          "vphSpecialEast": [],
+          "vphSpecialWest": []
+        }],
         lanePrioritisation: [],
         isCrossings: false,
         crossingDuration: 0,
