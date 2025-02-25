@@ -43,6 +43,13 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
       },
       specialLaneFlow: {} // New state for special lane traffic flow
     };
+    // if (formData.isBusOrCycle == "bus" || formData.isBusOrCycle == "cycle") {
+    //   let busCycleLaneDuration = [];
+    //   if (formData.busCycleLaneDuration) {
+    //     busCycleLaneDuration = formData.busCycleLaneDuration;
+    //   }
+    // }
+
   });
 
   const [isValid, setIsValid] = useState(false);
@@ -84,21 +91,13 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
     }));
   };
 
+  // FIXME: Change this so that multiple lanes of the same type can be selected
+    // Eg bus lane both north, south and east
   const handleSpecialLaneChange = (type, direction) => {
     setLaneData(prev => {
-      const newBusLane = {
-        north: false,
-        south: false,
-        east: false,
-        west: false
-      };
+      const newBusLane = prev.busLane;
       
-      const newCycleLane = {
-        north: false,
-        south: false,
-        east: false,
-        west: false
-      };
+      const newCycleLane = prev.cycleLane;
 
       if ((type === 'busLane' && prev.busLane[direction]) || 
           (type === 'cycleLane' && prev.cycleLane[direction])) {
@@ -122,7 +121,6 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
   };
 
   // Get the currently selected special lane direction
-  // FIXME: Issue with Object.entries, suggests we need to have some type of default value
   const getSelectedDirection = () => {
     const busLaneDirection = Object.entries(laneData.busLane).find(([_, value]) => value)?.[0];
     const cycleLaneDirection = Object.entries(laneData.cycleLane).find(([_, value]) => value)?.[0];
@@ -198,6 +196,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
     setActiveStep(0);
   };
 
+  // TODO: Change this with respect to new JSON structure
   const handleResetLaneChanges = () => {
     resetForm('laneCustomisation');
     setLaneData({
