@@ -16,6 +16,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
       "vphSpecialEast": [],
       "vphSpecialWest": []
     };
+    
     let leftTurnLanes = {
       north: false,
       south: false,
@@ -163,10 +164,25 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
       return "none";
     })();
 
+    // Parses values from form to be integers rather than strings
+    const lanesEntering = {
+      north: parseInt(laneData.entering.north) || 0 ,
+      south: parseInt(laneData.entering.south) || 0 ,
+      east: parseInt(laneData.entering.east) || 0 ,
+      west: parseInt(laneData.entering.west) || 0 
+    };
+
+    const lanesExiting = {
+      north: parseInt(laneData.exiting.north) || 0 ,
+      south: parseInt(laneData.exiting.south) || 0 ,
+      east: parseInt(laneData.exiting.east) || 0 ,
+      west: parseInt(laneData.exiting.west) || 0 
+    };
+
     return {
       leftTurnLanes: laneData.leftTurn,
-      lanesEntering: laneData.entering,
-      lanesExiting: laneData.exiting,
+      lanesEntering,
+      lanesExiting,
       isBusOrCycle,
       busCycleLaneDuration: laneData.busCycleLaneDuration
     };
