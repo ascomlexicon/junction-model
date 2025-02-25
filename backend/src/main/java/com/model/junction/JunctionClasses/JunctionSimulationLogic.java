@@ -9,6 +9,7 @@ import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -25,6 +26,7 @@ class JunctionSimulationLogic {
   private static double interArrivalTime = 0; // Inter-arrival time in seconds
   private static long exponentialTimeInterval = 0; // Exponential time interval
   private static long simulationStartTime = System.nanoTime(); // Start time of the simulation
+  private static final AtomicInteger exisitingcount = new AtomicInteger(0); /* count car exiting */
 
   // MODIFICATIONS
   enum LaneType {
@@ -202,21 +204,31 @@ class JunctionSimulationLogic {
             // Schedule {carsLeaving} cars to exit over {the priority time} seconds
             for (int i = 0; i < carsLeaving; i++) {
               final int carIndex = i;
+
+              final long rowIntervals = (long) ((carIndex + 1) * ((priorityArray[directionIndex] / (double) carsLeaving))  
+              * ThreadLocalRandom.current().nextDouble(0.95, 1.05)); 
+              
               carsExiting.schedule(
                   () -> {
-                    exitQueue(outboundCars[0].poll());
-                    maximumQueueLength.updateAndGet(
-                        currentMax -> Math.max(currentMax, outboundCars[0].size()));
-                    exitQueue(outboundCars[1].poll());
-                    maximumQueueLength.updateAndGet(
-                        currentMax -> Math.max(currentMax, outboundCars[1].size()));
-                    exitQueue(outboundCars[2].poll());
-                    maximumQueueLength.updateAndGet(
-                        currentMax -> Math.max(currentMax, outboundCars[2].size()));
+                    for (int j = 0; j < numberOfLanes; j++){
+
+                      final int laneIndex = j;                   
+                      
+                      carsExiting.schedule( () -> {
+                        exitQueue(outboundCars[laneIndex].poll());
+                        maximumQueueLength.updateAndGet(
+                        currentMax -> Math.max(currentMax, outboundCars[laneIndex].size()));
+                      },
+                      ((long) ((laneIndex + 1) * ((rowIntervals / numberOfLanes)))),
+                      TimeUnit.NANOSECONDS); // spread car exits over the row intervals' duration in nanoseconds 
+                    }  
+                     
                   },
-                  (long) (carIndex * (priorityArray[directionIndex] / carsLeaving)),
+                  (rowIntervals),
                   TimeUnit.NANOSECONDS); // spread car exits over the green light's duration in nanoseconds stored in priorityArray[directionIndex]
             }
+
+            /* existing for number of lanes modifications Ended */
             
             long actualGreenLightTime = System.nanoTime() - threadStartTime;
             long timeToNextGreen = calculateTimeToNextGreen(trafficLightCycleFinal - actualGreenLightTime, puffinCrossing, crossingsPerHour, crossingInterval, crossingDuration);
@@ -251,6 +263,7 @@ class JunctionSimulationLogic {
         () -> {
           System.out.println("Shutting down carsExiting");
           carsExiting.shutdown();
+          System.out.println("Total cars exisited : "+exisitingcount.get());
         },
         simulationTime * 15,
         TimeUnit.SECONDS);
@@ -259,6 +272,7 @@ class JunctionSimulationLogic {
   // updates our metrics when cars exit the queue
   public static void exitQueue(Long enterTime) {
     if (enterTime != null) {
+      exisitingcount.incrementAndGet(); /* count car exiting */
       long waitingTime = System.nanoTime() - enterTime;
       maximumWaitingTime.updateAndGet(currentMax -> Math.max(currentMax, waitingTime));
       int exitedCars = quarterCarsExited.incrementAndGet();
