@@ -184,24 +184,24 @@ function MainPage() {
     const resetAllForms = () => {
       // Resets all JSON information
       setCompleteJSON({
-        leftTurnLanes: [],
-        lanesEntering: [],
-        lanesExiting: [],
+        leftTurnLanes: {},
+        lanesEntering: {},
+        lanesExiting: {},
         isBusOrCycle: "none",
-        busCycleLaneDuration: [{
+        busCycleLaneDuration: {
           "vphSpecialNorth": [],
           "vphSpecialSouth": [],
           "vphSpecialEast": [],
           "vphSpecialWest": []
-        }],
+        },
         lanePrioritisation: [],
         isCrossings: false,
         crossingDuration: 0,
         crossingRequestsPerHour: 0,
-        vphNorth: [],
-        vphSouth: [],
-        vphEast: [],
-        vphWest: []
+        vphNorth: {},
+        vphSouth: {},
+        vphEast: {},
+        vphWest: {}
       });
 
       setFormData({
@@ -235,8 +235,7 @@ function MainPage() {
                     saveFormData={saveFormData}
                     resetForm={resetForm}
                     resetAllForms={resetAllForms}
-                    formData={formData.laneCustomisation}
-                    // formData={completeJSON}
+                    formData={completeJSON}
                   />
                 );
             case 2:
@@ -262,7 +261,8 @@ function MainPage() {
             case 4:
                 return (
                   <Summary 
-                    formData={formData}
+                    // formData={formData}
+                    formData={completeJSON}
                     setActiveStep={setActiveStep}
                   />
                 );
