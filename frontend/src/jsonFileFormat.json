@@ -1,27 +1,25 @@
 {
   // Array of directions where there is a left turn lane
   // [North, South, East, West] - in this example, only North has a left turn lane
-  "leftTurnLanes": [
-    {
+  "leftTurnLanes": {
       "north": true,
       "south": false,
       "east": false,
       "west": false
-    }
-  ],
+  },
   // [North, South, East, West] - never null
-  "lanesEntering": [{
+  "lanesEntering": {
       "north": 2,
       "south": 3,
       "east": 4,
       "west": 1
-    }],
-  "lanesExiting": [{
+    },
+  "lanesExiting": {
       "north": 1,
       "south": 2,
       "east": 3,
       "west": 4
-    }],
+    },
   // Either bus, cycle or none
   "isBusOrCycle": "bus",
   "busCycleLaneDuration": [
