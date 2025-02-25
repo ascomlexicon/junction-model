@@ -29,10 +29,14 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
     }
     
     if (formData.leftTurnLanes) {
-      leftTurnLanes = formData.leftTurnLanes;
+      leftTurnLanes = {
+        north : formData.leftTurnLanes.north,
+        south : formData.leftTurnLanes.south,
+        east : formData.leftTurnLanes.east,
+        west : formData.leftTurnLanes.west
+      };
     }
 
-    console.log(busCycleLaneDuration.vphSpecialEast.length > 0);
     return {
       entering: {
         north: (formData.lanesEntering && formData.lanesEntering['north']) || '',
@@ -102,19 +106,26 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
     }));
   };
 
+  // FIXME: Need to revert the speeds to an empty list if the user unchecks a particular direction
   const handleSpecialLaneChange = (type, direction) => {
     setLaneData(prev => {
-      const newBusLane = { ...prev.busLane };;
-      
-      const newCycleLane = { ...prev.cycleLane };;
+      let newBusLane = { ...prev.busLane };
+      let newCycleLane = { ...prev.cycleLane };
+      let busCycleLaneDuration = { ...prev.busCycleLaneDuration };
 
       if (type === 'busLane') {
+        if (prev.busLane[direction]) {
+          busCycleLaneDuration[`vphSpecial${direction.charAt(0).toUpperCase() + direction.slice(1)}`] = [];
+        };
         newBusLane[direction] = !prev.busLane[direction];
         if (newBusLane[direction]) {
           // If bus lane is selected, clear cycle lane
           Object.keys(newCycleLane).forEach(dir => newCycleLane[dir] = false);
         }
       } else {
+        if (prev.cycleLane[direction]) {
+          busCycleLaneDuration[`vphSpecial${direction.charAt(0).toUpperCase() + direction.slice(1)}`] = [];
+        };
         newCycleLane[direction] = !prev.cycleLane[direction];
         if (newCycleLane[direction]) {
           // If cycle lane is selected, clear bus lane
@@ -126,7 +137,8 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
       return {
         ...prev,
         busLane: newBusLane,
-        cycleLane: newCycleLane
+        cycleLane: newCycleLane,
+        busCycleLaneDuration
       };
     });
   };
@@ -201,7 +213,6 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
     setActiveStep(0);
   };
 
-  // TODO: Change this with respect to new JSON structure
   const handleResetLaneChanges = () => {
     resetForm('laneCustomisation');
     setLaneData({
@@ -344,7 +355,8 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
                     outgoingDirection3={remainingDirections[2]}
                     onUpdate={(data) => handleJunctionInputUpdate(direction, data)}
                     // Pass only the data for the selected direction
-                    values={laneData.busCycleLaneDuration[direction]}
+                    // values={laneData.busCycleLaneDuration[direction]}
+                    values={laneData.busCycleLaneDuration[`vphSpecial${direction.charAt(0).toUpperCase() + direction.slice(1)}`]}
                   />
                 );
               }
