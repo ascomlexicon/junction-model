@@ -33,6 +33,11 @@ const JunctionRankings = () => {
         <div className = {styles.header}>
           <h1>Named Junction!</h1>
         </div>
+        <div className={styles.backButtonContainer}>
+        <button className={styles.backButton}>
+              <Link to="/MainPage">Back to Junction Configuration Menu</Link>
+            </button>
+        </div>
         <div className={styles.side}>
         <VPHDisplayForm 
           />
@@ -48,9 +53,7 @@ const JunctionRankings = () => {
           />
           
           {/* TODO: Change this; not advised to have Link tag within button (I think) */}
-          <button className={styles.backButton}>
-            <Link to="/MainPage">Back to Junction Configuration Menu</Link>
-          </button>
+          
         </div>
         
         <div className={styles.rightPanel}>
