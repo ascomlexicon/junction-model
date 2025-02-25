@@ -110,7 +110,7 @@ function Summary({ formData, setActiveStep }) {
             <p>Bus Lanes:</p>
             <ul>
               {Object.entries(laneCustomisation.busLane).filter(([_, enabled]) => enabled).map(([direction]) => (
-          </div>      <li key={`bus-${direction}`}>{direction.charAt(0).toUpperCase() + direction.slice(1)}</li>
+                <li key={`bus-${direction}`}>{direction.charAt(0).toUpperCase() + direction.slice(1)}</li>
               ))}
               {!Object.values(laneCustomisation.busLane).some(value => value) && <li>None</li>}
             </ul>
@@ -151,8 +151,8 @@ function Summary({ formData, setActiveStep }) {
             <>
               <p>Priority Order (highest to lowest):</p>
               <ol>
-                {formData.lanePrioritisation.directions.map((direction, index) => (
-                  <li key={`priority-${index}`}>{direction.content}</li>
+                {formData.lanePrioritisation.map((direction, index) => (
+                  <li key={`priority-${index}`}>{direction}</li>
                 ))}
               </ol>
             </>
