@@ -48,36 +48,32 @@ function Summary({ formData, setActiveStep }) {
     <div className="summary-container">
       <h2>Junction Configuration Summary</h2>
 
-      {/* <div className="summary-section">
+      <div className="summary-section">
         <h3>Traffic Flow</h3>
-        {Object.keys(formData.vphNorth || {}).length > 0 ? (
-          <div className="summary-content">
-            <h4>Total Traffic Volume: {calculateTotalVPH()} vehicles per hour</h4>
-            
-            <div className="traffic-flow-grid">
-              {Object.entries({north: completeJSON.vphNorth, south: completeJSON.vphSouth, east: completeJSON.vphEast, west: completeJSON.vphWest}).map(([direction, data]) => (
-                <div key={`traffic-${direction}`} className="traffic-flow-direction">
-                  <h4>{direction.charAt(0).toUpperCase() + direction.slice(1)} Incoming Traffic</h4>
-                  <ul>
-                    {Object.entries(data)
-                      .filter(([key, _]) => key !== 'entry' && key.startsWith('exit'))
-                      .map(([exitKey, value]) => {
-                        const outDir = exitKey.replace('exit', '').toLowerCase();
-                        return (
-                          <li key={`${direction}-to-${outDir}`}>
-                            To {outDir.charAt(0).toUpperCase() + outDir.slice(1)}: {value} vehicles/hour
-                          </li>
-                        );
-                      })}
-                  </ul>
-                </div>
-              ))}
-            </div>
+        <div className="summary-content">
+          <h4>Total Traffic Volume: {calculateTotalVPH()} vehicles per hour</h4>
+          
+          <div className="traffic-flow-grid">
+            {Object.entries({north: formData.vphNorth, south: formData.vphSouth, east: formData.vphEast, west: formData.vphWest}).map(([direction, data]) => (
+              <div key={`traffic-${direction}`} className="traffic-flow-direction">
+                <h4>{direction.charAt(0).toUpperCase() + direction.slice(1)} Incoming Traffic</h4>
+                <ul>
+                  {Object.entries(data)
+                    .filter(([key, _]) => key !== 'entry' && key.startsWith('exit'))
+                    .map(([exitKey, value]) => {
+                      const outDir = exitKey.replace('exit', '').toLowerCase();
+                      return (
+                        <li key={`${direction}-to-${outDir}`}>
+                          To {outDir.charAt(0).toUpperCase() + outDir.slice(1)}: {value} vehicles/hour
+                        </li>
+                      );
+                    })}
+                </ul>
+              </div>
+            ))}
           </div>
-        ) : (
-          <p className="no-data">No traffic flow data configured</p>
-        )}
-      </div> */}
+        </div>
+      </div>
       
       <div className="summary-section">
         <h3>Lane Configuration</h3>
@@ -114,7 +110,7 @@ function Summary({ formData, setActiveStep }) {
             <p>Bus Lanes:</p>
             <ul>
               {Object.entries(laneCustomisation.busLane).filter(([_, enabled]) => enabled).map(([direction]) => (
-                <li key={`bus-${direction}`}>{direction.charAt(0).toUpperCase() + direction.slice(1)}</li>
+          </div>      <li key={`bus-${direction}`}>{direction.charAt(0).toUpperCase() + direction.slice(1)}</li>
               ))}
               {!Object.values(laneCustomisation.busLane).some(value => value) && <li>None</li>}
             </ul>
