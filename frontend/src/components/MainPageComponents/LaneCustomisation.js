@@ -11,10 +11,10 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
   // Initialize state with passed formData or default values
   const [laneData, setLaneData] = useState(() => {
     let busCycleLaneDuration = {
-      "vphSpecialNorth": [],
-      "vphSpecialSouth": [],
-      "vphSpecialEast": [],
-      "vphSpecialWest": []
+      "vphSpecialNorth": 0,
+      "vphSpecialSouth": 0,
+      "vphSpecialEast": 0,
+      "vphSpecialWest": 0
     };
     
     let leftTurnLanes = {
@@ -106,7 +106,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
     }));
   };
 
-  // FIXME: Need to revert the speeds to an empty list if the user unchecks a particular direction
+  // FIXME: Need to revert the speeds to 0 if the user unchecks a particular direction
   const handleSpecialLaneChange = (type, direction) => {
     setLaneData(prev => {
       let newBusLane = { ...prev.busLane };
@@ -115,7 +115,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
 
       if (type === 'busLane') {
         if (prev.busLane[direction]) {
-          busCycleLaneDuration[`vphSpecial${direction.charAt(0).toUpperCase() + direction.slice(1)}`] = [];
+          busCycleLaneDuration[`vphSpecial${direction.charAt(0).toUpperCase() + direction.slice(1)}`] = 0;
         };
         newBusLane[direction] = !prev.busLane[direction];
         if (newBusLane[direction]) {
@@ -124,7 +124,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
         }
       } else {
         if (prev.cycleLane[direction]) {
-          busCycleLaneDuration[`vphSpecial${direction.charAt(0).toUpperCase() + direction.slice(1)}`] = [];
+          busCycleLaneDuration[`vphSpecial${direction.charAt(0).toUpperCase() + direction.slice(1)}`] = 0;
         };
         newCycleLane[direction] = !prev.cycleLane[direction];
         if (newCycleLane[direction]) {
@@ -144,13 +144,13 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
   };
 
   // Handle JunctionInput updates
-  const handleJunctionInputUpdate = (incomingDirection, flows) => {
+  const handleJunctionInputUpdate = (incomingDirection, value) => {
     setLaneData(prev => ({
       ...prev,
       busCycleLaneDuration: {
         ...prev.busCycleLaneDuration,
         // Update only the selected direction with new flows
-        [`vphSpecial${incomingDirection.charAt(0).toUpperCase() + incomingDirection.slice(1)}`]: [flows]
+        [`vphSpecial${incomingDirection.charAt(0).toUpperCase() + incomingDirection.slice(1)}`]: value
       }
     }));
   };
@@ -222,10 +222,10 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
       busLane: { north: false, south: false, east: false, west: false },
       cycleLane: { north: false, south: false, east: false, west: false },
       busCycleLaneDuration: {
-        vphSpecialNorth: [],
-        vphSpecialSouth: [],
-        vphSpecialEast: [],
-        vphSpecialWest: []
+        vphSpecialNorth: 0,
+        vphSpecialSouth: 0,
+        vphSpecialEast: 0,
+        vphSpecialWest: 0
       }
     });
   };
@@ -345,19 +345,16 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
           <div className="junction-input-wrapper">
             {Object.keys(laneData.busLane).map(direction => {
               if (laneData.busLane[direction] || laneData.cycleLane[direction]) {
-                const remainingDirections = getRemainingDirections(direction);
                 return (
-                  <JunctionInput
-                    key={`junction-input-${direction}`}
-                    incomingDirection={direction}
-                    outgoingDirection1={remainingDirections[0]}
-                    outgoingDirection2={remainingDirections[1]}
-                    outgoingDirection3={remainingDirections[2]}
-                    onUpdate={(data) => handleJunctionInputUpdate(direction, data)}
-                    // Pass only the data for the selected direction
-                    // values={laneData.busCycleLaneDuration[direction]}
-                    values={laneData.busCycleLaneDuration[`vphSpecial${direction.charAt(0).toUpperCase() + direction.slice(1)}`]}
-                  />
+                  <div key={`special-lane-${direction}`} className="input-group">
+                    <label>VPH for {direction.charAt(0).toUpperCase() + direction.slice(1)}:</label>
+                    <input
+                      type="number"
+                      value={laneData.busCycleLaneDuration[`vphSpecial${direction.charAt(0).toUpperCase() + direction.slice(1)}`]}
+                      onChange={(e) => handleJunctionInputUpdate(direction, e.target.value)}
+                      className="lane-input"
+                    />
+                  </div>
                 );
               }
               return null;
