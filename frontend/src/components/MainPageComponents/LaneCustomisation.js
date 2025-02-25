@@ -198,6 +198,12 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
       leftTurn: { north: false, south: false, east: false, west: false },
       busLane: { north: false, south: false, east: false, west: false },
       cycleLane: { north: false, south: false, east: false, west: false },
+      busCycleLaneDuration: {
+        vphSpecialNorth: [],
+        vphSpecialSouth: [],
+        vphSpecialEast: [],
+        vphSpecialWest: []
+      }
     });
   };
 
