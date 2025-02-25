@@ -261,7 +261,6 @@ function MainPage() {
             case 4:
                 return (
                   <Summary 
-                    // formData={formData}
                     formData={completeJSON}
                     setActiveStep={setActiveStep}
                   />
@@ -283,7 +282,7 @@ function MainPage() {
                     {renderForm()}
                 </div>
             </div>
-            <JSONViewer data={completeJSON} />
+            {/* <JSONViewer data={completeJSON} /> */}
         </div>
     );
 }
