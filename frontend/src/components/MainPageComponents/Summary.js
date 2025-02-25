@@ -3,7 +3,6 @@ import './Summary.css';
 import BackButton from '../ButtonComponents/BackButton';
 import { useNavigate } from 'react-router-dom';
 
-// TODO: Rather than accessing from formData, try to refactor to access from JSON instead
 function Summary({ formData, setActiveStep }) {
   const navigate = useNavigate();
 

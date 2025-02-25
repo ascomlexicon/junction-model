@@ -106,7 +106,6 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
     }));
   };
 
-  // FIXME: Need to revert the speeds to 0 if the user unchecks a particular direction
   const handleSpecialLaneChange = (type, direction) => {
     setLaneData(prev => {
       let newBusLane = { ...prev.busLane };
