@@ -152,12 +152,12 @@ function MainPage() {
           newJSON.lanesEntering = [];
           newJSON.lanesExiting = [];
           newJSON.isBusOrCycle = "none";
-          newJSON.busCycleLaneDuration = [{
+          newJSON.busCycleLaneDuration = {
             "vphSpecialNorth": [],
             "vphSpecialSouth": [],
             "vphSpecialEast": [],
             "vphSpecialWest": []
-          }];
+          };
           break;
         case 'pedestrianCrossing':
           newJSON.isCrossings = false;
@@ -188,12 +188,12 @@ function MainPage() {
         lanesEntering: [],
         lanesExiting: [],
         isBusOrCycle: "none",
-        busCycleLaneDuration: [{
+        busCycleLaneDuration: {
           "vphSpecialNorth": [],
           "vphSpecialSouth": [],
           "vphSpecialEast": [],
           "vphSpecialWest": []
-        }],
+        },
         lanePrioritisation: [],
         isCrossings: false,
         crossingDuration: 0,

@@ -16,12 +16,12 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
     if (formData.isBusOrCycle === "bus" || formData.isBusOrCycle === "cycle") {
       busCycleLaneDuration = formData.busCycleLaneDuration;
     } else {
-      busCycleLaneDuration = [{
+      busCycleLaneDuration = {
         "vphSpecialNorth": [],
         "vphSpecialSouth": [],
         "vphSpecialEast": [],
         "vphSpecialWest": []
-      }]
+      }
     }
     
     if (formData.leftTurnLanes) {
@@ -52,16 +52,16 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
       leftTurn: leftTurnLanes,
       busCycleLaneDuration: busCycleLaneDuration,
       busLane: {
-        north: busCycleLaneDuration[0].vphSpecialNorth.length > 0,
-        south: busCycleLaneDuration[0].vphSpecialSouth.length > 0,
-        east: busCycleLaneDuration[0].vphSpecialEast.length > 0,
-        west: busCycleLaneDuration[0].vphSpecialWest.length > 0
+        north: busCycleLaneDuration.vphSpecialNorth.length > 0,
+        south: busCycleLaneDuration.vphSpecialSouth.length > 0,
+        east: busCycleLaneDuration.vphSpecialEast.length > 0,
+        west: busCycleLaneDuration.vphSpecialWest.length > 0
       },
       cycleLane: {
-        north: busCycleLaneDuration[0].vphSpecialNorth.length > 0,
-        south: busCycleLaneDuration[0].vphSpecialSouth.length > 0,
-        east: busCycleLaneDuration[0].vphSpecialEast.length > 0,
-        west: busCycleLaneDuration[0].vphSpecialWest.length > 0
+        north: busCycleLaneDuration.vphSpecialNorth.length > 0,
+        south: busCycleLaneDuration.vphSpecialSouth.length > 0,
+        east: busCycleLaneDuration.vphSpecialEast.length > 0,
+        west: busCycleLaneDuration.vphSpecialWest.length > 0
       }
     }
   });
@@ -216,7 +216,6 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
       leftTurn: { north: false, south: false, east: false, west: false },
       busLane: { north: false, south: false, east: false, west: false },
       cycleLane: { north: false, south: false, east: false, west: false },
-      specialLaneFlow: {}
     });
   };
 
