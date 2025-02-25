@@ -121,14 +121,6 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
     });
   };
 
-  // Get the currently selected special lane direction
-  // TODO: Needs to change, as we can have multiple directions
-  const getSelectedDirection = () => {
-    const busLaneDirection = Object.entries(laneData.busLane).find(([_, value]) => value)?.[0];
-    const cycleLaneDirection = Object.entries(laneData.cycleLane).find(([_, value]) => value)?.[0];
-    return busLaneDirection || cycleLaneDirection;
-  };
-
   // Handle JunctionInput updates
   const handleJunctionInputUpdate = (flows) => {
     setLaneData(prev => ({
