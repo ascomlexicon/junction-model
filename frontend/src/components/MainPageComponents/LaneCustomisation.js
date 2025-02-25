@@ -122,6 +122,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
   };
 
   // Get the currently selected special lane direction
+  // TODO: Needs to change, as we can have multiple directions
   const getSelectedDirection = () => {
     const busLaneDirection = Object.entries(laneData.busLane).find(([_, value]) => value)?.[0];
     const cycleLaneDirection = Object.entries(laneData.cycleLane).find(([_, value]) => value)?.[0];
@@ -323,13 +324,13 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
           </div>
         ) : (
           <div className="junction-input-wrapper">
-            {(() => {
-              const selectedDirection = getSelectedDirection();
-              if (selectedDirection) {
-                const remainingDirections = getRemainingDirections(selectedDirection);
+            {Object.keys(laneData.busLane).map(direction => {
+              if (laneData.busLane[direction] || laneData.cycleLane[direction]) {
+                const remainingDirections = getRemainingDirections(direction);
                 return (
                   <JunctionInput
-                    incomingDirection={selectedDirection}
+                    key={`junction-input-${direction}`}
+                    incomingDirection={direction}
                     outgoingDirection1={remainingDirections[0]}
                     outgoingDirection2={remainingDirections[1]}
                     outgoingDirection3={remainingDirections[2]}
@@ -339,12 +340,10 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
                 );
               }
               return null;
-            })()}
+            })}
           </div>
         )}
       </div>
-
-      {/* Button container */}
       <div className="button-container">
         <BackButton onClick={handleBack} label="Back to Traffic Flow" />
         <ResetLaneChangesButton onClick={handleResetLaneChanges} />
