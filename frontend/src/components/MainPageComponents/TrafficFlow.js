@@ -15,28 +15,28 @@ function TrafficFlow({ setActiveStep, saveFormData, resetForm, resetAllForms, fo
             // Transform JSON format into the component's internal format
             return {
                 north: {
-                    enter: formData.vphNorth[0]?.enter || 0, 
-                    south: formData.vphNorth[0]?.exitSouth || 0,
-                    east: formData.vphNorth[0]?.exitEast || 0,
-                    west: formData.vphNorth[0]?.exitWest || 0
+                    enter: formData.vphNorth?.enter || 0, 
+                    south: formData.vphNorth?.exitSouth || 0,
+                    east: formData.vphNorth?.exitEast || 0,
+                    west: formData.vphNorth?.exitWest || 0
                 },
                 south: {
-                    enter: formData.vphSouth[0]?.enter || 0,
-                    north: formData.vphSouth[0]?.exitNorth || 0,
-                    east: formData.vphSouth[0]?.exitEast || 0,
-                    west: formData.vphSouth[0]?.exitWest || 0
+                    enter: formData.vphSouth?.enter || 0,
+                    north: formData.vphSouth?.exitNorth || 0,
+                    east: formData.vphSouth?.exitEast || 0,
+                    west: formData.vphSouth?.exitWest || 0
                 },
                 east: {
-                    enter: formData.vphEast[0]?.enter || 0,
-                    north: formData.vphEast[0]?.exitNorth || 0,
-                    south: formData.vphEast[0]?.exitSouth || 0,
-                    west: formData.vphEast[0]?.exitWest || 0
+                    enter: formData.vphEast?.enter || 0,
+                    north: formData.vphEast?.exitNorth || 0,
+                    south: formData.vphEast?.exitSouth || 0,
+                    west: formData.vphEast?.exitWest || 0
                 },
                 west: {
-                    enter: formData.vphWest[0]?.enter || 0,
-                    north: formData.vphWest[0]?.exitNorth || 0,
-                    south: formData.vphWest[0]?.exitSouth || 0,
-                    east: formData.vphWest[0]?.exitEast || 0
+                    enter: formData.vphWest?.enter || 0,
+                    north: formData.vphWest?.exitNorth || 0,
+                    south: formData.vphWest?.exitSouth || 0,
+                    east: formData.vphWest?.exitEast || 0
                 }
             };
         }
@@ -94,7 +94,7 @@ function TrafficFlow({ setActiveStep, saveFormData, resetForm, resetAllForms, fo
                 }
             });
 
-            return [entry];
+            return entry;
         };
 
         return {

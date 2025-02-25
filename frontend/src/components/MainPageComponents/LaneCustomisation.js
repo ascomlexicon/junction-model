@@ -10,32 +10,28 @@ import ResetAllButton from '../ButtonComponents/ResetAllButton';
 const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllForms, formData = {} }) => {
   // Initialize state with passed formData or default values
   const [laneData, setLaneData] = useState(() => {
-    let busCycleLaneDuration = [];
-    let leftTurnLanes = [];
+    let busCycleLaneDuration = {
+      "vphSpecialNorth": [],
+      "vphSpecialSouth": [],
+      "vphSpecialEast": [],
+      "vphSpecialWest": []
+    };
+    let leftTurnLanes = {
+      north: false,
+      south: false,
+      east: false,
+      west: false
+    };
 
     if (formData.isBusOrCycle === "bus" || formData.isBusOrCycle === "cycle") {
       busCycleLaneDuration = formData.busCycleLaneDuration;
-    } else {
-      busCycleLaneDuration = {
-        "vphSpecialNorth": [],
-        "vphSpecialSouth": [],
-        "vphSpecialEast": [],
-        "vphSpecialWest": []
-      }
     }
     
     if (formData.leftTurnLanes) {
       leftTurnLanes = formData.leftTurnLanes;
-    } else {
-      leftTurnLanes = {
-        north: false,
-        south: false,
-        east: false,
-        west: false
-      };
     }
 
-    console.log(busCycleLaneDuration);
+    console.log(busCycleLaneDuration.vphSpecialEast.length > 0);
     return {
       entering: {
         north: (formData.lanesEntering && formData.lanesEntering['north']) || '',
@@ -52,6 +48,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
       leftTurn: leftTurnLanes,
       busCycleLaneDuration: busCycleLaneDuration,
       busLane: {
+        // FIXME: This is not being updated properly, and it's coming up as undefined
         north: busCycleLaneDuration.vphSpecialNorth.length > 0,
         south: busCycleLaneDuration.vphSpecialSouth.length > 0,
         east: busCycleLaneDuration.vphSpecialEast.length > 0,

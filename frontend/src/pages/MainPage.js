@@ -32,25 +32,25 @@ function MainPage() {
     // Initialize complete JSON structure
     // See jsonFileFormat.json for notes on structure
     const [completeJSON, setCompleteJSON] = useState({
-      leftTurnLanes: [],
-      lanesEntering: [],
-      lanesExiting: [],
+      leftTurnLanes: {},
+      lanesEntering: {},
+      lanesExiting: {},
       isBusOrCycle: "none",
-      busCycleLaneDuration: [{
+      busCycleLaneDuration: {
         "vphSpecialNorth": [],
         "vphSpecialSouth": [],
         "vphSpecialEast": [],
         "vphSpecialWest": []
-      }],
+      },
       enablePrioritisation: false,
       lanePrioritisation: [],
       isCrossings: false,
       crossingDuration: 0,
       crossingRequestsPerHour: 0,
-      vphNorth: [],
-      vphSouth: [],
-      vphEast: [],
-      vphWest: []
+      vphNorth: {},
+      vphSouth: {},
+      vphEast: {},
+      vphWest: {}
     });
     
     // State to store form data
@@ -142,22 +142,22 @@ function MainPage() {
 
       switch (formName) {
         case 'trafficFlow':
-          newJSON.vphNorth = [];
-          newJSON.vphSouth = [];
-          newJSON.vphEast = [];
-          newJSON.vphWest = [];
+          newJSON.vphNorth = {};
+          newJSON.vphSouth = {};
+          newJSON.vphEast = {};
+          newJSON.vphWest = {};
           break;
         case 'laneCustomisation':
-          newJSON.leftTurnLanes = [];
-          newJSON.lanesEntering = [];
-          newJSON.lanesExiting = [];
+          newJSON.leftTurnLanes = {};
+          newJSON.lanesEntering = {};
+          newJSON.lanesExiting = {};
           newJSON.isBusOrCycle = "none";
-          newJSON.busCycleLaneDuration = [{
+          newJSON.busCycleLaneDuration = {
             "vphSpecialNorth": [],
             "vphSpecialSouth": [],
             "vphSpecialEast": [],
             "vphSpecialWest": []
-          }];
+          };
           break;
         case 'pedestrianCrossing':
           newJSON.isCrossings = false;
