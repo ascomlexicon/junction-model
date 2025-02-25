@@ -36,16 +36,16 @@ function JunctionInput({
 		if (value === '' || (/^\d+$/.test(value) && parseInt(value) >= 0)) {
 			const newFlows = {
 				...outgoingFlows,
-				[direction.toLowerCase()]: value
+				[direction.toLowerCase()]: parseInt(value)
 			};
-			setOutgoingFlows(newFlows);
+			setOutgoingFlows(newFlows);	
 		}
 	};
 
 	// Handle total incoming vehicles change
 	const handleTotalChange = (value) => {
 		if (value === '' || (/^\d+$/.test(value) && parseInt(value) >= 0)) {
-			setTotalIncoming(value);
+			setTotalIncoming(parseInt(value));
 		}
 	};
 
