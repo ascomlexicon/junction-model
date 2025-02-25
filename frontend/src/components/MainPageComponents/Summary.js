@@ -106,7 +106,6 @@ function Summary({ formData, setActiveStep }) {
               ))}
             </ul>
             
-            {/* FIXME: Will need to change this after changing the bus direction form we are using */}
             <h4>Bus/Cycle Lanes</h4>
               {formData.isBusOrCycle === "none" && (
                 <>
@@ -116,28 +115,21 @@ function Summary({ formData, setActiveStep }) {
               {formData.isBusOrCycle !== "none" && (
                 <>
                   <p>Bus or Cycle: {formData.isBusOrCycle.toUpperCase()}</p>
-                  {Object.entries({
-                    north: formData.busCycleLaneDuration.vphSpecialNorth, 
-                    south: formData.busCycleLaneDuration.vphSpecialSouth, 
-                    east: formData.busCycleLaneDuration.vphSpecialEast, west: 
-                    formData.busCycleLaneDuration.vphSpecialWest
-                  }).map(([direction, data]) => (
-                    <div key={`traffic-${direction}`} className="traffic-flow-direction">
-                      <h4>{direction.charAt(0).toUpperCase() + direction.slice(1)} Incoming {formData.isBusOrCycle.toUpperCase()} Traffic</h4>
-                      <ul>
-                        {Object.entries(data)
-                          .filter(([key, _]) => key !== 'enter')
-                          .map(([exitKey, value]) => {
-                            return (
-                              <li key={`${direction}-to-${exitKey}`}>
-                                To {exitKey.charAt(0).toUpperCase() + exitKey.slice(1)}: {value} vehicles/hour
-                              </li>
-                            );
-                          })}
-                      </ul>
-                    </div>
-                  ))}
-              </>
+                  <ul>
+                    {Object.entries({
+                      north: formData.busCycleLaneDuration.vphSpecialNorth, 
+                      south: formData.busCycleLaneDuration.vphSpecialSouth, 
+                      east: formData.busCycleLaneDuration.vphSpecialEast, 
+                      west: formData.busCycleLaneDuration.vphSpecialWest
+                    }).map(([direction, value]) => (
+                      value > 0 && (
+                        <li key={`busCycle-${direction}`}>
+                          {direction.charAt(0).toUpperCase() + direction.slice(1)}: {value} vehicles/hour
+                        </li>
+                      )
+                    ))}
+                  </ul>
+                </>
               )}
           </div>
         ) : (
