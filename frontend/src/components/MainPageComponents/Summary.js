@@ -4,11 +4,25 @@ import BackButton from '../ButtonComponents/BackButton';
 import { useNavigate } from 'react-router-dom';
 
 // TODO: Rather than accessing from formData, try to refactor to access from JSON instead
-function Summary({ formData, setActiveStep }) {
-  const { trafficFlow, laneCustomisation, pedestrianCrossing, lanePrioritisation } = formData;
+function Summary({ completeJSON, setActiveStep }) {
+  // const { 
+  //   leftTurnLanes,
+  //   lanesEntering,
+  //   lanesExiting,
+  //   isBusOrCycle,
+  //   busCycleLaneDuration,
+  //   lanePrioritisation,
+  //   isCrossings,
+  //   crossingDuration,
+  //   crossingRequestsPerHour,
+  //   vphNorth,
+  //   vphSouth,
+  //   vphEast,
+  //   vphWest
+  // } = completeJSON;
+  
   const navigate = useNavigate();
   
-
   const handleClick = (e) => {
     e.preventDefault();
     // TODO: For now this just ensures form is not-empty
@@ -26,15 +40,8 @@ function Summary({ formData, setActiveStep }) {
 
   // Calculate total vehicles per hour for traffic flow summary
   const calculateTotalVPH = () => {
-    if (!trafficFlow || Object.keys(trafficFlow).length === 0) return 0;
-    
-    let total = 0;
-    Object.values(trafficFlow).forEach(direction => {
-      Object.values(direction).forEach(value => {
-        total += parseInt(value) || 0;
-      });
-    });
-    return total;
+    // FIXME: Returning undefined, not sure why
+    return completeJSON.vphNorth.enter + completeJSON.vphSouth.enter + completeJSON.vphEast.enter + completeJSON.vphWest.enter;;
   };
   
   return (
@@ -43,20 +50,25 @@ function Summary({ formData, setActiveStep }) {
       
       <div className="summary-section">
         <h3>Traffic Flow</h3>
-        {Object.keys(trafficFlow || {}).length > 0 ? (
+        {Object.keys(completeJSON.vphNorth || {}).length > 0 ? (
           <div className="summary-content">
             <h4>Total Traffic Volume: {calculateTotalVPH()} vehicles per hour</h4>
             
             <div className="traffic-flow-grid">
-              {Object.entries(trafficFlow).map(([incoming, outgoing]) => (
-                <div key={`traffic-${incoming}`} className="traffic-flow-direction">
-                  <h4>{incoming.charAt(0).toUpperCase() + incoming.slice(1)} Incoming Traffic</h4>
+              {Object.entries({north: completeJSON.vphNorth, south: completeJSON.vphSouth, east: completeJSON.vphEast, west: completeJSON.vphWest}).map(([direction, data]) => (
+                <div key={`traffic-${direction}`} className="traffic-flow-direction">
+                  <h4>{direction.charAt(0).toUpperCase() + direction.slice(1)} Incoming Traffic</h4>
                   <ul>
-                    {Object.entries(outgoing).map(([outDir, value]) => (
-                      <li key={`${incoming}-to-${outDir}`}>
-                        To {outDir.charAt(0).toUpperCase() + outDir.slice(1)}: {value} vehicles/hour
-                      </li>
-                    ))}
+                    {Object.entries(data)
+                      .filter(([key, _]) => key !== 'entry' && key.startsWith('exit'))
+                      .map(([exitKey, value]) => {
+                        const outDir = exitKey.replace('exit', '').toLowerCase();
+                        return (
+                          <li key={`${direction}-to-${outDir}`}>
+                            To {outDir.charAt(0).toUpperCase() + outDir.slice(1)}: {value} vehicles/hour
+                          </li>
+                        );
+                      })}
                   </ul>
                 </div>
               ))}
@@ -67,7 +79,7 @@ function Summary({ formData, setActiveStep }) {
         )}
       </div>
       
-      <div className="summary-section">
+      {/* <div className="summary-section">
         <h3>Lane Configuration</h3>
         {Object.keys(laneCustomisation || {}).length > 0 ? (
           <div className="summary-content">
@@ -158,7 +170,7 @@ function Summary({ formData, setActiveStep }) {
         ) : (
           <p className="no-data">No lane prioritisation configured</p>
         )}
-      </div>
+      </div> */}
       
       <div className="button-container">
         <BackButton onClick={handleBack} label="Back to Lane Prioritisation" />
