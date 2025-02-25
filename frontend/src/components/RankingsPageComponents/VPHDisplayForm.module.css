@@ -1,0 +1,52 @@
+.junctionDisplayContainer {
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: #001F3F;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.infoSection {
+    margin-bottom: 20px;
+    align-self: flex-start;
+    width: 280px;
+}
+
+.dataInfo {
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    margin-bottom: 20px;
+}
+
+.formsGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 280px;
+    align-self: flex-start;
+}
+
+.formCell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    background: #001F3F;
+    border-radius: 8px;
+    border: 2px solid rgb(2, 2, 2);
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.formCell h1 {
+    font-size: 1rem;
+    border-bottom: 2px solid #333;
+    text-align: center;
+    width: 80%;
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: white;
+}
