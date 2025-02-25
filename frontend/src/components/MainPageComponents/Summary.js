@@ -4,7 +4,7 @@ import BackButton from '../ButtonComponents/BackButton';
 import { useNavigate } from 'react-router-dom';
 
 // TODO: Rather than accessing from formData, try to refactor to access from JSON instead
-function Summary({ completeJSON, setActiveStep }) {
+function Summary({ formData, setActiveStep }) {
   const navigate = useNavigate();
 
   const handleClick = async (e) => {
@@ -14,7 +14,7 @@ function Summary({ completeJSON, setActiveStep }) {
       const response = await fetch('/api/simulate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(completeJSON)
+        body: JSON.stringify(formData)
       });
   
       if (!response.ok) {
@@ -41,17 +41,16 @@ function Summary({ completeJSON, setActiveStep }) {
 
   // Calculate total vehicles per hour for traffic flow summary
   const calculateTotalVPH = () => {
-    // FIXME: Returning undefined, not sure why
-    return completeJSON.vphNorth.enter + completeJSON.vphSouth.enter + completeJSON.vphEast.enter + completeJSON.vphWest.enter;
+    return formData.vphNorth.enter + formData.vphSouth.enter + formData.vphEast.enter + formData.vphWest.enter;
   };
   
   return (
     <div className="summary-container">
       <h2>Junction Configuration Summary</h2>
-      
-      <div className="summary-section">
+
+      {/* <div className="summary-section">
         <h3>Traffic Flow</h3>
-        {Object.keys(completeJSON.vphNorth || {}).length > 0 ? (
+        {Object.keys(formData.vphNorth || {}).length > 0 ? (
           <div className="summary-content">
             <h4>Total Traffic Volume: {calculateTotalVPH()} vehicles per hour</h4>
             
@@ -78,15 +77,15 @@ function Summary({ completeJSON, setActiveStep }) {
         ) : (
           <p className="no-data">No traffic flow data configured</p>
         )}
-      </div>
+      </div> */}
       
       <div className="summary-section">
         <h3>Lane Configuration</h3>
-        {Object.keys(laneCustomisation || {}).length > 0 ? (
+        {Object.keys(formData.lanesEntering || {}).length > 0 ? (
           <div className="summary-content">
             <h4>Entering Lanes</h4>
             <ul>
-              {Object.entries(laneCustomisation.entering).map(([direction, count]) => (
+              {Object.entries(formData.lanesEntering).map(([direction, count]) => (
                 <li key={`entering-${direction}`}>
                   {direction.charAt(0).toUpperCase() + direction.slice(1)}: {count || 0}
                 </li>
@@ -95,7 +94,7 @@ function Summary({ completeJSON, setActiveStep }) {
             
             <h4>Exiting Lanes</h4>
             <ul>
-              {Object.entries(laneCustomisation.exiting).map(([direction, count]) => (
+              {Object.entries(formData.lanesExiting).map(([direction, count]) => (
                 <li key={`exiting-${direction}`}>
                   {direction.charAt(0).toUpperCase() + direction.slice(1)}: {count || 0}
                 </li>
@@ -104,14 +103,14 @@ function Summary({ completeJSON, setActiveStep }) {
             
             <h4>Left Turn Lanes</h4>
             <ul>
-              {Object.entries(laneCustomisation.leftTurn).map(([direction, enabled]) => (
+              {Object.entries(formData.leftTurnLanes).map(([direction, enabled]) => (
                 <li key={`leftTurn-${direction}`}>
                   {direction.charAt(0).toUpperCase() + direction.slice(1)}: {enabled ? 'Yes' : 'No'}
                 </li>
               ))}
             </ul>
             
-            <h4>Special Lanes</h4>
+            {/* <h4>Special Lanes</h4>
             <p>Bus Lanes:</p>
             <ul>
               {Object.entries(laneCustomisation.busLane).filter(([_, enabled]) => enabled).map(([direction]) => (
@@ -126,7 +125,7 @@ function Summary({ completeJSON, setActiveStep }) {
                 <li key={`cycle-${direction}`}>{direction.charAt(0).toUpperCase() + direction.slice(1)}</li>
               ))}
               {!Object.values(laneCustomisation.cycleLane).some(value => value) && <li>None</li>}
-            </ul>
+            </ul> */}
           </div>
         ) : (
           <p className="no-data">No lane configuration data</p>
@@ -135,42 +134,34 @@ function Summary({ completeJSON, setActiveStep }) {
       
       <div className="summary-section">
         <h3>Pedestrian Crossings</h3>
-        {Object.keys(pedestrianCrossing || {}).length > 0 ? (
-          <div className="summary-content">
-            <p>Pedestrian Crossings: {pedestrianCrossing.addCrossings ? 'Enabled' : 'Disabled'}</p>
-            
-            {pedestrianCrossing.addCrossings && (
-              <>
-                <p>Crossing Duration: {pedestrianCrossing.crossingDuration} seconds</p>
-                <p>Requests Per Hour: {pedestrianCrossing.requestsPerHour}</p>
-              </>
-            )}
-          </div>
-        ) : (
-          <p className="no-data">No pedestrian crossing configuration</p>
-        )}
+        <div className="summary-content">
+          <p>Pedestrian Crossings: {formData.isCrossings ? 'Enabled' : 'Disabled'}</p>
+          
+          {formData.isCrossings && (
+            <>
+              <p>Crossing Duration: {formData.crossingDuration} seconds</p>
+              <p>Requests Per Hour: {formData.crossingRequestsPerHour}</p>
+            </>
+          )}
+        </div>
       </div>
       
       <div className="summary-section">
-        <h3>Lane Prioritisation</h3>
-        {Object.keys(lanePrioritisation || {}).length > 0 ? (
-          <div className="summary-content">
-            <p>Direction Prioritization: {lanePrioritisation.enablePrioritization ? 'Enabled' : 'Disabled'}</p>
-            
-            {lanePrioritisation.enablePrioritization && (
-              <>
-                <p>Priority Order (highest to lowest):</p>
-                <ol>
-                  {lanePrioritisation.directions.map((direction, index) => (
-                    <li key={`priority-${index}`}>{direction.content}</li>
-                  ))}
-                </ol>
-              </>
-            )}
-          </div>
-        ) : (
-          <p className="no-data">No lane prioritisation configured</p>
-        )}
+        <h3>Direction Prioritisation</h3>
+        <div className="summary-content">
+          <p>Direction Prioritisation: {formData.enablePrioritisation ? 'Enabled' : 'Disabled'}</p>
+          
+          {formData.enablePrioritisation && (
+            <>
+              <p>Priority Order (highest to lowest):</p>
+              <ol>
+                {formData.lanePrioritisation.directions.map((direction, index) => (
+                  <li key={`priority-${index}`}>{direction.content}</li>
+                ))}
+              </ol>
+            </>
+          )}
+        </div>
       </div>
       
       <div className="button-container">
