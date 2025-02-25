@@ -48,17 +48,16 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
       leftTurn: leftTurnLanes,
       busCycleLaneDuration: busCycleLaneDuration,
       busLane: {
-        // FIXME: This is not being updated properly, and it's coming up as undefined
-        north: busCycleLaneDuration.vphSpecialNorth.length > 0,
-        south: busCycleLaneDuration.vphSpecialSouth.length > 0,
-        east: busCycleLaneDuration.vphSpecialEast.length > 0,
-        west: busCycleLaneDuration.vphSpecialWest.length > 0
+        north: busCycleLaneDuration.vphSpecialNorth.length > 0 && formData.isBusOrCycle === "bus",
+        south: busCycleLaneDuration.vphSpecialSouth.length > 0 && formData.isBusOrCycle === "bus",
+        east: busCycleLaneDuration.vphSpecialEast.length > 0 && formData.isBusOrCycle === "bus",
+        west: busCycleLaneDuration.vphSpecialWest.length > 0 && formData.isBusOrCycle === "bus"
       },
       cycleLane: {
-        north: busCycleLaneDuration.vphSpecialNorth.length > 0,
-        south: busCycleLaneDuration.vphSpecialSouth.length > 0,
-        east: busCycleLaneDuration.vphSpecialEast.length > 0,
-        west: busCycleLaneDuration.vphSpecialWest.length > 0
+        north: busCycleLaneDuration.vphSpecialNorth.length > 0 && formData.isBusOrCycle === "cycle",
+        south: busCycleLaneDuration.vphSpecialSouth.length > 0 && formData.isBusOrCycle === "cycle",
+        east: busCycleLaneDuration.vphSpecialEast.length > 0 && formData.isBusOrCycle === "cycle",
+        west: busCycleLaneDuration.vphSpecialWest.length > 0 && formData.isBusOrCycle === "cycle"
       }
     }
   });
@@ -138,7 +137,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
       busCycleLaneDuration: {
         ...prev.busCycleLaneDuration,
         // Update only the selected direction with new flows
-        [`vphSpecial${incomingDirection.charAt(0).toUpperCase() + incomingDirection.slice(1)}`]: flows
+        [`vphSpecial${incomingDirection.charAt(0).toUpperCase() + incomingDirection.slice(1)}`]: [flows]
       }
     }));
   };
