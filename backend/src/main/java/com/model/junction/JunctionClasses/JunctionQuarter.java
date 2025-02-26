@@ -1,7 +1,8 @@
-package com.model.junction; 
+package com.model.junction.JunctionClasses; 
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import com.model.junction.Direction;
 
 /*Contains the classes*/
 
@@ -101,6 +102,8 @@ public class JunctionQuarter{
     public void setPriorityLevel(int priorityLevel){
         PriorityLevel = priorityLevel;
     }
+
+    // TODO: There's a lot of variable type mismatch here. What are the types that you actually want?
     public String getBusLaneDirection(){
         return busLaneDirection;
     }
@@ -113,6 +116,8 @@ public class JunctionQuarter{
     public void setCycleLaneDirection(String cycleLaneDirection){
         this.cycleLaneDirection = cycleLaneDirection;
     }
+
+
     public ArrayList<Integer> getLeftTurnLanes(){
         return leftTurnLanes;
     }
