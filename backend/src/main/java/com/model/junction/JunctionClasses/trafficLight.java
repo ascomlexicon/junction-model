@@ -1,4 +1,4 @@
-package com.model.junction; 
+package com.model.junction.JunctionClasses; 
 
 /*Traffic Light stores the time spent on each colour of traffic light */
 class TrafficLight{
