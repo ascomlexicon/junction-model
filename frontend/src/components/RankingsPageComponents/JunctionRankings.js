@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import styles from './JunctionRankings.module.css';
 import JunctionList from './JunctionList';
 import ScoreBreakdown from './ScoreBreakdown';
-import ConfigurableParameters from './ConfigurableParameters';
 import { Link } from "react-router-dom";
+import VPHDisplayForm from './VPHDisplayForm';
 
 const JunctionRankings = () => {
     // Keep track of both selected junction and junctions state
@@ -29,6 +29,21 @@ const JunctionRankings = () => {
     
     return (
       <div className={styles.container}>
+        <div className = {styles.header}>
+          <h1>Named Junction!</h1>
+        </div>
+        <div className={styles.backButtonContainer}>
+                    {/* TODO: Change this; not advised to have Link tag within button (I think) */}
+
+        <button className={styles.backButton}>
+              <Link to="/MainPage">Back to Junction Configuration Menu</Link>
+            </button>
+        </div>
+        <div className={styles.side}>
+        <VPHDisplayForm 
+          />
+
+        </div>
         <div className={styles.leftPanel}>
           <h1 className={styles.title}>Junction Rankings</h1>
           <p className={styles.subtitle}>Click on a score to see how it was calculated</p>
@@ -38,17 +53,14 @@ const JunctionRankings = () => {
             onSelect={handleSelect}
           />
           
-          {/* TODO: Change this; not advised to have Link tag within button (I think) */}
-          <button className={styles.backButton}>
-            <Link to="/MainPage">Back to Junction Configuration Menu</Link>
-          </button>
+          
         </div>
         
         <div className={styles.rightPanel}>
           {selectedJunction && (
             <>
               <ScoreBreakdown junctionName={selectedJunction.name} score={selectedJunction.score} />
-              <ConfigurableParameters />
+              
             </>
           )}
         </div>

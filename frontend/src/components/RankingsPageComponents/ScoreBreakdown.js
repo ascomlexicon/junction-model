@@ -1,5 +1,9 @@
 import React from 'react';
 import styles from './JunctionRankings.module.css';
+import DisplayLaneCustomisation from './DisplayLaneCustomisation';
+import DisplayPedestrianCrossing from './DisplayPedestrianCrossing';
+import DisplayLanePrioritisation from './DisplayLanePrioritisation';
+
 
 const ScoreBreakdown = ({ junctionName, score }) => {
     return(
@@ -42,17 +46,14 @@ const ScoreBreakdown = ({ junctionName, score }) => {
             </tbody>
         </table>
         
-        <div className={styles.weightings}>
-            <h3>Weightings</h3>
-            <p>Average Wait:</p>
-            <p>Maximum Wait:</p>
-            <p>Maximum Queue</p>
+
+        <div className='styles.confiurableParameters'>
+            <h3>Configurable Parameters</h3>
+            <DisplayLaneCustomisation />
+            <DisplayPedestrianCrossing />
+            <DisplayLanePrioritisation />
         </div>
-        
-        <div className={styles.formula}>
-            <h3>Formula Used</h3>
-            <div className={styles.formulaBox}></div>
-        </div>
+
         </div>
     )
 };
