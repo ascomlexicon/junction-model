@@ -53,7 +53,9 @@ const JunctionRankings = () => {
             onSelect={handleSelect}
           />
           
-          
+            <button className = {styles.backButton}>
+            <Link to="/Leaderboard">See other leaderboards</Link>
+          </button>
         </div>
         
         <div className={styles.rightPanel}>
@@ -64,9 +66,6 @@ const JunctionRankings = () => {
             </>
           )}
         </div>
-        <button>
-          <Link to="/Leaderboard">Leaderboard</Link>
-        </button>
       </div>
     );
   };
