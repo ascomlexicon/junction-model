@@ -271,12 +271,20 @@ function MainPage() {
         }
     };
 
+    const draw = (ctx, frameCount) => {
+      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+      ctx.fillStyle = '#000000'
+      ctx.beginPath()
+      ctx.arc(50, 100, 20*Math.sin(frameCount*0.05)**2, 0, 2*Math.PI)
+      ctx.fill()
+    }
+
     return(
         <div className="container">
             <h1 className='main-title'>Junction Simulator</h1>
             <div className="junction-visual">
                 {/* Add canvas */}
-                <Canvas />
+                <Canvas draw={draw}/>
 
                 {/* <div className='image'>Junction graphicIMAGE</div>
                 <div className='Leaderboard'>See junction Leaderboard</div> */}
