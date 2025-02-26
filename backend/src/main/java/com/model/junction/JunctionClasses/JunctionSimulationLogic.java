@@ -12,6 +12,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.ThreadLocalRandom;
 
 class JunctionSimulationLogic {
   // all longs and integers have been replaced with AtomicInteger and AtomicLong because this allows us to update them in the threads
@@ -25,26 +26,32 @@ class JunctionSimulationLogic {
   private static double interArrivalTime = 0; // Inter-arrival time in seconds
   private static long exponentialTimeInterval = 0; // Exponential time interval
   private static long simulationStartTime = System.nanoTime(); // Start time of the simulation
+  private static final AtomicInteger exisitingcount = new AtomicInteger(0); /* count car exiting */
 
   // MODIFICATIONS
   enum LaneType {
     FORWARD_ONLY, RIGHT_ONLY, LEFT_ONLY, ALL_DIRECTIONS, LEFT_FORWARD, RIGHT_FORWARD
   }
   private static boolean leftLane;
+  private static boolean busCycleLane;
   private static Queue<Long>[] outboundCars;
   private static List<LaneType> laneTypes= Collections.synchronizedList(new ArrayList<>());
 
+  
   public static void main(String[] args) {
-    int northboundVph = 600; // vph for northbound traffic
-    int exitingNorth = 350; // cars exiting north
-    int exitingEast = 150; // cars exiting east
-    int exitingWest = 100; // cars exiting west
+    int northboundVph = 700; // vph for northbound traffic
+    int exitingNorth = 200; // cars exiting north
+    int exitingEast = 100; // cars exiting east
+    int exitingWest = 400; // cars exiting west
 
     // NUMBER OF LANES: The number of lanes can be set to 1, 2, 3, 4 or 5
     // LEFT TURN LANE: If the left lane is enabled, the leftmost lane will be the left turn lane
     int numberOfLanes = 3;
     leftLane = false;
     initializeLanes(numberOfLanes);
+
+    // BUS LANE: If the bus lane is enabled, the leftmost lane will be the bus lane
+    busCycleLane = true;
 
     // PUFFIN CROSSING:
     boolean puffinCrossing = false; // Puffin crossing is enabled
@@ -71,6 +78,11 @@ class JunctionSimulationLogic {
     long priorityArray[] = {0, 3, 4, 1}; // priority array for the lanes where indexes are North, East, South, West
     long initialDelay = 0; // initial delay for the cars to start entering the junction
     int priority = (int) priorityArray[directionIndex]; // priority for the lane
+
+    // LEFT LANE: The left lane will also go when the opposite junction quarter goes
+    int oppositeLane = (directionIndex + 2) % 4; // opposite lane to the current lane
+    int oppositePriority = (int) priorityArray[oppositeLane]; // priority for the opposite lane
+    long leftLaneDelay = 0; // delay for the left lane
 
     switch ((int) priorityArray[directionIndex]) {
       case 0:
@@ -118,12 +130,20 @@ class JunctionSimulationLogic {
         initialDelay += priorityArray[i];
       }
 
+      // the left lane also goes when the opposite junction quarter goes
+      if (currentPriority > oppositePriority)
+      {
+        leftLaneDelay += priorityArray[i];
+      }
+
       System.out.println("Priority for direction " + i + " is " + priorityArray[i] + " nanoseconds");
       trafficLightCycle += priorityArray[i];
     }
 
     System.out.println("Initial delay = " + initialDelay + " nanoseconds");
     System.out.println("Total traffic cycle = " + trafficLightCycle + " nanoseconds");
+
+    final long leftLaneInitialDelay = leftLaneDelay; // final variable for the left lane initial delay
 
     final long initialDelayFinal = initialDelay; // final variable for the initial delay
     final long trafficLightCycleFinal = trafficLightCycle; // final variable for the traffic light cycle
@@ -134,6 +154,7 @@ class JunctionSimulationLogic {
     // our scheduled executor services
     ScheduledExecutorService carsEntering = Executors.newScheduledThreadPool(1);
     ScheduledExecutorService carsExiting = Executors.newScheduledThreadPool(1);
+    ScheduledExecutorService leftLaneCarsExiting = Executors.newScheduledThreadPool(1);
 
     // The max number of vehicles that can enter the junction per hour is the northboundVPH
     final int maxVehicles = northboundVph;
@@ -146,7 +167,7 @@ class JunctionSimulationLogic {
           return;
         }
         
-        // Stop adding cars if we've reached the limit.
+        // Stop adding cars if we've reached the limit
         if (count.get() >= maxVehicles) {
           return;
         }
@@ -187,47 +208,89 @@ class JunctionSimulationLogic {
 
     // runnable for exiting cars
     Runnable exitCarsTask =
-        new Runnable() {
-          @Override
-          public void run() {
-            if (carsExiting.isShutdown()) {
-              return;
-            }
-
-            long threadStartTime = System.nanoTime();
-
-            // assuming 2 cars leave per second
-            int carsLeaving = greenLightOnTimeFinal * 2;
-
-            // Schedule {carsLeaving} cars to exit over {the priority time} seconds
-            for (int i = 0; i < carsLeaving; i++) {
-              final int carIndex = i;
-              carsExiting.schedule(
-                  () -> {
-                    exitQueue(outboundCars[0].poll());
-                    maximumQueueLength.updateAndGet(
-                        currentMax -> Math.max(currentMax, outboundCars[0].size()));
-                    exitQueue(outboundCars[1].poll());
-                    maximumQueueLength.updateAndGet(
-                        currentMax -> Math.max(currentMax, outboundCars[1].size()));
-                    exitQueue(outboundCars[2].poll());
-                    maximumQueueLength.updateAndGet(
-                        currentMax -> Math.max(currentMax, outboundCars[2].size()));
-                  },
-                  (long) (carIndex * (priorityArray[directionIndex] / carsLeaving)),
-                  TimeUnit.NANOSECONDS); // spread car exits over the green light's duration in nanoseconds stored in priorityArray[directionIndex]
-            }
-            
-            long actualGreenLightTime = System.nanoTime() - threadStartTime;
-            long timeToNextGreen = calculateTimeToNextGreen(trafficLightCycleFinal - actualGreenLightTime, puffinCrossing, crossingsPerHour, crossingInterval, crossingDuration);
-
-            carsExiting.schedule(this, timeToNextGreen, TimeUnit.NANOSECONDS);
+      new Runnable() {
+        @Override
+        public void run() {
+          if (carsExiting.isShutdown()) {
+            return;
           }
-        };
+
+          long threadStartTime = System.nanoTime();
+
+          // assuming 2 cars leave per second
+          int carsLeaving = greenLightOnTimeFinal * 2;
+
+          // Schedule {carsLeaving} cars to exit over {the priority time} seconds
+          for (int i = 0; i < carsLeaving; i++) {
+            final int carIndex = i;
+            final long rowIntervals = (long) ((carIndex + 1) * ((priorityArray[directionIndex] / (double) carsLeaving))  
+            * ThreadLocalRandom.current().nextDouble(0.95, 1.05)); // randomize the time a car exits
+            carsExiting.schedule(
+                () -> {
+                  for (int j = 0; j < numberOfLanes; j++){
+
+                    final int laneIndex = j;                   
+
+                    carsExiting.schedule( () -> {
+                      exitQueue(outboundCars[laneIndex].poll());
+                      maximumQueueLength.updateAndGet(
+                      currentMax -> Math.max(currentMax, outboundCars[laneIndex].size()));
+                    },
+                    (rowIntervals),
+                    TimeUnit.NANOSECONDS); // spread car exits over the row intervals' duration in nanoseconds 
+                  } 
+                },
+                (long) (carIndex * (priorityArray[directionIndex] / carsLeaving)),
+                TimeUnit.NANOSECONDS); // spread car exits over the green light's duration in nanoseconds stored in priorityArray[directionIndex]
+          }
+          
+          long actualGreenLightTime = System.nanoTime() - threadStartTime;
+          long timeToNextGreen = calculateTimeToNextGreen(trafficLightCycleFinal - actualGreenLightTime, puffinCrossing, crossingsPerHour, crossingInterval, crossingDuration);
+
+          carsExiting.schedule(this, timeToNextGreen, TimeUnit.NANOSECONDS);
+        }
+      };
+
+    Runnable leftLaneCarsExitingTask =
+      new Runnable() {
+        @Override
+        public void run() {
+          if (leftLaneCarsExiting.isShutdown()) {
+            return;
+          }
+
+          long threadStartTime = System.nanoTime();
+
+          // assuming 2 cars leave per second
+          int carsLeaving = greenLightOnTimeFinal * 2;
+
+          for (int i = 0; i < carsLeaving; i++) {
+            final int carIndex = i;
+
+            // since we are only checking one lane, there is no need to loop through the rest
+            leftLaneCarsExiting.schedule(
+                () -> {
+                  // make the cars leave the leftmost lane
+                  exitQueue(outboundCars[0].poll());
+                  maximumQueueLength.updateAndGet(currentMax -> Math.max(currentMax, outboundCars[0].size()));
+                },
+                (long) (carIndex * (priorityArray[oppositeLane] / carsLeaving)),
+                TimeUnit.NANOSECONDS); // spread car exits over the green light's duration in nanoseconds stored in priorityArray[directionIndex]
+              }
+
+          long actualGreenLightTime = System.nanoTime() - threadStartTime;
+          long timeToNextGreen = calculateTimeToNextGreen(trafficLightCycleFinal - actualGreenLightTime, puffinCrossing, crossingsPerHour, crossingInterval, crossingDuration);
+
+          leftLaneCarsExiting.schedule(this, timeToNextGreen, TimeUnit.NANOSECONDS);
+        }
+      };
 
     // start entering and exiting cars
     carsEntering.schedule(enterCarsTask, 0, TimeUnit.MILLISECONDS);
     carsExiting.schedule(exitCarsTask, initialDelayFinal, TimeUnit.NANOSECONDS);
+    if (leftLane){
+      leftLaneCarsExiting.schedule(leftLaneCarsExitingTask, leftLaneInitialDelay, TimeUnit.NANOSECONDS);
+    }
 
     // scheduling shutdown of carsEntering
     carsEntering.schedule(
@@ -250,16 +313,28 @@ class JunctionSimulationLogic {
     carsExiting.schedule(
         () -> {
           System.out.println("Shutting down carsExiting");
+          System.out.println("Total cars exisited : " + exisitingcount.get());
           carsExiting.shutdown();
         },
         simulationTime * 15,
         TimeUnit.SECONDS);
+
+    if (leftLane){
+      leftLaneCarsExiting.schedule(
+          () -> {
+            System.out.println("Shutting down leftLaneCarsExiting");
+            leftLaneCarsExiting.shutdown();
+          },
+          simulationTime * 15,
+          TimeUnit.SECONDS);
+    }
   }
 
   // updates our metrics when cars exit the queue
   public static void exitQueue(Long enterTime) {
     if (enterTime != null) {
       long waitingTime = System.nanoTime() - enterTime;
+      exisitingcount.incrementAndGet(); /* count car exiting */
       maximumWaitingTime.updateAndGet(currentMax -> Math.max(currentMax, waitingTime));
       int exitedCars = quarterCarsExited.incrementAndGet();
       averageWaitTime.updateAndGet(
@@ -291,6 +366,7 @@ class JunctionSimulationLogic {
     return realTime * 1_000_000_000 / 240;
   }
 
+  /* START OF SHAHAD CODE */
   //helper methode for findShortestLane
   private static boolean isLaneValidForDirection(int laneIndex, LaneType direction) {
     return laneTypes.get(laneIndex) == direction ||
@@ -314,7 +390,7 @@ class JunctionSimulationLogic {
       }
     }
     
-    //this is will never happen as all casses are covered
+    //this is will never happen as all cases are covered
     return bestLane;
   }
     
@@ -324,8 +400,7 @@ class JunctionSimulationLogic {
       int bestLane = findShortestLane(direction);
       outboundCars[bestLane].add(System.nanoTime());
       count.incrementAndGet();
-      maximumQueueLength.updateAndGet(
-        currentMax -> Math.max(currentMax, outboundCars[bestLane].size()));  
+      maximumQueueLength.updateAndGet(currentMax -> Math.max(currentMax, outboundCars[bestLane].size()));  
     }
   }
 
@@ -360,13 +435,13 @@ class JunctionSimulationLogic {
         if (leftLane) {
           laneTypes.add( LaneType.LEFT_ONLY);
           laneTypes.add( LaneType.FORWARD_ONLY);
+          laneTypes.add( LaneType.FORWARD_ONLY);
           laneTypes.add( LaneType.RIGHT_FORWARD);
-          laneTypes.add( LaneType.RIGHT_ONLY);
         } else {
           laneTypes.add( LaneType.LEFT_FORWARD);
           laneTypes.add( LaneType.FORWARD_ONLY);
+          laneTypes.add( LaneType.FORWARD_ONLY);
           laneTypes.add( LaneType.RIGHT_FORWARD);
-          laneTypes.add( LaneType.RIGHT_ONLY);
         }
       break;
       case 5:
@@ -374,20 +449,19 @@ class JunctionSimulationLogic {
           laneTypes.add(LaneType.LEFT_ONLY);
           laneTypes.add(LaneType.FORWARD_ONLY);
           laneTypes.add(LaneType.FORWARD_ONLY);
+          laneTypes.add(LaneType.FORWARD_ONLY);
           laneTypes.add(LaneType.RIGHT_FORWARD);
-          laneTypes.add(LaneType.RIGHT_ONLY);
         } else {
           laneTypes.add(LaneType.LEFT_FORWARD);
           laneTypes.add(LaneType.FORWARD_ONLY);
           laneTypes.add(LaneType.FORWARD_ONLY);
+          laneTypes.add(LaneType.FORWARD_ONLY);
           laneTypes.add(LaneType.RIGHT_FORWARD);
-          laneTypes.add(LaneType.RIGHT_ONLY);
         }
       break;
     }
   }
 
-      
   // Poisson distribution generator(this algorithm proposed by D. Knuth:)
   private static int generatePoisson(int lambda) {
       double L = Math.exp(-lambda); 
@@ -403,3 +477,5 @@ class JunctionSimulationLogic {
       return k - 1;
   }
 }
+
+/* END OF SHAHAD CODE */
