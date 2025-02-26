@@ -52,6 +52,9 @@ const JunctionRankings = () => {
             </>
           )}
         </div>
+        <button>
+          <Link to="/Leaderboard">Leaderboard</Link>
+        </button>
       </div>
     );
   };
