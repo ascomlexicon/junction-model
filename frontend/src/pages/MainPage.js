@@ -6,6 +6,7 @@ import LaneCustomisation from '../components/MainPageComponents/LaneCustomisatio
 import PedestrianCrossing from '../components/MainPageComponents/PedestrianCrossing';
 import LanePrioritisation from '../components/MainPageComponents/LanePrioritisation';
 import Summary from '../components/MainPageComponents/Summary';
+import Canvas from '../components/JunctionVisualisationComponents/Canvas/Canvas'
 
 // New component for instructions
 const InstructionsPage = () => {
@@ -123,8 +124,11 @@ function MainPage() {
         <div className="container">
             <h1 className='main-title'>Junction Simulator</h1>
             <div className="junction-visual">
-                <div className='image'>{/* Junction graphic */}IMAGE</div>
-                <div className='Leaderboard'>See junction Leaderboard</div>
+                {/* Add canvas */}
+                <Canvas />
+
+                {/* <div className='image'>Junction graphicIMAGE</div>
+                <div className='Leaderboard'>See junction Leaderboard</div> */}
             </div>
             <div className='menu'>
                 <Sidebar setActiveStep={setActiveStep} activeStep={activeStep} />
