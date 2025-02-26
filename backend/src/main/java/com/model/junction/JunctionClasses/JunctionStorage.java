@@ -1,11 +1,10 @@
 package com.model.junction.JunctionClasses;
 
 import java.util.Set;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class JunctionStorage {
-
-
   // Attributes
   private HashMap<String, Junction> junctions;
 
@@ -44,6 +43,10 @@ public class JunctionStorage {
   public Set<String> getJunctionNames() {
     return junctions.keySet();
   } 
+  
+  public ArrayList<Junction> getAllJunctions() {
+    return new ArrayList<Junction>(junctions.values());
+  }
 
   // Storage Information
   public boolean isEmpty() {

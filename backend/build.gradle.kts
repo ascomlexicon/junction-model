@@ -1,6 +1,6 @@
 plugins {
 	java
-	id("org.springframework.boot") version "3.4.2"
+	id("org.springframework.boot") version "3.4.3"
 	id("io.spring.dependency-management") version "1.1.7"
 }
 
@@ -19,6 +19,7 @@ repositories {
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }

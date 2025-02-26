@@ -1,4 +1,4 @@
-package com.model.junction;
+package com.model.junction.Attributes;
 
 public enum Direction {
   NORTH,
