@@ -1,5 +1,6 @@
 package com.model.junction; 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 /*Contains the classes*/
@@ -16,9 +17,9 @@ public class JunctionQuarter{
     private int ExitingRight;
 
     /*Stores the lanes exiting the junction, default this to 1,2 and 3*/
-    private ArrayList<Integer> exitingLanes = new ArrayList<>(Arrays.asList(1, 2, 3));
+    private ArrayList<Integer> exitingLanes = new ArrayList<Integer>(Arrays.asList(1, 2, 3));
     /*Stores the lanes entering the junction, default this to 4 and 5*/
-    private ArrayList<Integer> enteringLanes = new ArrayList<>(Arrays.asList(4,5));
+    private ArrayList<Integer> enteringLanes = new ArrayList<Integer>(Arrays.asList(4,5));
 
     /**
     * The attributes below are the configurable parameters
