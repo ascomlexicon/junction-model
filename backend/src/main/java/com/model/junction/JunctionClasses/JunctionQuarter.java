@@ -16,9 +16,9 @@ public class JunctionQuarter{
     private int ExitingRight;
 
     /*Stores the lanes exiting the junction, default this to 1,2 and 3*/
-    private ArrayList[Integer] exitingLanes = new ArrayList<>(Arrays.asList(1, 2, 3));
+    private ArrayList<Integer> exitingLanes = new ArrayList<>(Arrays.asList(1, 2, 3));
     /*Stores the lanes entering the junction, default this to 4 and 5*/
-    private ArrayList[Integer] enteringLanes = new ArrayList<>(Arrays.asList(4,5));
+    private ArrayList<Integer> enteringLanes = new ArrayList<>(Arrays.asList(4,5));
 
     /**
     * The attributes below are the configurable parameters
@@ -29,11 +29,11 @@ public class JunctionQuarter{
     /*Stores the priority level of the junction, defaulted to 0*/
     private int PriorityLevel = 0; 
     /*Stores the lanes that are bus lanes*/
-    private ArrayList[Integer] busLaneDirection= new ArrayList<>(); 
+    private ArrayList<Integer> busLaneDirection= new ArrayList<>(); 
     /*Stores the lanes that are cycle lanes*/
-    private ArrayList[Integer] cycleLaneDirection = new ArrayList<>(); 
+    private ArrayList<Integer> cycleLaneDirection = new ArrayList<>(); 
     /*Stores the lanes that are left turn lanes*/
-    private ArrayList[Integer] leftTurnLanes = new ArrayList<>(); 
+    private ArrayList<Integer> leftTurnLanes = new ArrayList<>(); 
     /*Stores the number of lanes in the junction, defaulted to 5*/
     private int numberOfLanes = 5;  
     /*Stores whether the junction contains a pedestrian crossing, defaulted to false*/
@@ -82,16 +82,16 @@ public class JunctionQuarter{
     }
 
 
-    public ArrayList[int] getEnteringLanes(){
+    public ArrayList<Integer> getEnteringLanes(){
         return enteringLanes;
     }
-    public void setEnteringLanes(ArrayList[int] enteringLanes){
+    public void setEnteringLanes(ArrayList<Integer> enteringLanes){
         this.enteringLanes = enteringLanes;
     }
-    public ArrayList[int] getExitingLanes(){
+    public ArrayList<Integer> getExitingLanes(){
         return exitingLanes;
     }
-    public void setExitingLanes(ArrayList[int] exitingLanes){
+    public void setExitingLanes(ArrayList<Integer> exitingLanes){
         this.exitingLanes = exitingLanes;
     }
     public int getPriorityLevel(){
@@ -112,10 +112,10 @@ public class JunctionQuarter{
     public void setCycleLaneDirection(String cycleLaneDirection){
         this.cycleLaneDirection = cycleLaneDirection;
     }
-    public ArrayList[int] getLeftTurnLanes(){
+    public ArrayList<Integer> getLeftTurnLanes(){
         return leftTurnLanes;
     }
-    public void setLeftTurnLanes(ArrayList[int] leftTurnLanes){
+    public void setLeftTurnLanes(ArrayList<Integer> leftTurnLanes){
         this.leftTurnLanes = leftTurnLanes;
     }
     public int getNumberOfLanes(){
