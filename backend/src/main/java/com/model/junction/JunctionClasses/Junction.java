@@ -5,6 +5,7 @@ import java.util.Objects;
 public class Junction {
   // Attributes
   private String name;
+  private Double score;
   
   // TODO: Are EastJunction etc supposed to implement the abstract class JunctionQuarter?
   private EastJunction East;
