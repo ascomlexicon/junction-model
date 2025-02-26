@@ -142,6 +142,11 @@ public class JunctionQuarter{
      * But will check that the outbound and inbound lanes are numbered properly
      * Lanes are numbered 1 to n where n does not exceed 5
      */
+
+    // TODO: Both of these methods are private, should they not be public?
+    // Also, to make storing and verifying junction configurations easier, 
+    // the JSON object passed from the frontend will ONLY be passed if it is a valid
+    // junction.
     private boolean verifyLanes(){
         return true;
     }
