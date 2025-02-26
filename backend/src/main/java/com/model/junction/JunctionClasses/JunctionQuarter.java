@@ -2,7 +2,7 @@ package com.model.junction.JunctionClasses;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import com.model.junction.Direction;
+import com.model.junction.Attributes.Direction;
 
 /*Contains the classes*/
 
