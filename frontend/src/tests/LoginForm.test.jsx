@@ -18,14 +18,6 @@ describe(LoginForm, () => {
     );    
   });
 
-  beforeEach(() => {
-    render(
-      <BrowserRouter>
-        <LoginForm />
-      </BrowserRouter>
-    );    
-  });
-
   it("login form renders successfully", () => {
     // Check if title is present
     expect(screen.getByText('Junction Simulator')).toBeInTheDocument();
@@ -86,47 +78,12 @@ describe(LoginForm, () => {
   });
 
   it('ensures email field is of correct type', () => {    
-  it('ensures email field is of correct type', () => {    
     const passwordInput = screen.getByLabelText(/email:/i);
 
     // Checks the type of the password input field
     expect(passwordInput).toHaveAttribute('type', 'email');
   });
 
-  it('submit button should not navigate when email is empty', () => {
-    const passwordInput = screen.getByLabelText(/password/i);
-    const submitButton = screen.getByRole('button', { name: /login/i });
-
-    // Fill only password field
-    fireEvent.change(passwordInput, { target: { value: 'testpassword' } });
-
-    // Try to submit the form
-    fireEvent.click(submitButton);
-
-    // Mock form submission
-    const mockSubmit = jest.fn(e => e.preventDefault());
-
-    // Check that navigation didn't occur
-    expect(mockSubmit).not.toHaveBeenCalled();
-  });
-
-  it('submit button should not navigate when password is empty', () => {
-    // Get form elements
-    const emailInput = screen.getByLabelText(/email/i);
-    const submitButton = screen.getByRole('button', { name: /login/i });
-
-    // Fill only email field
-    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
-
-    // Try to submit the form
-    fireEvent.click(submitButton);
-
-    // Mock form submission
-    const mockSubmit = jest.fn(e => e.preventDefault());
-
-    // Check that navigation didn't occur
-    expect(mockSubmit).not.toHaveBeenCalled();
-  });
   it('submit button should not navigate when email is empty', () => {
     const passwordInput = screen.getByLabelText(/password/i);
     const submitButton = screen.getByRole('button', { name: /login/i });
