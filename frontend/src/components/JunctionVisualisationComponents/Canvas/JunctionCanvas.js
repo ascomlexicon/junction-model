@@ -323,25 +323,25 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
     
     // Draw special lanes based on direction and vph
     if (busCycleLaneDuration.vphSpecialNorth > 0) {
-      ctx.drawImage(laneImage, centerX - 180, centerY + 200, 40, 100);
-    }
-    
-    if (busCycleLaneDuration.vphSpecialSouth > 0) {
       ctx.drawImage(laneImage, centerX + 140, centerY - 300, 40, 100);
+    }
+
+    if (busCycleLaneDuration.vphSpecialSouth > 0) {
+      ctx.drawImage(laneImage, centerX - 180, centerY + 200, 40, 100);
     }
     
     if (busCycleLaneDuration.vphSpecialEast > 0) {
       ctx.save();
-      ctx.translate(centerX - 300, centerY - 180);
-      ctx.rotate(-Math.PI/2);
+      ctx.translate(centerX + 300, centerY + 140);
+      ctx.rotate(Math.PI/2);
       ctx.drawImage(laneImage, 0, 0, 40, 100);
       ctx.restore();
     }
-    
+
     if (busCycleLaneDuration.vphSpecialWest > 0) {
       ctx.save();
-      ctx.translate(centerX + 300, centerY + 140);
-      ctx.rotate(Math.PI/2);
+      ctx.translate(centerX - 300, centerY - 180);
+      ctx.rotate(-Math.PI/2);
       ctx.drawImage(laneImage, 0, 0, 40, 100);
       ctx.restore();
     }
