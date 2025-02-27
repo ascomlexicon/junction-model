@@ -7,7 +7,7 @@ import PedestrianCrossing from '../components/MainPageComponents/PedestrianCross
 import LanePrioritisation from '../components/MainPageComponents/LanePrioritisation';
 import Summary from '../components/MainPageComponents/Summary';
 import JSONViewer from './JSONViewer';
-import Canvas from '../components/JunctionVisualisationComponents/Canvas/Canvas'
+import JunctionCanvas from '../components/JunctionVisualisationComponents/Canvas/JunctionCanvas';
 
 // New component for instructions
 const InstructionsPage = () => {
@@ -271,20 +271,16 @@ function MainPage() {
         }
     };
 
-    const draw = (ctx, frameCount) => {
-      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-      ctx.fillStyle = '#000000'
-      ctx.beginPath()
-      ctx.arc(50, 100, 20*Math.sin(frameCount*0.05)**2, 0, 2*Math.PI)
-      ctx.fill()
-    }
-
     return(
         <div className="container">
             <h1 className='main-title'>Junction Simulator</h1>
             <div className="junction-visual">
                 {/* Add canvas */}
-                <Canvas draw={draw}/>
+                <JunctionCanvas 
+                  config={completeJSON} 
+                  width={800} 
+                  height={600} 
+                />
 
                 {/* <div className='image'>Junction graphicIMAGE</div>
                 <div className='Leaderboard'>See junction Leaderboard</div> */}
