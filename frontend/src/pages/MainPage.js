@@ -278,6 +278,7 @@ function MainPage() {
                 {/* Add canvas */}
                 <JunctionCanvas 
                   config={completeJSON} 
+                  // FIXME: Use window.innerHeight/Width when doing dynamic stuff
                   width={800} 
                   height={600} 
                 />

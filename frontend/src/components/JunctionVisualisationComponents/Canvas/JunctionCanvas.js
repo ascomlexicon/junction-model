@@ -120,6 +120,7 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
   const drawNorthLanes = (ctx, centreX, centreY, entering, exiting, hasLeftTurn, images) => {
     // Similar to North but mirrored
     const laneWidth = 40;
+    // FIXME: This logic is flawed currently, so will look at on Thursday
     const totalEnteringWidth = entering * laneWidth;
     const startX = centreX + (totalEnteringWidth / 2);
     
@@ -151,6 +152,9 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
     }
     
     // Draw traffic light
+
+    // FIXME: Traffic lights are always placed on the corners of the junction, facing the drivers
+    // Implement the same rotation and flipping stuff you did for these too
     ctx.drawImage(images.trafficLight, startX + 20, centreY - 140, 20, 40);
   };
 
