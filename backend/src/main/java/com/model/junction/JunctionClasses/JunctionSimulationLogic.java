@@ -47,7 +47,7 @@ class JunctionSimulationLogic {
     // NUMBER OF LANES: The number of lanes can be set to 1, 2, 3, 4 or 5
     // LEFT TURN LANE: If the left lane is enabled, the leftmost lane will be the left turn lane
     int numberOfLanes = 3;
-    leftLane = false;
+    leftLane = true;
     initializeLanes(numberOfLanes);
 
     // BUS LANE: If the bus lane is enabled, the leftmost lane will be the bus lane
@@ -144,7 +144,6 @@ class JunctionSimulationLogic {
     System.out.println("Total traffic cycle = " + trafficLightCycle + " nanoseconds");
 
     final long leftLaneInitialDelay = leftLaneDelay; // final variable for the left lane initial delay
-
     final long initialDelayFinal = initialDelay; // final variable for the initial delay
     final long trafficLightCycleFinal = trafficLightCycle; // final variable for the traffic light cycle
     final int greenLightOnTimeFinal = greenLightOnTime; // final variable for the green light on time
