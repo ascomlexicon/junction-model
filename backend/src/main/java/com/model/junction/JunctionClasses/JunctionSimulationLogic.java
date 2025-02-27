@@ -9,6 +9,7 @@ import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -314,6 +315,7 @@ class JunctionSimulationLogic {
           System.out.println("Shutting down carsExiting");
           System.out.println("Total cars exisited : " + exisitingcount.get());
           carsExiting.shutdown();
+          System.out.println("Total cars exisited : "+exisitingcount.get());
         },
         simulationTime * 15,
         TimeUnit.SECONDS);
@@ -332,6 +334,7 @@ class JunctionSimulationLogic {
   // updates our metrics when cars exit the queue
   public static void exitQueue(Long enterTime) {
     if (enterTime != null) {
+      exisitingcount.incrementAndGet(); /* count car exiting */
       long waitingTime = System.nanoTime() - enterTime;
       exisitingcount.incrementAndGet(); /* count car exiting */
       maximumWaitingTime.updateAndGet(currentMax -> Math.max(currentMax, waitingTime));
