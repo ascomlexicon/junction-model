@@ -152,10 +152,11 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
     }
     
     // Draw traffic light
-
-    // FIXME: Traffic lights are always placed on the corners of the junction, facing the drivers
-    // Implement the same rotation and flipping stuff you did for these too
-    ctx.drawImage(images.trafficLight, startX + 20, centreY - 140, 20, 40);
+    ctx.save();
+    ctx.translate(centreX + 155, centreY - 175); // Translate to the top right corner of the box
+    ctx.rotate(Math.PI); // Rotate by 180 degrees
+    ctx.drawImage(images.trafficLight, -20, -40, 20, 40); // Draw the image centered at the new origin
+    ctx.restore();
   };
 
   // Cars coming from the south
@@ -189,8 +190,7 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
     }
     
     // Draw traffic light
-    // FIXME: Traffic lights appear skewed in different directions, so need to fix this
-    ctx.drawImage(images.trafficLight, startX - 60, centreY + 120, 20, 40);
+    ctx.drawImage(images.trafficLight, centreX - 175, centreY + 135, 20, 40);
   };
   
   // Cars coming from the east
@@ -235,7 +235,11 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
     ctx.restore();
     
     // Draw traffic light
-    ctx.drawImage(images.trafficLight, centreX + 100, startY + 20, 20, 40);
+    ctx.save();
+    ctx.translate(centreX + 175, startY + 135);
+    ctx.rotate(-Math.PI / 2);
+    ctx.drawImage(images.trafficLight, -20, -40, 20, 40);
+    ctx.restore();
   };
 
   // Cars coming from the west
@@ -280,7 +284,11 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
     ctx.restore();
     
     // Draw traffic light
-    ctx.drawImage(images.trafficLight, centreX - 120, startY - 60, 20, 40);
+    ctx.save();
+    ctx.translate(centreX - 95, startY - 175);
+    ctx.rotate(Math.PI / 2);
+    ctx.drawImage(images.trafficLight, 20, 40, 20, 40);
+    ctx.restore();
   };
   
   // Draw pedestrian crossings if enabled
