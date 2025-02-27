@@ -276,12 +276,7 @@ function MainPage() {
             <h1 className='main-title'>Junction Simulator</h1>
             <div className="junction-visual">
                 {/* Add canvas */}
-                <JunctionCanvas 
-                  config={completeJSON} 
-                  // FIXME: Use window.innerHeight/Width when doing dynamic stuff
-                  width={800} 
-                  height={600} 
-                />
+                <JunctionCanvas config={completeJSON} />
 
                 {/* <div className='image'>Junction graphicIMAGE</div>
                 <div className='Leaderboard'>See junction Leaderboard</div> */}

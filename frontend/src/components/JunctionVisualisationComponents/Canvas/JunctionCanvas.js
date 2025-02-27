@@ -1,15 +1,66 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
-// TODO: Will need to use dynamic sizing, but fixed for now
-const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
+const JunctionCanvas = ({ config }) => {
   const canvasRef = useRef(null);
+  const containerRef = useRef(null);
+  const resizeTimeoutRef = useRef(null);
+  const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
   
-  // Effect to redraw the canvas whenever the config changes
+  // Function to handle resize with debounce
+  // TODO: Check, new
+  const handleResize = () => {
+    // Clear any existing timeout
+    if (resizeTimeoutRef.current) {
+      clearTimeout(resizeTimeoutRef.current);
+    }
+    
+    // Set a new timeout
+    resizeTimeoutRef.current = setTimeout(() => {
+      if (containerRef.current) {
+        // Get the container dimensions
+        const containerWidth = containerRef.current.clientWidth;
+        const containerHeight = containerRef.current.clientHeight || window.innerHeight * 0.7;
+        
+        // Set canvas dimensions based on container
+        setDimensions({
+          width: containerWidth,
+          height: containerHeight
+        });
+      }
+    }, 250); // 250ms delay for debounce
+  };
+  
+  // Initialize dimensions and set up resize listener
+  // TODO: Check, new
   useEffect(() => {
-    // TODO: Remove this (I think?)
+    // Initial sizing
+    if (containerRef.current) {
+      const containerWidth = containerRef.current.clientWidth;
+      const containerHeight = containerRef.current.clientHeight || window.innerHeight * 0.7;
+      
+      setDimensions({
+        width: containerWidth,
+        height: containerHeight
+      });
+    }
+    
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      // Clear any existing timeout on unmount
+      if (resizeTimeoutRef.current) {
+        clearTimeout(resizeTimeoutRef.current);
+      }
+    };
+  }, []);
+  
+  // Effect to redraw the canvas whenever the config or dimensions change
+  useEffect(() => {
     if (!config) return;
     
     const canvas = canvasRef.current;
+    if (!canvas) return;
+    
     const ctx = canvas.getContext('2d');
     
     // Load all required images
@@ -42,14 +93,35 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
     let loadedImages = 0;
     const totalImages = Object.keys(images).length;
     
-    // Function to draw the junction based on config
+    // Calculate scale factor based on original design dimensions
+    // TODO: Check, new
+    const baseWidth = 800;
+    const baseHeight = 600;
+    const scaleX = dimensions.width / baseWidth;
+    const scaleY = dimensions.height / baseHeight;
+    
+    // Use the smaller scale to maintain aspect ratio
+    const scale = Math.min(scaleX, scaleY);
+    
+    // Function to draw the junction based on config and scale
     const drawJunction = () => {
       // Clear canvas
-      ctx.clearRect(0, 0, width, height);
+      ctx.clearRect(0, 0, dimensions.width, dimensions.height);
       
-      // Center coordinates
-      const centreX = width / 2;
-      const centreY = height / 2;
+      // Save the context state
+      ctx.save();
+      
+      // Center the drawing in the canvas
+      const offsetX = (dimensions.width - (baseWidth * scale)) / 2;
+      const offsetY = (dimensions.height - (baseHeight * scale)) / 2;
+      
+      // Move to center and scale
+      ctx.translate(offsetX, offsetY);
+      ctx.scale(scale, scale);
+      
+      // Center coordinates (now in the scaled coordinate system)
+      const centreX = baseWidth / 2;
+      const centreY = baseHeight / 2;
       
       // Draw box junction in the center
       ctx.drawImage(images.boxJunction, centreX - 175, centreY - 175, 350, 350);
@@ -62,13 +134,14 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
         drawPedestrianCrossings(ctx, centreX, centreY, images);
       }
       
-      // Draw traffic flow indicators
-      drawTrafficFlow(ctx, config, centreX, centreY, images);
-      
       // Draw special lanes (bus/cycle) if configured
+      // FIXME: This should be included in the drawLanes bit
       if (config.isBusOrCycle && config.isBusOrCycle !== "none") {
         drawSpecialLanes(ctx, config, centreX, centreY, images);
       }
+      
+      // Restore the context state
+      ctx.restore();
     };
     
     // Load handler for images
@@ -85,7 +158,7 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
       img.onload = onImageLoad;
     });
     
-  }, [config, width, height]);
+  }, [config, dimensions]);
   
   // Draw lanes based on config
   const drawLanes = (ctx, config, centreX, centreY, images) => {
@@ -118,9 +191,8 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
   
   // Cars coming from the north
   const drawNorthLanes = (ctx, centreX, centreY, entering, exiting, hasLeftTurn, images) => {
-    // Similar to North but mirrored
+    // FIXME: Only thing left to do is draw the lanes based on the users input
     const laneWidth = 40;
-    // FIXME: This logic is flawed currently, so will look at on Thursday
     const totalEnteringWidth = entering * laneWidth;
     const startX = centreX + (totalEnteringWidth / 2);
     
@@ -161,7 +233,6 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
 
   // Cars coming from the south
   const drawSouthLanes = (ctx, centreX, centreY, entering, exiting, hasLeftTurn, images) => {
-    // Draw entering lanes (from bottom to junction)
     const laneWidth = 40;
     const totalEnteringWidth = entering * laneWidth;
     const startX = centreX - (totalEnteringWidth / 2);
@@ -173,7 +244,7 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
       const x = startX + (i * laneWidth);
       ctx.beginPath();
       ctx.moveTo(x, centreY + 175);
-      ctx.lineTo(x, height);
+      ctx.lineTo(x, 600); // Use base height
       ctx.stroke();
     }
     
@@ -206,7 +277,7 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
       const y = startY - (i * laneWidth);
       ctx.beginPath();
       ctx.moveTo(centreX + 175, y);
-      ctx.lineTo(width, y);
+      ctx.lineTo(800, y); // Use base width
       ctx.stroke();
     }
     
@@ -301,7 +372,6 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
     
     // East crossing
     ctx.save();
-    // This translates the centre of the canvas to a new position (centreX + 230, centreY - 100)
     ctx.translate(centreX + 22, centreY - 160);
     ctx.rotate(Math.PI/2);
     ctx.drawImage(images.pedestrianCrossing, -15, -175, 350, 22);
@@ -311,38 +381,11 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
     ctx.save();
     ctx.translate(centreX - 21, centreY + 160);
     ctx.rotate(-Math.PI/2);
-    ctx.fillRect(0, 0, 20, 20);
     ctx.drawImage(images.pedestrianCrossing, -15, -175, 350, 22);
     ctx.restore();
   };
   
-  // Draw traffic flow indicators
-  const drawTrafficFlow = (ctx, config, centreX, centreY, images) => {
-    // Display traffic volume indicators based on vph values
-    drawVolumeIndicator(ctx, 'North', config.vphNorth, centreX, centreY + 300);
-    drawVolumeIndicator(ctx, 'South', config.vphSouth, centreX, centreY - 300);
-    drawVolumeIndicator(ctx, 'East', config.vphEast, centreX - 300, centreY);
-    drawVolumeIndicator(ctx, 'West', config.vphWest, centreX + 300, centreY);
-  };
-  
-  // Helper to draw traffic volume indicator
-  const drawVolumeIndicator = (ctx, direction, vphData, x, y) => {
-    if (!vphData || Object.keys(vphData).length === 0) return;
-    
-    // Extract total vph if available
-    const totalVph = vphData.total || 
-                    (vphData.left || 0) + (vphData.straight || 0) + (vphData.right || 0);
-    
-    if (totalVph > 0) {
-      ctx.fillStyle = '#000';
-      ctx.font = '14px Arial';
-      ctx.fillText(`${direction}: ${totalVph} vph`, x - 40, y);
-    }
-  };
-  
   // Draw special lanes (bus/cycle)
-  // FIXME: Width of bus lane needs to be the same as every other lane
-  // This means the width of the bus lane depends on the number of lanes, see logic for drawing standard lanes and customise accordingly
   const drawSpecialLanes = (ctx, config, centreX, centreY, images) => {
     const { isBusOrCycle, busCycleLaneDuration } = config;
     const laneImage = isBusOrCycle === "bus" ? images.busLane : images.cycleLane;
@@ -382,12 +425,28 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
   };
   
   return (
-    <canvas 
-      ref={canvasRef} 
-      width={width} 
-      height={height} 
-      style={{ border: '1px solid #000', backgroundColor: '#f0f0f0' }}
-    />
+    <div 
+      ref={containerRef} 
+      style={{ 
+        width: '100%', 
+        height: '70vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}
+    >
+      <canvas 
+        ref={canvasRef} 
+        width={dimensions.width} 
+        height={dimensions.height} 
+        style={{ 
+          border: '1px solid #000', 
+          backgroundColor: '#f0f0f0',
+          maxWidth: '100%',
+          maxHeight: '100%'
+        }}
+      />
+    </div>
   );
 };
 
