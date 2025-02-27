@@ -116,7 +116,41 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
     });
   };
   
-  // Draw lanes for North approach
+  // Cars coming from the north
+  const drawNorthLanes = (ctx, centerX, centerY, entering, exiting, hasLeftTurn, images) => {
+    // Similar to North but mirrored
+    const laneWidth = 40;
+    const totalEnteringWidth = entering * laneWidth;
+    const startX = centerX + (totalEnteringWidth / 2);
+    
+    // Draw lane markers
+    ctx.strokeStyle = 'white';
+    
+    for (let i = 0; i <= entering; i++) {
+      const x = startX - (i * laneWidth);
+      ctx.beginPath();
+      ctx.moveTo(x, centerY - 175);
+      ctx.lineTo(x, 0);
+      ctx.stroke();
+    }
+    
+    // Draw directional arrows
+    if (hasLeftTurn) {
+      ctx.drawImage(images.leftOnlyArrow, startX - 35, centerY - 260, 30, 60);
+    }
+    
+    // Draw straight arrows
+    const straightLanes = hasLeftTurn ? entering - 1 : entering;
+    for (let i = 0; i < straightLanes; i++) {
+      const x = startX - (hasLeftTurn ? laneWidth : 0) - (i * laneWidth) - 35;
+      ctx.drawImage(images.straightArrow, x, centerY - 260, 30, 60);
+    }
+    
+    // Draw traffic light
+    ctx.drawImage(images.trafficLight, startX + 20, centerY - 140, 40, 20);
+  };
+
+  // Cars coming from the south
   const drawSouthLanes = (ctx, centerX, centerY, entering, exiting, hasLeftTurn, images) => {
     // Draw entering lanes (from bottom to junction)
     const laneWidth = 40;
@@ -151,41 +185,49 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
     ctx.drawImage(images.trafficLight, startX - 60, centerY + 120, 40, 20);
   };
   
-  // Draw lanes for South approach
-  const drawNorthLanes = (ctx, centerX, centerY, entering, exiting, hasLeftTurn, images) => {
-    // Similar to North but mirrored
+  // Cars coming from the east
+  const drawEastLanes = (ctx, centerX, centerY, entering, exiting, hasLeftTurn, images) => {
     const laneWidth = 40;
-    const totalEnteringWidth = entering * laneWidth;
-    const startX = centerX + (totalEnteringWidth / 2);
+    const totalEnteringHeight = entering * laneWidth;
+    const startY = centerY + (totalEnteringHeight / 2);
     
     // Draw lane markers
     ctx.strokeStyle = 'white';
     
     for (let i = 0; i <= entering; i++) {
-      const x = startX - (i * laneWidth);
+      const y = startY - (i * laneWidth);
       ctx.beginPath();
-      ctx.moveTo(x, centerY - 175);
-      ctx.lineTo(x, 0);
+      ctx.moveTo(centerX + 175, y);
+      ctx.lineTo(width, y);
       ctx.stroke();
     }
     
-    // Draw directional arrows
+    // Draw arrows (need to rotate for west direction)
+    ctx.save();
+    
     if (hasLeftTurn) {
-      ctx.drawImage(images.leftOnlyArrow, startX - 35, centerY - 260, 30, 60);
+      ctx.translate(centerX + 230, startY - 15);
+      ctx.rotate(Math.PI/2);
+      ctx.drawImage(images.leftOnlyArrow, -30, -30, 30, 60);
     }
     
-    // Draw straight arrows
     const straightLanes = hasLeftTurn ? entering - 1 : entering;
     for (let i = 0; i < straightLanes; i++) {
-      const x = startX - (hasLeftTurn ? laneWidth : 0) - (i * laneWidth) - 35;
-      ctx.drawImage(images.straightArrow, x, centerY - 260, 30, 60);
+      const y = startY - (hasLeftTurn ? laneWidth : 0) - (i * laneWidth) - 15;
+      ctx.translate(centerX + 230, y);
+      ctx.rotate(Math.PI/2);
+      ctx.drawImage(images.straightArrow, -30, -30, 30, 60);
+      ctx.rotate(-Math.PI/2);
+      ctx.translate(-(centerX + 230), -y);
     }
     
+    ctx.restore();
+    
     // Draw traffic light
-    ctx.drawImage(images.trafficLight, startX + 20, centerY - 140, 40, 20);
+    ctx.drawImage(images.trafficLight, centerX + 100, startY + 20, 20, 40);
   };
-  
-  // Draw lanes for East approach (left side to junction)
+
+  // Cars coming from the west
   const drawWestLanes = (ctx, centerX, centerY, entering, exiting, hasLeftTurn, images) => {
     const laneWidth = 40;
     const totalEnteringHeight = entering * laneWidth;
@@ -227,68 +269,28 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
     ctx.drawImage(images.trafficLight, centerX - 120, startY - 60, 20, 40);
   };
   
-  // Draw lanes for West approach (right side to junction)
-  const drawEastLanes = (ctx, centerX, centerY, entering, exiting, hasLeftTurn, images) => {
-    const laneWidth = 40;
-    const totalEnteringHeight = entering * laneWidth;
-    const startY = centerY + (totalEnteringHeight / 2);
-    
-    // Draw lane markers
-    ctx.strokeStyle = 'white';
-    
-    for (let i = 0; i <= entering; i++) {
-      const y = startY - (i * laneWidth);
-      ctx.beginPath();
-      ctx.moveTo(centerX + 175, y);
-      ctx.lineTo(width, y);
-      ctx.stroke();
-    }
-    
-    // Draw arrows (need to rotate for west direction)
-    ctx.save();
-    
-    if (hasLeftTurn) {
-      ctx.translate(centerX + 230, startY - 15);
-      ctx.rotate(Math.PI/2);
-      ctx.drawImage(images.leftOnlyArrow, -30, -30, 30, 60);
-    }
-    
-    const straightLanes = hasLeftTurn ? entering - 1 : entering;
-    for (let i = 0; i < straightLanes; i++) {
-      const y = startY - (hasLeftTurn ? laneWidth : 0) - (i * laneWidth) - 15;
-      ctx.translate(centerX + 230, y);
-      ctx.rotate(Math.PI/2);
-      ctx.drawImage(images.straightArrow, -30, -30, 30, 60);
-      ctx.rotate(-Math.PI/2);
-      ctx.translate(-(centerX + 230), -y);
-    }
-    
-    ctx.restore();
-    
-    // Draw traffic light
-    ctx.drawImage(images.trafficLight, centerX + 100, startY + 20, 20, 40);
-  };
-  
   // Draw pedestrian crossings if enabled
   const drawPedestrianCrossings = (ctx, centerX, centerY, images) => {
     // North crossing
-    ctx.drawImage(images.pedestrianCrossing, centerX - 100, centerY + 200, 200, 30);
-    
+    ctx.drawImage(images.pedestrianCrossing, centerX - 175, centerY - 197, 350, 22);
+
     // South crossing
-    ctx.drawImage(images.pedestrianCrossing, centerX - 100, centerY - 230, 200, 30);
+    ctx.drawImage(images.pedestrianCrossing, centerX - 175, centerY + 174, 350, 22);
     
     // East crossing
     ctx.save();
-    ctx.translate(centerX - 230, centerY - 100);
-    ctx.rotate(-Math.PI/2);
-    ctx.drawImage(images.pedestrianCrossing, -30, -30, 200, 30);
-    ctx.restore();
-    
+    // This translates the centre of the canvas to a new position (centerX + 230, centerY - 100)
+    ctx.translate(centerX + 22, centerY - 160);
+    ctx.rotate(Math.PI/2);
+    ctx.drawImage(images.pedestrianCrossing, -15, -175, 350, 22);
+    ctx.restore(); // Restores to previously saved state (used so centre of canvas is now (0,0) again)
+
     // West crossing
     ctx.save();
-    ctx.translate(centerX + 230, centerY - 100);
-    ctx.rotate(Math.PI/2);
-    ctx.drawImage(images.pedestrianCrossing, -30, -30, 200, 30);
+    ctx.translate(centerX - 21, centerY + 160);
+    ctx.rotate(-Math.PI/2);
+    ctx.fillRect(0, 0, 20, 20);
+    ctx.drawImage(images.pedestrianCrossing, -15, -175, 350, 22);
     ctx.restore();
   };
   
