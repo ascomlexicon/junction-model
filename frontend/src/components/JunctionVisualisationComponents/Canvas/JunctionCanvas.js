@@ -136,7 +136,11 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
     
     // Draw directional arrows
     if (hasLeftTurn) {
-      ctx.drawImage(images.leftOnlyArrow, startX - 35, centreY - 260, 30, 60);
+      ctx.save();
+      ctx.translate(centreX + 134 + 20, centreY - 274 + 50); // Translate to the center of the image
+      ctx.rotate(Math.PI); // Rotate by 180 degrees
+      ctx.drawImage(images.leftOnlyArrow, -20, -50, 40, 100); // Draw the image centered at the new origin
+      ctx.restore();
     }
     
     // Draw straight arrows
@@ -147,7 +151,7 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
     }
     
     // Draw traffic light
-    ctx.drawImage(images.trafficLight, startX + 20, centreY - 140, 40, 20);
+    ctx.drawImage(images.trafficLight, startX + 20, centreY - 140, 20, 40);
   };
 
   // Cars coming from the south
@@ -170,7 +174,7 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
     
     // Draw directional arrows
     if (hasLeftTurn) {
-      ctx.drawImage(images.leftOnlyArrow, startX + 5, centreY + 200, 30, 60);
+      ctx.drawImage(images.leftOnlyArrow, centreX - 174, centreY + 174, 40, 100);
     }
     
     // Draw straight arrows
@@ -182,7 +186,7 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
     
     // Draw traffic light
     // FIXME: Traffic lights appear skewed in different directions, so need to fix this
-    ctx.drawImage(images.trafficLight, startX - 60, centreY + 120, 40, 20);
+    ctx.drawImage(images.trafficLight, startX - 60, centreY + 120, 20, 40);
   };
   
   // Cars coming from the east
@@ -206,9 +210,12 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
     ctx.save();
     
     if (hasLeftTurn) {
-      ctx.translate(centreX + 230, startY - 15);
+      ctx.save();
+      ctx.translate(centreX + 275, centreY + 135);
       ctx.rotate(Math.PI/2);
-      ctx.drawImage(images.leftOnlyArrow, -30, -30, 30, 60);
+      ctx.scale(-1, -1); // Flips image again, can be read by oncoming traffic from the east
+      ctx.drawImage(images.leftOnlyArrow, -40, -100, 40, 100);
+      ctx.restore();
     }
     
     const straightLanes = hasLeftTurn ? entering - 1 : entering;
@@ -248,9 +255,12 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
     ctx.save();
     
     if (hasLeftTurn) {
-      ctx.translate(centreX - 230, startY + 15);
+      ctx.save();
+      ctx.translate(centreX - 173, centreY - 175);
       ctx.rotate(-Math.PI/2);
-      ctx.drawImage(images.leftOnlyArrow, -30, -30, 30, 60);
+      ctx.scale(-1, -1);
+      ctx.drawImage(images.leftOnlyArrow, 0, 0, 40, 100);
+      ctx.restore();
     }
     
     const straightLanes = hasLeftTurn ? entering - 1 : entering;
