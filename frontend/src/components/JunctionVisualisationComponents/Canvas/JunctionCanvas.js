@@ -45,8 +45,11 @@ const JunctionCanvas = ({ config }) => {
     }
     
     window.addEventListener('resize', handleResize);
+
+    // Cleanup function
     return () => {
       window.removeEventListener('resize', handleResize);
+
       // Clear any existing timeout on unmount
       if (resizeTimeoutRef.current) {
         clearTimeout(resizeTimeoutRef.current);
@@ -93,8 +96,7 @@ const JunctionCanvas = ({ config }) => {
     let loadedImages = 0;
     const totalImages = Object.keys(images).length;
     
-    // Calculate scale factor based on original design dimensions
-    // TODO: Check, new
+    // Original design was based on 800x600; calculate scale factor based on these dimensions
     const baseWidth = 800;
     const baseHeight = 600;
     const scaleX = dimensions.width / baseWidth;
@@ -103,7 +105,7 @@ const JunctionCanvas = ({ config }) => {
     // Use the smaller scale to maintain aspect ratio
     const scale = Math.min(scaleX, scaleY);
     
-    // Function to draw the junction based on config and scale
+    // Function to draw the junction based on user data and scale
     const drawJunction = () => {
       // Clear canvas
       ctx.clearRect(0, 0, dimensions.width, dimensions.height);
@@ -130,6 +132,7 @@ const JunctionCanvas = ({ config }) => {
       drawLanes(ctx, config, centreX, centreY, images);
       
       // Draw pedestrian crossings if enabled
+      // FIXME: If crossings is configured, positions of lanes should be further away from the box junction
       if (config.isCrossings) {
         drawPedestrianCrossings(ctx, centreX, centreY, images);
       }
@@ -148,7 +151,7 @@ const JunctionCanvas = ({ config }) => {
     const onImageLoad = () => {
       loadedImages++;
       if (loadedImages === totalImages) {
-        // All images loaded, draw the junction
+        // Draw the junction when all images have loaded
         drawJunction();
       }
     };
@@ -191,21 +194,13 @@ const JunctionCanvas = ({ config }) => {
   
   // Cars coming from the north
   const drawNorthLanes = (ctx, centreX, centreY, entering, exiting, hasLeftTurn, images) => {
-    // FIXME: Only thing left to do is draw the lanes based on the users input
-    const laneWidth = 40;
+    // TODO: Entering lane widths = ((height of box junction)/2) / number of entering lanes
+    // TODO: Exiting lane widths = ((height of box junction)/2) / number of exiting lanes
+    const laneWidth = 40; 
     const totalEnteringWidth = entering * laneWidth;
     const startX = centreX + (totalEnteringWidth / 2);
     
     // Draw lane markers
-    ctx.strokeStyle = 'white';
-    
-    for (let i = 0; i <= entering; i++) {
-      const x = startX - (i * laneWidth);
-      ctx.beginPath();
-      ctx.moveTo(x, centreY - 175);
-      ctx.lineTo(x, 0);
-      ctx.stroke();
-    }
     
     // Draw directional arrows
     if (hasLeftTurn) {
@@ -215,13 +210,10 @@ const JunctionCanvas = ({ config }) => {
       ctx.drawImage(images.leftOnlyArrow, -20, -50, 40, 100); // Draw the image centered at the new origin
       ctx.restore();
     }
+
+    // TODO: Draw bus lane here for north
     
     // Draw straight arrows
-    const straightLanes = hasLeftTurn ? entering - 1 : entering;
-    for (let i = 0; i < straightLanes; i++) {
-      const x = startX - (hasLeftTurn ? laneWidth : 0) - (i * laneWidth) - 35;
-      ctx.drawImage(images.straightArrow, x, centreY - 260, 30, 60);
-    }
     
     // Draw traffic light
     ctx.save();
