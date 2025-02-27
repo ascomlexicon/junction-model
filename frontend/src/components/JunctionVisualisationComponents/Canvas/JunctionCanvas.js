@@ -166,25 +166,26 @@ const JunctionCanvas = ({ config }) => {
   // Draw lanes based on config
   const drawLanes = (ctx, config, centreX, centreY, images) => {
     const directions = ['North', 'South', 'East', 'West'];
-    
+    const busData = config.busCycleLaneDuration;
+
     directions.forEach(direction => {
       const enteringLanes = config.lanesEntering[`${direction.toLowerCase()}`] || 1;
       const exitingLanes = config.lanesExiting[`${direction.toLowerCase()}`] || 1;
       const hasLeftTurn = config.leftTurnLanes[`${direction.toLowerCase()}`] || false;
-      
+
       // Draw lanes based on direction
       switch(direction) {
         case 'North':
-          drawNorthLanes(ctx, centreX, centreY, enteringLanes, exitingLanes, hasLeftTurn, images);
+          drawNorthQuarter(ctx, centreX, centreY, enteringLanes, exitingLanes, hasLeftTurn, images, busData, config.isBusOrCycle);
           break;
         case 'South':
-          drawSouthLanes(ctx, centreX, centreY, enteringLanes, exitingLanes, hasLeftTurn, images);
+          drawSouthLanes(ctx, centreX, centreY, enteringLanes, exitingLanes, hasLeftTurn, images, busData, config.isBusOrCycle);
           break;
         case 'East':
-          drawEastLanes(ctx, centreX, centreY, enteringLanes, exitingLanes, hasLeftTurn, images);
+          drawEastLanes(ctx, centreX, centreY, enteringLanes, exitingLanes, hasLeftTurn, images, busData, config.isBusOrCycle);
           break;
         case 'West':
-          drawWestLanes(ctx, centreX, centreY, enteringLanes, exitingLanes, hasLeftTurn, images);
+          drawWestLanes(ctx, centreX, centreY, enteringLanes, exitingLanes, hasLeftTurn, images, busData, config.isBusOrCycle);
           break;
         default:
           break;
@@ -193,12 +194,17 @@ const JunctionCanvas = ({ config }) => {
   };
   
   // Cars coming from the north
-  const drawNorthLanes = (ctx, centreX, centreY, entering, exiting, hasLeftTurn, images) => {
+  // TODO: Change to drawNorthQuarter() name
+  const drawNorthQuarter = (ctx, centreX, centreY, entering, exiting, hasLeftTurn, images, busData, busOrBike) => {
     // TODO: Entering lane widths = ((height of box junction)/2) / number of entering lanes
     // TODO: Exiting lane widths = ((height of box junction)/2) / number of exiting lanes
     const laneWidth = 40; 
     const totalEnteringWidth = entering * laneWidth;
     const startX = centreX + (totalEnteringWidth / 2);
+
+    // FIXME: Issue if the value is "none"
+      // Not a problem: bus will only be displayed if busData.vphSpecialNorth is a value, and this is only a value if there is a buslane ticked
+    const specialImg = busOrBike === "bus" ? images.busLane : images.cycleLane;
     
     // Draw lane markers
     
@@ -211,8 +217,17 @@ const JunctionCanvas = ({ config }) => {
       ctx.restore();
     }
 
-    // TODO: Draw bus lane here for north
-    
+    // Draw special lanes based on direction and vph
+    if (busData.vphSpecialNorth) {
+      ctx.save();
+      // Original image drawn at (centreX + 134, centreY - 274)
+      // TODO: Eventually simplify this, keep additions for rotation logic for now
+      ctx.translate(centreX + 134 + 20, centreY - 274 + 50); // Translate to the center of the image
+      ctx.rotate(Math.PI); // Rotate by 180 degrees
+      ctx.drawImage(specialImg, -20, -50, 40, 100); // Draw the image centered at the new origin
+      ctx.restore();
+    }
+
     // Draw straight arrows
     
     // Draw traffic light
@@ -383,15 +398,15 @@ const JunctionCanvas = ({ config }) => {
     const laneImage = isBusOrCycle === "bus" ? images.busLane : images.cycleLane;
     
     // Draw special lanes based on direction and vph
-    if (busCycleLaneDuration.vphSpecialNorth) {
-      ctx.save();
-      // Original image drawn at (centreX + 134, centreY - 274)
-      // TODO: Eventually simplify this, keep additions for rotation logic for now
-      ctx.translate(centreX + 134 + 20, centreY - 274 + 50); // Translate to the center of the image
-      ctx.rotate(Math.PI); // Rotate by 180 degrees
-      ctx.drawImage(laneImage, -20, -50, 40, 100); // Draw the image centered at the new origin
-      ctx.restore();
-    }
+    // if (busCycleLaneDuration.vphSpecialNorth) {
+    //   ctx.save();
+    //   // Original image drawn at (centreX + 134, centreY - 274)
+    //   // TODO: Eventually simplify this, keep additions for rotation logic for now
+    //   ctx.translate(centreX + 134 + 20, centreY - 274 + 50); // Translate to the center of the image
+    //   ctx.rotate(Math.PI); // Rotate by 180 degrees
+    //   ctx.drawImage(laneImage, -20, -50, 40, 100); // Draw the image centered at the new origin
+    //   ctx.restore();
+    // }
 
     if (busCycleLaneDuration.vphSpecialSouth) {
       ctx.drawImage(laneImage, centreX - 174, centreY + 174, 40, 100);
