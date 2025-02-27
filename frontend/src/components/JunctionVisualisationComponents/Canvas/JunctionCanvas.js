@@ -1,10 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 
+// TODO: Will need to use dynamic sizing, but fixed for now
 const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
   const canvasRef = useRef(null);
   
   // Effect to redraw the canvas whenever the config changes
   useEffect(() => {
+    // TODO: Remove this (I think?)
     if (!config) return;
     
     const canvas = canvasRef.current;
@@ -15,9 +17,11 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
       boxJunction: new Image(),
       trafficLight: new Image(),
       pedestrianCrossing: new Image(),
-      // leftArrow: new Image(),
-      // rightArrow: new Image(),
-      // straightArrow: new Image(),
+      leftOnlyArrow: new Image(),
+      rightOnlyArrow: new Image(),
+      straightArrow: new Image(),
+      straightLeftArrow: new Image(),
+      straightRightArrow: new Image(),
       busLane: new Image(),
       cycleLane: new Image()
     };
@@ -26,9 +30,11 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
     images.boxJunction.src = require('../images/box.png');
     images.trafficLight.src = require('../images/trafficLights.png');
     images.pedestrianCrossing.src = require('../images/crossing.png');
-    // images.leftArrow.src = require('../components/JunctionVisualisationComponents/images/left-arrow.png');
-    // images.rightArrow.src = require('../components/JunctionVisualisationComponents/images/right-arrow.png');
-    // images.straightArrow.src = require('../components/JunctionVisualisationComponents/images/straight-arrow.png');
+    images.leftOnlyArrow.src = require('../images/left.png');
+    images.rightOnlyArrow.src = require('../images/right.png');
+    images.straightArrow.src = require('../images/straight.png');
+    images.straightLeftArrow.src = require('../images/straightLeft.png');
+    images.straightRightArrow.src = require('../images/straightRight.png');
     images.busLane.src = require('../images/busLane.png');
     images.cycleLane.src = require('../images/cycleLane.png');
     
@@ -44,9 +50,6 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
       // Center coordinates
       const centerX = width / 2;
       const centerY = height / 2;
-      
-      // Draw base road
-      drawRoadBase(ctx, centerX, centerY);
       
       // Draw box junction in the center
       ctx.drawImage(images.boxJunction, centerX - 175, centerY - 175, 350, 350);
@@ -84,33 +87,6 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
     
   }, [config, width, height]);
   
-  // Draw the base road structure
-  const drawRoadBase = (ctx, centerX, centerY) => {
-    // Draw horizontal road
-    ctx.fillStyle = '#555555';
-    ctx.fillRect(0, centerY - 100, width, 200);
-    
-    // Draw vertical road
-    ctx.fillRect(centerX - 100, 0, 200, height);
-    
-    // Draw road markings
-    ctx.strokeStyle = 'white';
-    ctx.setLineDash([20, 10]);
-    
-    // Center lines
-    ctx.beginPath();
-    ctx.moveTo(0, centerY);
-    ctx.lineTo(width, centerY);
-    ctx.stroke();
-    
-    ctx.beginPath();
-    ctx.moveTo(centerX, 0);
-    ctx.lineTo(centerX, height);
-    ctx.stroke();
-    
-    ctx.setLineDash([]);
-  };
-  
   // Draw lanes based on config
   const drawLanes = (ctx, config, centerX, centerY, images) => {
     const directions = ['North', 'South', 'East', 'West'];
@@ -141,7 +117,7 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
   };
   
   // Draw lanes for North approach
-  const drawNorthLanes = (ctx, centerX, centerY, entering, exiting, hasLeftTurn, images) => {
+  const drawSouthLanes = (ctx, centerX, centerY, entering, exiting, hasLeftTurn, images) => {
     // Draw entering lanes (from bottom to junction)
     const laneWidth = 40;
     const totalEnteringWidth = entering * laneWidth;
@@ -160,7 +136,7 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
     
     // Draw directional arrows
     if (hasLeftTurn) {
-      ctx.drawImage(images.leftArrow, startX + 5, centerY + 200, 30, 60);
+      ctx.drawImage(images.leftOnlyArrow, startX + 5, centerY + 200, 30, 60);
     }
     
     // Draw straight arrows
@@ -171,11 +147,12 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
     }
     
     // Draw traffic light
+    // FIXME: Traffic lights appear skewed in different directions, so need to fix this
     ctx.drawImage(images.trafficLight, startX - 60, centerY + 120, 40, 20);
   };
   
   // Draw lanes for South approach
-  const drawSouthLanes = (ctx, centerX, centerY, entering, exiting, hasLeftTurn, images) => {
+  const drawNorthLanes = (ctx, centerX, centerY, entering, exiting, hasLeftTurn, images) => {
     // Similar to North but mirrored
     const laneWidth = 40;
     const totalEnteringWidth = entering * laneWidth;
@@ -194,7 +171,7 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
     
     // Draw directional arrows
     if (hasLeftTurn) {
-      ctx.drawImage(images.leftArrow, startX - 35, centerY - 260, 30, 60);
+      ctx.drawImage(images.leftOnlyArrow, startX - 35, centerY - 260, 30, 60);
     }
     
     // Draw straight arrows
@@ -209,7 +186,7 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
   };
   
   // Draw lanes for East approach (left side to junction)
-  const drawEastLanes = (ctx, centerX, centerY, entering, exiting, hasLeftTurn, images) => {
+  const drawWestLanes = (ctx, centerX, centerY, entering, exiting, hasLeftTurn, images) => {
     const laneWidth = 40;
     const totalEnteringHeight = entering * laneWidth;
     const startY = centerY - (totalEnteringHeight / 2);
@@ -231,7 +208,7 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
     if (hasLeftTurn) {
       ctx.translate(centerX - 230, startY + 15);
       ctx.rotate(-Math.PI/2);
-      ctx.drawImage(images.leftArrow, -30, -30, 30, 60);
+      ctx.drawImage(images.leftOnlyArrow, -30, -30, 30, 60);
     }
     
     const straightLanes = hasLeftTurn ? entering - 1 : entering;
@@ -251,7 +228,7 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
   };
   
   // Draw lanes for West approach (right side to junction)
-  const drawWestLanes = (ctx, centerX, centerY, entering, exiting, hasLeftTurn, images) => {
+  const drawEastLanes = (ctx, centerX, centerY, entering, exiting, hasLeftTurn, images) => {
     const laneWidth = 40;
     const totalEnteringHeight = entering * laneWidth;
     const startY = centerY + (totalEnteringHeight / 2);
@@ -273,7 +250,7 @@ const JunctionCanvas = ({ config, width = 800, height = 600 }) => {
     if (hasLeftTurn) {
       ctx.translate(centerX + 230, startY - 15);
       ctx.rotate(Math.PI/2);
-      ctx.drawImage(images.leftArrow, -30, -30, 30, 60);
+      ctx.drawImage(images.leftOnlyArrow, -30, -30, 30, 60);
     }
     
     const straightLanes = hasLeftTurn ? entering - 1 : entering;
