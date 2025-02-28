@@ -168,7 +168,6 @@ const JunctionCanvas = ({ config }) => {
 
       // Draw lanes based on direction
       switch(direction) {
-        // TODO: Change the function parameters on the other functions to match drawNorthQuarter
         case 'North':
           drawNorthQuarter(ctx, centreX, centreY, enteringLanes, exitingLanes, hasLeftTurn, images, busData, config.vphNorth, config.isBusOrCycle);
           break;
@@ -190,21 +189,23 @@ const JunctionCanvas = ({ config }) => {
   const drawEnteringCarLanes = (ctx, centreX, centreY, lanesToDraw, images, isSpecialLane, carData, width, direction) => {
     // Values in carData (ie vphX for directionX) determines what images are drawn in what order
 
-    // TODO: If isSpecialLane, move the pointer to start further away from edge
+    // TODO: If isSpecialLane, move the pointer to start further away from edge - DEALING WITH NOW
 
+    // TODO: Lanes need to be different depending on (a) number of lanes and (b) vph data (ie traffic flow, see first comment of the function)
+    let xOffset = isSpecialLane ? width : 0;
     switch (direction) {
       case 'North':
         for (let i = 0; i < lanesToDraw; i++) {
           ctx.save()
           ctx.translate(centreX + 134 + 20, centreY - 274 + 50); // Translate to the center of the image
           ctx.rotate(Math.PI); // Rotate by 180 degrees
-          ctx.drawImage(images.straightArrow, -20 + (i * width), -50, width, 100);
+          ctx.drawImage(images.straightArrow, -20 + (i * width) + xOffset, -50, width, 100);
           ctx.restore()
         }
         break
       case 'South':
         for (let i = 0; i < lanesToDraw; i++) {
-          ctx.drawImage(images.straightArrow, centreX - 174 + (i * width), centreY + 174, width, 100);
+          ctx.drawImage(images.straightArrow, centreX - 174 + (i * width) + xOffset, centreY + 174, width, 100);
         }
         break
       case 'East':
@@ -213,7 +214,7 @@ const JunctionCanvas = ({ config }) => {
           ctx.translate(centreX + 275, centreY + 135);
           ctx.rotate(Math.PI/2);
           ctx.scale(-1, -1); // Flips image again, can be read by oncoming traffic from the east
-          ctx.drawImage(images.straightArrow, -40 + (i * width), -100, width, 100);
+          ctx.drawImage(images.straightArrow, -40 + (i * width) + xOffset, -100, width, 100);
           ctx.restore();
         }
         break
@@ -223,7 +224,7 @@ const JunctionCanvas = ({ config }) => {
           ctx.translate(centreX - 173, centreY - 175);
           ctx.rotate(-Math.PI/2);
           ctx.scale(-1, -1);
-          ctx.drawImage(images.straightArrow, 0 + (i * width), 0, width, 100);
+          ctx.drawImage(images.straightArrow, 0 + (i * width) + xOffset, 0, width, 100);
           ctx.restore();
         }
         break
@@ -291,6 +292,7 @@ const JunctionCanvas = ({ config }) => {
     // Draws the special lane only if the user has specified left, bus or cycle lane
     if (specialImg) {
       ctx.drawImage(specialImg, centreX - 174, centreY + 174, 40, 100);
+      lanesToDraw--;
     }
 
     if (entering !== 0) {
@@ -324,6 +326,7 @@ const JunctionCanvas = ({ config }) => {
       ctx.scale(-1, -1); // Flips image again, can be read by oncoming traffic from the east
       ctx.drawImage(specialImg, -40, -100, 40, 100);
       ctx.restore();
+      lanesToDraw--;
     }
 
     if (entering !== 0) {
@@ -356,6 +359,7 @@ const JunctionCanvas = ({ config }) => {
       ctx.scale(-1, -1);
       ctx.drawImage(specialImg, 0, 0, 40, 100);
       ctx.restore();
+      lanesToDraw--;
     }
 
     if (entering !== 0) {
