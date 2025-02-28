@@ -188,36 +188,150 @@ const JunctionCanvas = ({ config }) => {
     });
   };
   
+  const determineLayout = (numLanes, carData, direction) => {
+    let left, straight, right;
+
+    switch (direction) {
+      case 'North':
+        left = carData.exitEast;
+        straight = carData.exitSouth;
+        right = carData.exitWest;
+        break;
+      case 'South':
+        left = carData.exitWest;
+        straight = carData.exitNorth;
+        right = carData.exitEast;
+        break;
+      case 'East':
+        left = carData.exitSouth;
+        straight = carData.exitWest;
+        right = carData.exitNorth;
+        break;
+      case 'West':
+        left = carData.exitNorth;
+        straight = carData.exitWest;
+        right = carData.exitSouth;
+        break;
+    }
+
+    // Checks which directions have traffic flow (non-zero)
+    const needLeft = left > 0;
+    const needStraight = straight > 0;
+    const needRight = right > 0;
+
+    let laneConfiguration = []
+
+    // 1 lane
+    if (numLanes === 1) {
+      // TODO: Need to think about this case
+        // The straight only arrow would not cover it naturally, however is it too complex to have all 3?
+        // I think this should be disallowed, talk with the team
+      if (needLeft && needStraight && needRight) {
+        laneConfiguration.push('straight');
+      } else if (needLeft && needStraight) {
+        laneConfiguration.push('straightLeft');
+      } else if (needRight && needStraight) {
+        laneConfiguration.push('straightRight');
+      } else if (needLeft && needRight) {
+        laneConfiguration.push('leftRight');
+      } else if (needLeft) {
+        laneConfiguration.push('left');
+      } else if (needRight) {
+        laneConfiguration.push('right');
+      } else {
+        laneConfiguration.push('straight');
+      }
+      return laneConfiguration;
+    }
+
+    // Multiple lanes case
+    if (numLanes >= 2) {
+      // Left lane handling
+      if (needLeft) {
+        if (needStraight) {
+          laneConfiguration.push('straightLeft');
+        } else {
+          laneConfiguration.push('left');
+        }
+      } else {
+        laneConfiguration.push('straight');
+      }
+      
+      // Middle lanes (if any)
+      for (let i = 1; i < numLanes - 1; i++) {
+        laneConfiguration.push('straight');
+      }
+      
+      // Right lane handling
+      if (numLanes > 1) {
+        if (needRight) {
+          if (needStraight) {
+            laneConfiguration.push('straightRight');
+          } else {
+            laneConfiguration.push('right');
+          }
+        } else {
+          laneConfiguration.push('straight');
+        }
+      }
+    }
+
+    return laneConfiguration;
+  };
+
+  // Returns the image for a given type of lane
+  const getLaneImageFromType = (images, type) => {
+    switch (type) {
+      case 'straight':
+        return images.straightArrow;
+      case 'left':
+        return images.leftArrow;
+      case 'right':
+        return images.rightArrow;
+      case 'straightLeft':
+        return images.straightLeftArrow;
+      case 'straightRight':
+        return images.straightRightArrow;
+      case 'leftRight':
+        return images.leftRightArrow;
+      default:
+        break;
+    }
+  }
+
   const drawEnteringCarLanes = (ctx, centreX, centreY, lanesToDraw, images, isSpecialLane, carData, width, direction) => {
     // Values in carData (ie vphX for directionX) determines what images are drawn in what order
 
     // TODO: Lanes need to be different depending on (a) number of lanes and (b) vph data (ie traffic flow, see first comment of the function)
     let xOffset = isSpecialLane ? width : 0;
+    
+    const laneLayout = determineLayout(lanesToDraw, carData, direction);
+
     switch (direction) {
       case 'North':
         ctx.save();
-        ctx.translate(centreX + 135 + 20, centreY - 275 + 50); // Translate to the center of the image
-        ctx.rotate(Math.PI); // Rotate by 180 degrees
+        ctx.translate(centreX + 135 + 20, centreY - 275 + 50); 
+        ctx.rotate(Math.PI);
 
         for (let i = 0; i < lanesToDraw; i++) {
-          ctx.drawImage(images.straightArrow, -20 + (i * width) + xOffset, -50, width, 100);
+          ctx.drawImage(getLaneImageFromType(images, laneLayout[i]), -20 + (i * width) + xOffset, -50, width, 100);
         }
 
         ctx.restore();
         break;
       case 'South':
         for (let i = 0; i < lanesToDraw; i++) {
-          ctx.drawImage(images.straightArrow, centreX - 174 + (i * width) + xOffset, centreY + 174, width, 100);
+          ctx.drawImage(getLaneImageFromType(images, laneLayout[i]), centreX - 174 + (i * width) + xOffset, centreY + 174, width, 100);
         }
         break;
       case 'East':
         ctx.save();
         ctx.translate(centreX + 275, centreY + 135);
         ctx.rotate(Math.PI/2);
-        ctx.scale(-1, -1); // Flips image again, can be read by oncoming traffic from the east
+        ctx.scale(-1, -1); 
 
         for (let i = 0; i < lanesToDraw; i++) {
-          ctx.drawImage(images.straightArrow, -40 + (i * width) + xOffset, -100, width, 100);
+          ctx.drawImage(getLaneImageFromType(images, laneLayout[i]), -40 + (i * width) + xOffset, -100, width, 100);
         }
 
         ctx.restore();
@@ -229,7 +343,7 @@ const JunctionCanvas = ({ config }) => {
         ctx.scale(-1, -1);
 
         for (let i = 0; i < lanesToDraw; i++) {
-          ctx.drawImage(images.straightArrow, 0 + (i * width) + xOffset, 0, width, 100);
+          ctx.drawImage(getLaneImageFromType(images, laneLayout[i]), 0 + (i * width) + xOffset, 0, width, 100);
         }
 
         ctx.restore();
@@ -267,7 +381,7 @@ const JunctionCanvas = ({ config }) => {
         ctx.save();
         ctx.translate(centreX + 275, centreY + 135);
         ctx.rotate(Math.PI/2);
-        ctx.scale(-1, -1); // Flips image again, can be read by oncoming traffic from the east
+        ctx.scale(-1, -1);
 
         for (let i = 0; i < lanesToDraw; i++) {
           ctx.drawImage(img, -40 + (i * width), -548, width, 100);
