@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import JunctionInput from './JunctionInput';
 import { Info } from 'lucide-react';
 import './LaneCustomisation.css';
 import SaveNextButton from '../ButtonComponents/SaveNextButton';
@@ -11,29 +10,29 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
   // Initialize state with passed formData or default values
   const [laneData, setLaneData] = useState(() => {
     let busCycleLaneDuration = {
-      "vphSpecialNorth": 0,
-      "vphSpecialSouth": 0,
-      "vphSpecialEast": 0,
-      "vphSpecialWest": 0
+      vphSpecialNorth: 0,
+      vphSpecialSouth: 0,
+      vphSpecialEast: 0,
+      vphSpecialWest: 0,
     };
-    
+
     let leftTurnLanes = {
       north: false,
       south: false,
       east: false,
-      west: false
+      west: false,
     };
 
-    if (formData.isBusOrCycle === "bus" || formData.isBusOrCycle === "cycle") {
+    if (formData.isBusOrCycle === 'bus' || formData.isBusOrCycle === 'cycle') {
       busCycleLaneDuration = formData.busCycleLaneDuration;
     }
-    
+
     if (formData.leftTurnLanes) {
       leftTurnLanes = {
-        north : formData.leftTurnLanes.north,
-        south : formData.leftTurnLanes.south,
-        east : formData.leftTurnLanes.east,
-        west : formData.leftTurnLanes.west
+        north: formData.leftTurnLanes.north,
+        south: formData.leftTurnLanes.south,
+        east: formData.leftTurnLanes.east,
+        west: formData.leftTurnLanes.west,
       };
     }
 
@@ -42,29 +41,29 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
         north: (formData.lanesEntering && formData.lanesEntering['north']) || '',
         south: (formData.lanesEntering && formData.lanesEntering['south']) || '',
         east: (formData.lanesEntering && formData.lanesEntering['east']) || '',
-        west: (formData.lanesEntering && formData.lanesEntering['west']) || ''
+        west: (formData.lanesEntering && formData.lanesEntering['west']) || '',
       },
       exiting: {
-        north: (formData.lanesEntering && formData.lanesExiting['north'] )|| '',
-        south: (formData.lanesEntering && formData.lanesExiting['south'] )|| '',
-        east: (formData.lanesEntering && formData.lanesExiting['east'] )|| '',
-        west: (formData.lanesEntering && formData.lanesExiting['west'] )|| ''
+        north: (formData.lanesExiting && formData.lanesExiting['north']) || '',
+        south: (formData.lanesExiting && formData.lanesExiting['south']) || '',
+        east: (formData.lanesExiting && formData.lanesExiting['east']) || '',
+        west: (formData.lanesExiting && formData.lanesExiting['west']) || '',
       },
       leftTurn: leftTurnLanes,
       busCycleLaneDuration: busCycleLaneDuration,
       busLane: {
-        north: busCycleLaneDuration.vphSpecialNorth.length > 0 && formData.isBusOrCycle === "bus",
-        south: busCycleLaneDuration.vphSpecialSouth.length > 0 && formData.isBusOrCycle === "bus",
-        east: busCycleLaneDuration.vphSpecialEast.length > 0 && formData.isBusOrCycle === "bus",
-        west: busCycleLaneDuration.vphSpecialWest.length > 0 && formData.isBusOrCycle === "bus"
+        north: busCycleLaneDuration.vphSpecialNorth > 0 && formData.isBusOrCycle === 'bus',
+        south: busCycleLaneDuration.vphSpecialSouth > 0 && formData.isBusOrCycle === 'bus',
+        east: busCycleLaneDuration.vphSpecialEast > 0 && formData.isBusOrCycle === 'bus',
+        west: busCycleLaneDuration.vphSpecialWest > 0 && formData.isBusOrCycle === 'bus',
       },
       cycleLane: {
-        north: busCycleLaneDuration.vphSpecialNorth.length > 0 && formData.isBusOrCycle === "cycle",
-        south: busCycleLaneDuration.vphSpecialSouth.length > 0 && formData.isBusOrCycle === "cycle",
-        east: busCycleLaneDuration.vphSpecialEast.length > 0 && formData.isBusOrCycle === "cycle",
-        west: busCycleLaneDuration.vphSpecialWest.length > 0 && formData.isBusOrCycle === "cycle"
-      }
-    }
+        north: busCycleLaneDuration.vphSpecialNorth > 0 && formData.isBusOrCycle === 'cycle',
+        south: busCycleLaneDuration.vphSpecialSouth > 0 && formData.isBusOrCycle === 'cycle',
+        east: busCycleLaneDuration.vphSpecialEast > 0 && formData.isBusOrCycle === 'cycle',
+        west: busCycleLaneDuration.vphSpecialWest > 0 && formData.isBusOrCycle === 'cycle',
+      },
+    };
   });
 
   const [isValid, setIsValid] = useState(false);
@@ -78,8 +77,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
 
   const validateLanes = () => {
     const totalEntering = Object.values(laneData.entering).reduce(
-      (sum, val) => sum + (parseInt(val) || 0),
-      0
+      (sum, val) => sum + (parseInt(val) || 0), 0
     );
     const totalExiting = Object.values(laneData.exiting).reduce(
       (sum, val) => sum + (parseInt(val) || 0),
@@ -92,28 +90,28 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
     // Ensure the value doesn't exceed 5
     const numValue = parseInt(value) || 0;
     const limitedValue = numValue > 5 ? '5' : value;
-    
-    setLaneData(prev => ({
+
+    setLaneData((prev) => ({
       ...prev,
       [type]: {
         ...prev[type],
-        [direction]: limitedValue
-      }
+        [direction]: limitedValue,
+      },
     }));
   };
 
   const handleLeftTurnChange = (direction) => {
-    setLaneData(prev => ({
+    setLaneData((prev) => ({
       ...prev,
       leftTurn: {
         ...prev.leftTurn,
-        [direction]: !prev.leftTurn[direction]
-      }
+        [direction]: !prev.leftTurn[direction],
+      },
     }));
   };
 
   const handleSpecialLaneChange = (type, direction) => {
-    setLaneData(prev => {
+    setLaneData((prev) => {
       let newBusLane = { ...prev.busLane };
       let newCycleLane = { ...prev.cycleLane };
       let busCycleLaneDuration = { ...prev.busCycleLaneDuration };
@@ -121,79 +119,67 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
       if (type === 'busLane') {
         if (prev.busLane[direction]) {
           busCycleLaneDuration[`vphSpecial${direction.charAt(0).toUpperCase() + direction.slice(1)}`] = 0;
-        };
+        }
         newBusLane[direction] = !prev.busLane[direction];
         if (newBusLane[direction]) {
           // If bus lane is selected, clear cycle lane
-          Object.keys(newCycleLane).forEach(dir => newCycleLane[dir] = false);
+          Object.keys(newCycleLane).forEach((dir) => (newCycleLane[dir] = false));
         }
       } else {
         if (prev.cycleLane[direction]) {
           busCycleLaneDuration[`vphSpecial${direction.charAt(0).toUpperCase() + direction.slice(1)}`] = 0;
-        };
+        }
         newCycleLane[direction] = !prev.cycleLane[direction];
         if (newCycleLane[direction]) {
           // If cycle lane is selected, clear bus lane
-          Object.keys(newBusLane).forEach(dir => newBusLane[dir] = false);
+          Object.keys(newBusLane).forEach((dir) => (newBusLane[dir] = false));
         }
       }
 
-      // Clear specialLaneFlow when changing selection
       return {
         ...prev,
         busLane: newBusLane,
         cycleLane: newCycleLane,
-        busCycleLaneDuration
+        busCycleLaneDuration,
       };
     });
   };
 
-  // Handle JunctionInput updates
   const handleJunctionInputUpdate = (incomingDirection, value) => {
-    setLaneData(prev => ({
+    setLaneData((prev) => ({
       ...prev,
       busCycleLaneDuration: {
         ...prev.busCycleLaneDuration,
-        // Update only the selected direction with new flows
-        [`vphSpecial${incomingDirection.charAt(0).toUpperCase() + incomingDirection.slice(1)}`]: value
-      }
+        [`vphSpecial${incomingDirection.charAt(0).toUpperCase() + incomingDirection.slice(1)}`]: value,
+      },
     }));
   };
 
-  // Generate remaining directions based on selected direction
-  const getRemainingDirections = (selectedDirection) => {
-    const allDirections = ['north', 'south', 'east', 'west'];
-    return allDirections.filter(dir => dir !== selectedDirection);
-  };
-
-  const hasSpecialLane = Object.entries(laneData.busLane).some(([direction, value]) => 
-    value || laneData.cycleLane[direction]
+  const hasSpecialLane = Object.entries(laneData.busLane).some(
+    ([direction, value]) => value || laneData.cycleLane[direction]
   );
 
-  // Format lane data to match required JSON structure
-  const formatLaneDataToJSON = () => {    
-    // Determine if bus or cycle lane is selected
+  const formatLaneDataToJSON = () => {
     const isBusOrCycle = (() => {
-      const hasBusLane = Object.values(laneData.busLane).some(val => val);
-      const hasCycleLane = Object.values(laneData.cycleLane).some(val => val);
-      if (hasBusLane) return "bus";
-      if (hasCycleLane) return "cycle";
-      return "none";
+      const hasBusLane = Object.values(laneData.busLane).some((val) => val);
+      const hasCycleLane = Object.values(laneData.cycleLane).some((val) => val);
+      if (hasBusLane) return 'bus';
+      if (hasCycleLane) return 'cycle';
+      return 'none';
     })();
 
-    // Parses values from form to be integers rather than strings
     const lanesEntering = {
-      north: parseInt(laneData.entering.north) || 0 ,
-      south: parseInt(laneData.entering.south) || 0 ,
-      east: parseInt(laneData.entering.east) || 0 ,
-      west: parseInt(laneData.entering.west) || 0 
+      north: parseInt(laneData.entering.north) || 0,
+      south: parseInt(laneData.entering.south) || 0,
+      east: parseInt(laneData.entering.east) || 0,
+      west: parseInt(laneData.entering.west) || 0,
     };
 
     const lanesExiting = {
-      north: parseInt(laneData.exiting.north) || 0 ,
-      south: parseInt(laneData.exiting.south) || 0 ,
-      east: parseInt(laneData.exiting.east) || 0 ,
-      west: parseInt(laneData.exiting.west) || 0 
+      north: parseInt(laneData.exiting.north) || 0,
+      south: parseInt(laneData.exiting.south) || 0,
+      east: parseInt(laneData.exiting.east) || 0,
+      west: parseInt(laneData.exiting.west) || 0,
     };
 
     return {
@@ -201,11 +187,10 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
       lanesEntering,
       lanesExiting,
       isBusOrCycle,
-      busCycleLaneDuration: laneData.busCycleLaneDuration
+      busCycleLaneDuration: laneData.busCycleLaneDuration,
     };
   };
 
-  // Handle button click events
   const handleSaveNext = () => {
     if (isValid) {
       const formattedData = formatLaneDataToJSON();
@@ -230,35 +215,29 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
         vphSpecialNorth: 0,
         vphSpecialSouth: 0,
         vphSpecialEast: 0,
-        vphSpecialWest: 0
-      }
+        vphSpecialWest: 0,
+      },
     });
   };
 
-  // Render sections...
   return (
     <div className="lane-customization">
       <h2>Lane Customization</h2>
-      
+
       {/* Lanes Entering Section */}
       <section className="lanes-section">
         <div className="section-header">
           <h3>Lanes Entering Junction</h3>
-          <div 
+          <div
             className="info-icon"
             onMouseEnter={() => setShowEnteringTooltip(true)}
             onMouseLeave={() => setShowEnteringTooltip(false)}
           >
             <Info size={20} />
-            {showEnteringTooltip && (
-              <div className="tooltip">
-                Maximum of 5 lanes per direction.
-                Total number of lanes entering and exiting must be equal
-              </div>
-            )}
+            {showEnteringTooltip && <div className="tooltip">Maximum of 5 lanes per direction</div>}
           </div>
         </div>
-        {Object.keys(laneData.entering).map(direction => (
+        {Object.keys(laneData.entering).map((direction) => (
           <div key={`entering-${direction}`} className="input-group">
             <label>From {direction.charAt(0).toUpperCase() + direction.slice(1)}:</label>
             <input
@@ -277,21 +256,16 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
       <section className="lanes-section">
         <div className="section-header">
           <h3>Lanes Exiting Junction</h3>
-          <div 
+          <div
             className="info-icon"
             onMouseEnter={() => setShowExitingTooltip(true)}
             onMouseLeave={() => setShowExitingTooltip(false)}
           >
             <Info size={20} />
-            {showExitingTooltip && (
-              <div className="tooltip">
-                Maximum of 5 lanes per direction.
-                Total number of lanes entering and exiting must be equal
-              </div>
-            )}
+            {showExitingTooltip && <div className="tooltip">Maximum of 5 lanes per direction</div>}
           </div>
         </div>
-        {Object.keys(laneData.exiting).map(direction => (
+        {Object.keys(laneData.exiting).map((direction) => (
           <div key={`exiting-${direction}`} className="input-group">
             <label>To {direction.charAt(0).toUpperCase() + direction.slice(1)}:</label>
             <input
@@ -309,7 +283,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
       {/* Left Turn Section */}
       <section className="left-turn-section">
         <h3>Left Turn Lanes</h3>
-        {Object.keys(laneData.leftTurn).map(direction => (
+        {Object.keys(laneData.leftTurn).map((direction) => (
           <div key={`left-turn-${direction}`} className="checkbox-group">
             <label>
               <input
@@ -327,7 +301,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
       <section className="special-lanes-section">
         <div className="special-lanes-header">
           <h3>Bus/Cycle Lanes</h3>
-          <div 
+          <div
             className="info-icon"
             onMouseEnter={() => setShowTooltip(true)}
             onMouseLeave={() => setShowTooltip(false)}
@@ -343,7 +317,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
         <div className="special-lanes-grid">
           <div className="special-lanes-column">
             <h4>Bus Lanes</h4>
-            {Object.keys(laneData.busLane).map(direction => (
+            {Object.keys(laneData.busLane).map((direction) => (
               <div key={`bus-${direction}`} className="checkbox-group">
                 <label>
                   <input
@@ -358,7 +332,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
           </div>
           <div className="special-lanes-column">
             <h4>Cycle Lanes</h4>
-            {Object.keys(laneData.cycleLane).map(direction => (
+            {Object.keys(laneData.cycleLane).map((direction) => (
               <div key={`cycle-${direction}`} className="checkbox-group">
                 <label>
                   <input
@@ -382,7 +356,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
           </div>
         ) : (
           <div className="junction-input-wrapper">
-            {Object.keys(laneData.busLane).map(direction => {
+            {Object.keys(laneData.busLane).map((direction) => {
               if (laneData.busLane[direction] || laneData.cycleLane[direction]) {
                 return (
                   <div key={`special-lane-${direction}`} className="input-group">
