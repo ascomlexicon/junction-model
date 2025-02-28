@@ -173,13 +173,13 @@ const JunctionCanvas = ({ config }) => {
           drawNorthQuarter(ctx, centreX, centreY, enteringLanes, exitingLanes, hasLeftTurn, images, busData, config.vphNorth, config.isBusOrCycle);
           break;
         case 'South':
-          drawSouthQuarter(ctx, centreX, centreY, enteringLanes, exitingLanes, hasLeftTurn, images, busData, config.isBusOrCycle);
+          drawSouthQuarter(ctx, centreX, centreY, enteringLanes, exitingLanes, hasLeftTurn, images, busData, config.vphSouth, config.isBusOrCycle);
           break;
         case 'East':
-          drawEastQuarter(ctx, centreX, centreY, enteringLanes, exitingLanes, hasLeftTurn, images, busData, config.isBusOrCycle);
+          drawEastQuarter(ctx, centreX, centreY, enteringLanes, exitingLanes, hasLeftTurn, images, busData, config.vphEast, config.isBusOrCycle);
           break;
         case 'West':
-          drawWestQuarter(ctx, centreX, centreY, enteringLanes, exitingLanes, hasLeftTurn, images, busData, config.isBusOrCycle);
+          drawWestQuarter(ctx, centreX, centreY, enteringLanes, exitingLanes, hasLeftTurn, images, busData, config.vphWest, config.isBusOrCycle);
           break;
         default:
           break;
@@ -203,10 +203,30 @@ const JunctionCanvas = ({ config }) => {
         }
         break
       case 'South':
+        for (let i = 0; i < lanesToDraw; i++) {
+          ctx.drawImage(images.straightArrow, centreX - 174 + (i * width), centreY + 174, 40, 100);
+        }
         break
       case 'East':
+        for (let i = 0; i < lanesToDraw; i++) {
+          ctx.save();
+          ctx.translate(centreX + 275, centreY + 135);
+          ctx.rotate(Math.PI/2);
+          ctx.scale(-1, -1); // Flips image again, can be read by oncoming traffic from the east
+          // TODO: Need to check this, believe there might be an issue but shall see
+          ctx.drawImage(images.straightArrow, -40, -100 - (i * width), 40, 100);
+          ctx.restore();
+        }
         break
       case 'West':
+        for (let i = 0; i < lanesToDraw; i++) {
+          ctx.save();
+          ctx.translate(centreX - 173, centreY - 175);
+          ctx.rotate(-Math.PI/2);
+          ctx.scale(-1, -1);
+          ctx.drawImage(images.straightArrow, 0, 0 - (i * width), 40, 100);
+          ctx.restore();
+        }
         break
       default:
         break
@@ -219,7 +239,7 @@ const JunctionCanvas = ({ config }) => {
     // Exiting lane widths = ((height of box junction)/2) / number of exiting lanes
     const enteringLaneWidth = entering !== 0 ? (350 / 2) / entering : null;
     const exitingLaneWidth = exiting !== 0 ? (350 / 2) / exiting : null;
-    let lanesToDraw = entering
+    let lanesToDraw = entering;
 
     // const laneWidth = 40; 
     // const totalEnteringWidth = entering * laneWidth;
@@ -258,11 +278,13 @@ const JunctionCanvas = ({ config }) => {
   };
 
   // Cars coming from the south
-  const drawSouthQuarter = (ctx, centreX, centreY, entering, exiting, hasLeftTurn, images, busData, busOrBike) => {
-    // TODO: See logic from north about lanewidth
-    const laneWidth = 40;
-    const totalEnteringWidth = entering * laneWidth;
-    const startX = centreX - (totalEnteringWidth / 2);
+  const drawSouthQuarter = (ctx, centreX, centreY, entering, exiting, hasLeftTurn, images, busData, carData, busOrBike) => {
+    const enteringLaneWidth = entering !== 0 ? (350 / 2) / entering : null;
+    const exitingLaneWidth = exiting !== 0 ? (350 / 2) / exiting : null;
+    let lanesToDraw = entering;
+    // const laneWidth = 40;
+    // const totalEnteringWidth = entering * laneWidth;
+    // const startX = centreX - (totalEnteringWidth / 2);
 
     let specialImg = null;
 
@@ -279,15 +301,22 @@ const JunctionCanvas = ({ config }) => {
       ctx.drawImage(specialImg, centreX - 174, centreY + 174, 40, 100);
     }
 
+    if (entering !== 0) {
+      drawEnteringCarLanes(ctx, centreX, centreY, lanesToDraw, images, specialImg, carData, enteringLaneWidth, 'South');
+    }
+
     // Draw straight arrows
   };
   
   // Cars coming from the east
-  const drawEastQuarter = (ctx, centreX, centreY, entering, exiting, hasLeftTurn, images, busData, busOrBike) => {
-    const laneWidth = 40;
-    const totalEnteringHeight = entering * laneWidth;
-    const startY = centreY + (totalEnteringHeight / 2);
-    
+  const drawEastQuarter = (ctx, centreX, centreY, entering, exiting, hasLeftTurn, images, busData, carData, busOrBike) => {
+    // const laneWidth = 40;
+    // const totalEnteringHeight = entering * laneWidth;
+    // const startY = centreY + (totalEnteringHeight / 2);
+    const enteringLaneWidth = entering !== 0 ? (350 / 2) / entering : null;
+    const exitingLaneWidth = exiting !== 0 ? (350 / 2) / exiting : null;
+    let lanesToDraw = entering;
+
     let specialImg = null;
 
     if (hasLeftTurn) {
@@ -307,14 +336,23 @@ const JunctionCanvas = ({ config }) => {
       ctx.drawImage(specialImg, -40, -100, 40, 100);
       ctx.restore();
     }
+
+    if (entering !== 0) {
+      drawEnteringCarLanes(ctx, centreX, centreY, lanesToDraw, images, specialImg, carData, enteringLaneWidth, 'East');
+    }
+
   };
 
   // Cars coming from the west
-  const drawWestQuarter = (ctx, centreX, centreY, entering, exiting, hasLeftTurn, images, busData, busOrBike) => {
-    const laneWidth = 40;
-    const totalEnteringHeight = entering * laneWidth;
-    const startY = centreY - (totalEnteringHeight / 2);
+  const drawWestQuarter = (ctx, centreX, centreY, entering, exiting, hasLeftTurn, images, busData, carData, busOrBike) => {
+    // const laneWidth = 40;
+    // const totalEnteringHeight = entering * laneWidth;
+    // const startY = centreY - (totalEnteringHeight / 2);
   
+    const enteringLaneWidth = entering !== 0 ? (350 / 2) / entering : null;
+    const exitingLaneWidth = exiting !== 0 ? (350 / 2) / exiting : null;
+    let lanesToDraw = entering;
+
     let specialImg = null;
 
     if (hasLeftTurn) {
@@ -334,6 +372,11 @@ const JunctionCanvas = ({ config }) => {
       ctx.drawImage(specialImg, 0, 0, 40, 100);
       ctx.restore();
     }
+
+    if (entering !== 0) {
+      drawEnteringCarLanes(ctx, centreX, centreY, lanesToDraw, images, specialImg, carData, enteringLaneWidth, 'West');
+    }
+
   };
   
   // Draw pedestrian crossings if enabled
