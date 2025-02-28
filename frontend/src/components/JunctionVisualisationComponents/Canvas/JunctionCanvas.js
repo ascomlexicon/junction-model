@@ -188,6 +188,8 @@ const JunctionCanvas = ({ config }) => {
     });
   };
   
+  // Returns a layout of road markings dependant on the number of lanes available and
+  // what direction cars exit the junction
   const determineLayout = (numLanes, carData, direction) => {
     let left, straight, right;
 
@@ -209,7 +211,7 @@ const JunctionCanvas = ({ config }) => {
         break;
       case 'West':
         left = carData.exitNorth;
-        straight = carData.exitWest;
+        straight = carData.exitEast;
         right = carData.exitSouth;
         break;
     }
@@ -258,11 +260,14 @@ const JunctionCanvas = ({ config }) => {
       }
       
       // Middle lanes (if any)
+      // TODO: Issue with this, what happens if there are 5 lanes but NO forward-going traffic
       for (let i = 1; i < numLanes - 1; i++) {
         laneConfiguration.push('straight');
       }
       
       // Right lane handling
+      // TODO: Think through this logic again (Mr C), the if statement will never fail to run
+      // as a condition of being inside the outer one is that >= 2 already
       if (numLanes > 1) {
         if (needRight) {
           if (needStraight) {
@@ -285,9 +290,9 @@ const JunctionCanvas = ({ config }) => {
       case 'straight':
         return images.straightArrow;
       case 'left':
-        return images.leftArrow;
+        return images.leftOnlyArrow;
       case 'right':
-        return images.rightArrow;
+        return images.rightOnlyArrow;
       case 'straightLeft':
         return images.straightLeftArrow;
       case 'straightRight':
@@ -300,13 +305,20 @@ const JunctionCanvas = ({ config }) => {
   }
 
   const drawEnteringCarLanes = (ctx, centreX, centreY, lanesToDraw, images, isSpecialLane, carData, width, direction) => {
-    // Values in carData (ie vphX for directionX) determines what images are drawn in what order
-
-    // TODO: Lanes need to be different depending on (a) number of lanes and (b) vph data (ie traffic flow, see first comment of the function)
+    // If there is a special lane, then start drawing lanes further from the edge of
+    // the road
     let xOffset = isSpecialLane ? width : 0;
     
+    // TODO: This will need to include whether there is a special lane or not
+      // |laneLayout| = lanesToDraw always
+      // This means the layout is only about cars, we don't care about the special
+      // lane because that is always fixed to the left
+      // Furthermore, our assumptions are ensuring that forms are not submitted if junctions are invalid
+      // So, there will never be the case that here, we will have to deal with left turning traffic
+      // with a bus lane, causing a collision
     const laneLayout = determineLayout(lanesToDraw, carData, direction);
 
+    // Draw each junction quarter
     switch (direction) {
       case 'North':
         ctx.save();
