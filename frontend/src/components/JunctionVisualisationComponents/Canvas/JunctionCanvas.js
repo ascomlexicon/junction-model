@@ -204,7 +204,7 @@ const JunctionCanvas = ({ config }) => {
         break
       case 'South':
         for (let i = 0; i < lanesToDraw; i++) {
-          ctx.drawImage(images.straightArrow, centreX - 174 + (i * width), centreY + 174, 40, 100);
+          ctx.drawImage(images.straightArrow, centreX - 174 + (i * width), centreY + 174, width, 100);
         }
         break
       case 'East':
@@ -213,8 +213,7 @@ const JunctionCanvas = ({ config }) => {
           ctx.translate(centreX + 275, centreY + 135);
           ctx.rotate(Math.PI/2);
           ctx.scale(-1, -1); // Flips image again, can be read by oncoming traffic from the east
-          // TODO: Need to check this, believe there might be an issue but shall see
-          ctx.drawImage(images.straightArrow, -40, -100 - (i * width), 40, 100);
+          ctx.drawImage(images.straightArrow, -40 + (i * width), -100, width, 100);
           ctx.restore();
         }
         break
@@ -224,7 +223,7 @@ const JunctionCanvas = ({ config }) => {
           ctx.translate(centreX - 173, centreY - 175);
           ctx.rotate(-Math.PI/2);
           ctx.scale(-1, -1);
-          ctx.drawImage(images.straightArrow, 0, 0 - (i * width), 40, 100);
+          ctx.drawImage(images.straightArrow, 0 + (i * width), 0, width, 100);
           ctx.restore();
         }
         break
@@ -240,10 +239,6 @@ const JunctionCanvas = ({ config }) => {
     const enteringLaneWidth = entering !== 0 ? (350 / 2) / entering : null;
     const exitingLaneWidth = exiting !== 0 ? (350 / 2) / exiting : null;
     let lanesToDraw = entering;
-
-    // const laneWidth = 40; 
-    // const totalEnteringWidth = entering * laneWidth;
-    // const startX = centreX + (totalEnteringWidth / 2);
 
     let specialImg = null;
 
@@ -282,9 +277,6 @@ const JunctionCanvas = ({ config }) => {
     const enteringLaneWidth = entering !== 0 ? (350 / 2) / entering : null;
     const exitingLaneWidth = exiting !== 0 ? (350 / 2) / exiting : null;
     let lanesToDraw = entering;
-    // const laneWidth = 40;
-    // const totalEnteringWidth = entering * laneWidth;
-    // const startX = centreX - (totalEnteringWidth / 2);
 
     let specialImg = null;
 
@@ -310,9 +302,6 @@ const JunctionCanvas = ({ config }) => {
   
   // Cars coming from the east
   const drawEastQuarter = (ctx, centreX, centreY, entering, exiting, hasLeftTurn, images, busData, carData, busOrBike) => {
-    // const laneWidth = 40;
-    // const totalEnteringHeight = entering * laneWidth;
-    // const startY = centreY + (totalEnteringHeight / 2);
     const enteringLaneWidth = entering !== 0 ? (350 / 2) / entering : null;
     const exitingLaneWidth = exiting !== 0 ? (350 / 2) / exiting : null;
     let lanesToDraw = entering;
@@ -345,10 +334,6 @@ const JunctionCanvas = ({ config }) => {
 
   // Cars coming from the west
   const drawWestQuarter = (ctx, centreX, centreY, entering, exiting, hasLeftTurn, images, busData, carData, busOrBike) => {
-    // const laneWidth = 40;
-    // const totalEnteringHeight = entering * laneWidth;
-    // const startY = centreY - (totalEnteringHeight / 2);
-  
     const enteringLaneWidth = entering !== 0 ? (350 / 2) / entering : null;
     const exitingLaneWidth = exiting !== 0 ? (350 / 2) / exiting : null;
     let lanesToDraw = entering;
