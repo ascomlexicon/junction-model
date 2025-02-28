@@ -266,7 +266,7 @@ const JunctionCanvas = ({ config }) => {
       }
       
       // Middle lanes (only applicable in the case of >2)
-      if (numLanes != 2) {
+      if (numLanes !== 2) {
         for (let i = 1; i < numLanes - 1; i++) {
           if (needStraight) {
             laneConfiguration.push('straight');
