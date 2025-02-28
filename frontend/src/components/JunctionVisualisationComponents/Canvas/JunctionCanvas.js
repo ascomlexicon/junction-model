@@ -172,6 +172,7 @@ const JunctionCanvas = ({ config }) => {
 
       // Draw lanes based on direction
       switch(direction) {
+        // TODO: Change the function parameters on the other functions to match drawNorthQuarter
         case 'North':
           drawNorthQuarter(ctx, centreX, centreY, enteringLanes, exitingLanes, hasLeftTurn, images, busData, config.vphNorth, config.isBusOrCycle);
           break;
@@ -196,16 +197,14 @@ const JunctionCanvas = ({ config }) => {
 
     // TODO: If isSpecialLane, move the pointer to start further away from edge
 
-    console.log("WHY ARE YOU RENDERING SO QUICKLY");
-
     switch (direction) {
       case 'North':
         for (let i = 0; i < lanesToDraw; i++) {
-          ctx.save();
+          ctx.save()
           ctx.translate(centreX + 134 + 20, centreY - 274 + 50); // Translate to the center of the image
           ctx.rotate(Math.PI); // Rotate by 180 degrees
-          ctx.drawImage(images.straightArrow, -20 + (i * 5), -50 + (i * 5), width, 100);
-          ctx.restore();
+          ctx.drawImage(images.straightArrow, -20 + (i * width), -50, width, 100);
+          ctx.restore()
         }
         break
       case 'South':
@@ -252,9 +251,12 @@ const JunctionCanvas = ({ config }) => {
     }
 
     // Draws the other car lanes depending on vph data and how many are left
-    if (Object.keys(carData).length !== 0) {
+    if (entering !== 0) {
       drawEnteringCarLanes(ctx, centreX, centreY, lanesToDraw, images, specialImg, carData, enteringLaneWidth, 'North');
+
+      // ctx.save();
       // drawExitingCarLanes(ctx, centreX, centreY, images);
+      // ctx.restore();
     }
 
     // Draws car lanes exiting the junction northbound
