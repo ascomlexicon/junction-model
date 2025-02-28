@@ -243,6 +243,7 @@ const JunctionCanvas = ({ config }) => {
     switch (direction) {
       case 'North':
         ctx.save();
+        // TODO: DONT NEED TO FLIP THIS, ITS A NORMAL LANE!!! JUST USE SAME X VALUE AS SOUTH ENTER AND Y AS NORTH ENTER
         ctx.translate(centreX - 134 - 20, centreY - 274 + 50); // Translate to the center of the image
         ctx.rotate(Math.PI); // Rotate by 180 degrees
 
@@ -271,17 +272,16 @@ const JunctionCanvas = ({ config }) => {
         break;
       case 'West':
         ctx.save();
-        ctx.translate(centreX - 173, centreY - 175);
-        ctx.rotate(-Math.PI/2);
-        ctx.scale(-1, -1);
+        ctx.translate(centreX + 275, centreY + 135);
+        ctx.rotate(Math.PI/2);
+        ctx.scale(-1, -1); // Flips image again, can be read by oncoming traffic from the east
 
         for (let i = 0; i < lanesToDraw; i++) {
-          ctx.drawImage(img, 0 - (i * width), 0, width, 100);
+          ctx.drawImage(img, -40 + (i * width), -548, width, 100);
         }
 
-        ctx.fillRect(0, 0, 30, 30);
         ctx.restore();
-        break
+        break;
       default:
         break
     }
