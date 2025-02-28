@@ -195,82 +195,92 @@ const JunctionCanvas = ({ config }) => {
     let xOffset = isSpecialLane ? width : 0;
     switch (direction) {
       case 'North':
+        ctx.save();
+        ctx.translate(centreX + 134 + 20, centreY - 274 + 50); // Translate to the center of the image
+        ctx.rotate(Math.PI); // Rotate by 180 degrees
+
         for (let i = 0; i < lanesToDraw; i++) {
-          ctx.save()
-          ctx.translate(centreX + 134 + 20, centreY - 274 + 50); // Translate to the center of the image
-          ctx.rotate(Math.PI); // Rotate by 180 degrees
           ctx.drawImage(images.straightArrow, -20 + (i * width) + xOffset, -50, width, 100);
-          ctx.restore()
         }
-        break
+
+        ctx.restore();
+        break;
       case 'South':
         for (let i = 0; i < lanesToDraw; i++) {
           ctx.drawImage(images.straightArrow, centreX - 174 + (i * width) + xOffset, centreY + 174, width, 100);
         }
-        break
+        break;
       case 'East':
+        ctx.save();
+        ctx.translate(centreX + 275, centreY + 135);
+        ctx.rotate(Math.PI/2);
+        ctx.scale(-1, -1); // Flips image again, can be read by oncoming traffic from the east
+
         for (let i = 0; i < lanesToDraw; i++) {
-          ctx.save();
-          ctx.translate(centreX + 275, centreY + 135);
-          ctx.rotate(Math.PI/2);
-          ctx.scale(-1, -1); // Flips image again, can be read by oncoming traffic from the east
           ctx.drawImage(images.straightArrow, -40 + (i * width) + xOffset, -100, width, 100);
-          ctx.restore();
         }
-        break
+
+        ctx.restore();
+        break;
       case 'West':
+        ctx.save();
+        ctx.translate(centreX - 173, centreY - 175);
+        ctx.rotate(-Math.PI/2);
+        ctx.scale(-1, -1);
+
         for (let i = 0; i < lanesToDraw; i++) {
-          ctx.save();
-          ctx.translate(centreX - 173, centreY - 175);
-          ctx.rotate(-Math.PI/2);
-          ctx.scale(-1, -1);
           ctx.drawImage(images.straightArrow, 0 + (i * width) + xOffset, 0, width, 100);
-          ctx.restore();
         }
-        break
+
+        ctx.restore();
+        break;
       default:
-        break
+        break;
     }
   };
 
   const drawExitingCarLanes = (ctx, centreX, centreY, lanesToDraw, img, width, direction) => {
-    // TODO: 
-      // 1. Place north and south in same y position, flipped x about the centre
-      // 2. Place east and west in same x position, flipped y about the centre
     switch (direction) {
       case 'North':
-        for (let i = 0; i < lanesToDraw; i++) {
-          ctx.save()
-          ctx.translate(centreX - 134 - 20, centreY - 274 + 50); // Translate to the center of the image
-          ctx.rotate(Math.PI); // Rotate by 180 degrees
+        ctx.save();
+        ctx.translate(centreX - 134 - 20, centreY - 274 + 50); // Translate to the center of the image
+        ctx.rotate(Math.PI); // Rotate by 180 degrees
+
+        for (let i = 0; i < lanesToDraw; i++) {  
           ctx.drawImage(img, -20 - (i * width), -50, width, 100);
-          ctx.restore()
         }
-        break
+
+        ctx.restore();
+        break;
       case 'South':
         for (let i = 0; i < lanesToDraw; i++) {
-          ctx.drawImage(img, centreX + 174 - (i * width), centreY + 174, width, 100);
+          ctx.drawImage(img, centreX + (i * width), centreY + 174, width, 100);
         }
-        break
+        break;
       case 'East':
+        ctx.save();
+        ctx.translate(centreX + 275, centreY + 135);
+        ctx.rotate(Math.PI/2);
+        ctx.scale(-1, -1); // Flips image again, can be read by oncoming traffic from the east
+
         for (let i = 0; i < lanesToDraw; i++) {
-          ctx.save();
-          ctx.translate(centreX - 275, centreY + 135);
-          ctx.rotate(Math.PI/2);
-          ctx.scale(-1, -1); // Flips image again, can be read by oncoming traffic from the east
           ctx.drawImage(img, -40 - (i * width), -100, width, 100);
-          ctx.restore();
         }
-        break
+
+        ctx.restore();
+        break;
       case 'West':
+        ctx.save();
+        ctx.translate(centreX - 173, centreY - 175);
+        ctx.rotate(-Math.PI/2);
+        ctx.scale(-1, -1);
+
         for (let i = 0; i < lanesToDraw; i++) {
-          ctx.save();
-          ctx.translate(centreX + 173, centreY - 175);
-          ctx.rotate(-Math.PI/2);
-          ctx.scale(-1, -1);
           ctx.drawImage(img, 0 - (i * width), 0, width, 100);
-          ctx.restore();
         }
+
+        ctx.fillRect(0, 0, 30, 30);
+        ctx.restore();
         break
       default:
         break
