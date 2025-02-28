@@ -196,7 +196,7 @@ const JunctionCanvas = ({ config }) => {
     switch (direction) {
       case 'North':
         ctx.save();
-        ctx.translate(centreX + 134 + 20, centreY - 274 + 50); // Translate to the center of the image
+        ctx.translate(centreX + 135 + 20, centreY - 275 + 50); // Translate to the center of the image
         ctx.rotate(Math.PI); // Rotate by 180 degrees
 
         for (let i = 0; i < lanesToDraw; i++) {
@@ -242,16 +242,9 @@ const JunctionCanvas = ({ config }) => {
   const drawExitingCarLanes = (ctx, centreX, centreY, lanesToDraw, img, width, direction) => {
     switch (direction) {
       case 'North':
-        ctx.save();
-        // TODO: DONT NEED TO FLIP THIS, ITS A NORMAL LANE!!! JUST USE SAME X VALUE AS SOUTH ENTER AND Y AS NORTH ENTER
-        ctx.translate(centreX - 134 - 20, centreY - 274 + 50); // Translate to the center of the image
-        ctx.rotate(Math.PI); // Rotate by 180 degrees
-
         for (let i = 0; i < lanesToDraw; i++) {  
-          ctx.drawImage(img, -20 - (i * width), -50, width, 100);
+          ctx.drawImage(img, centreX - 175 + (i * width), centreY - 275, width, 100);
         }
-
-        ctx.restore();
         break;
       case 'South':
         for (let i = 0; i < lanesToDraw; i++) {
