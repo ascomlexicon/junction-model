@@ -76,6 +76,7 @@ const JunctionCanvas = ({ config }) => {
       straightArrow: new Image(),
       straightLeftArrow: new Image(),
       straightRightArrow: new Image(),
+      leftRightArrow: new Image(),
       busLane: new Image(),
       cycleLane: new Image()
     };
@@ -89,6 +90,7 @@ const JunctionCanvas = ({ config }) => {
     images.straightArrow.src = require('../images/straight.png');
     images.straightLeftArrow.src = require('../images/straightLeft.png');
     images.straightRightArrow.src = require('../images/straightRight.png');
+    images.leftRightArrow.src = require('../images/leftRight.png');
     images.busLane.src = require('../images/busLane.png');
     images.cycleLane.src = require('../images/cycleLane.png');
     
