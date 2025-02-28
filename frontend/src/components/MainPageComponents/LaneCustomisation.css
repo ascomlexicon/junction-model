@@ -62,6 +62,7 @@
     position: relative;
     cursor: help;
     color: #666;
+    width: 10%;
   }
 
   .tooltip {
