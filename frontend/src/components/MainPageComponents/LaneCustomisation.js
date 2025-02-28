@@ -70,6 +70,8 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
   const [showTooltip, setShowTooltip] = useState(false);
   const [showEnteringTooltip, setShowEnteringTooltip] = useState(false);
   const [showExitingTooltip, setShowExitingTooltip] = useState(false);
+  const [showEnteringTooltip, setShowEnteringTooltip] = useState(false);
+  const [showExitingTooltip, setShowExitingTooltip] = useState(false);
 
   useEffect(() => {
     validateLanes();
@@ -90,13 +92,13 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
     // Ensure the value doesn't exceed 5
     const numValue = parseInt(value) || 0;
     const limitedValue = numValue > 5 ? '5' : value;
-
-    setLaneData((prev) => ({
+    
+    setLaneData(prev => ({
       ...prev,
       [type]: {
         ...prev[type],
-        [direction]: limitedValue,
-      },
+        [direction]: limitedValue
+      }
     }));
   };
 
@@ -228,16 +230,21 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
       <section className="lanes-section">
         <div className="section-header">
           <h3>Lanes Entering Junction</h3>
-          <div
+          <div 
             className="info-icon"
             onMouseEnter={() => setShowEnteringTooltip(true)}
             onMouseLeave={() => setShowEnteringTooltip(false)}
           >
             <Info size={20} />
-            {showEnteringTooltip && <div className="tooltip">Maximum of 5 lanes per direction</div>}
+            {showEnteringTooltip && (
+              <div className="tooltip">
+                Maximum of 5 lanes per direction.
+                Total number of lanes entering and exiting must be equal
+              </div>
+            )}
           </div>
         </div>
-        {Object.keys(laneData.entering).map((direction) => (
+        {Object.keys(laneData.entering).map(direction => (
           <div key={`entering-${direction}`} className="input-group">
             <label>From {direction.charAt(0).toUpperCase() + direction.slice(1)}:</label>
             <input
@@ -245,6 +252,8 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
               value={laneData.entering[direction]}
               onChange={(e) => handleInputChange('entering', direction, e.target.value)}
               className={`lane-input ${isValid ? 'valid' : 'invalid'}`}
+              min="0"
+              max="5"
               min="0"
               max="5"
             />
@@ -256,16 +265,21 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
       <section className="lanes-section">
         <div className="section-header">
           <h3>Lanes Exiting Junction</h3>
-          <div
+          <div 
             className="info-icon"
             onMouseEnter={() => setShowExitingTooltip(true)}
             onMouseLeave={() => setShowExitingTooltip(false)}
           >
             <Info size={20} />
-            {showExitingTooltip && <div className="tooltip">Maximum of 5 lanes per direction</div>}
+            {showExitingTooltip && (
+              <div className="tooltip">
+                Maximum of 5 lanes per direction.
+                Total number of lanes entering and exiting must be equal
+              </div>
+            )}
           </div>
         </div>
-        {Object.keys(laneData.exiting).map((direction) => (
+        {Object.keys(laneData.exiting).map(direction => (
           <div key={`exiting-${direction}`} className="input-group">
             <label>To {direction.charAt(0).toUpperCase() + direction.slice(1)}:</label>
             <input
@@ -273,6 +287,8 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
               value={laneData.exiting[direction]}
               onChange={(e) => handleInputChange('exiting', direction, e.target.value)}
               className={`lane-input ${isValid ? 'valid' : 'invalid'}`}
+              min="0"
+              max="5"
               min="0"
               max="5"
             />
