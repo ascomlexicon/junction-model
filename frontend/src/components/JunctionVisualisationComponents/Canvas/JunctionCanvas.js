@@ -160,6 +160,8 @@ const JunctionCanvas = ({ config }) => {
   
   // Draw lanes based on config
   const drawLanes = (ctx, config, centreX, centreY, images) => {
+    console.log(config.vphNorth);
+
     const directions = ['North', 'South', 'East', 'West'];
     const busData = config.busCycleLaneDuration;
 
@@ -250,8 +252,7 @@ const JunctionCanvas = ({ config }) => {
     }
 
     // Draws the other car lanes depending on vph data and how many are left
-    if (carData && lanesToDraw > 0) {
-      console.log(carData);
+    if (Object.keys(carData).length !== 0) {
       drawEnteringCarLanes(ctx, centreX, centreY, lanesToDraw, images, specialImg, carData, enteringLaneWidth, 'North');
       // drawExitingCarLanes(ctx, centreX, centreY, images);
     }
