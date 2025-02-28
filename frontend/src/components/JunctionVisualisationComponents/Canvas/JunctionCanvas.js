@@ -160,14 +160,12 @@ const JunctionCanvas = ({ config }) => {
   
   // Draw lanes based on config
   const drawLanes = (ctx, config, centreX, centreY, images) => {
-    console.log(config.vphNorth);
-
     const directions = ['North', 'South', 'East', 'West'];
     const busData = config.busCycleLaneDuration;
 
     directions.forEach(direction => {
-      const enteringLanes = config.lanesEntering[`${direction.toLowerCase()}`] || 1;
-      const exitingLanes = config.lanesExiting[`${direction.toLowerCase()}`] || 1;
+      const enteringLanes = config.lanesEntering[`${direction.toLowerCase()}`] || 0;
+      const exitingLanes = config.lanesExiting[`${direction.toLowerCase()}`] || 0;
       const hasLeftTurn = config.leftTurnLanes[`${direction.toLowerCase()}`] || false;
 
       // Draw lanes based on direction
@@ -222,8 +220,8 @@ const JunctionCanvas = ({ config }) => {
   const drawNorthQuarter = (ctx, centreX, centreY, entering, exiting, hasLeftTurn, images, busData, carData, busOrBike) => {
     // Entering lane widths = ((height of box junction)/2) / number of entering lanes
     // Exiting lane widths = ((height of box junction)/2) / number of exiting lanes
-    const enteringLaneWidth = (350 / 2) / entering;
-    const exitingLaneWidth = (350 / 2) / exiting;
+    const enteringLaneWidth = entering !== 0 ? (350 / 2) / entering : null;
+    const exitingLaneWidth = exiting !== 0 ? (350 / 2) / exiting : null;
     let lanesToDraw = entering
 
     // const laneWidth = 40; 
@@ -327,7 +325,7 @@ const JunctionCanvas = ({ config }) => {
     ctx.save();
     ctx.translate(centreX + 175, startY + 135);
     ctx.rotate(-Math.PI / 2);
-    ctx.drawImage(images.trafficLight, -20, -40, 20, 40);
+    ctx.drawImage(images.trafficLight, -40, -40, 20, 40);
     ctx.restore();
   };
 
@@ -361,7 +359,7 @@ const JunctionCanvas = ({ config }) => {
     ctx.save();
     ctx.translate(centreX - 95, startY - 175);
     ctx.rotate(Math.PI / 2);
-    ctx.drawImage(images.trafficLight, 20, 40, 20, 40);
+    ctx.drawImage(images.trafficLight, 0, 40, 20, 40);
     ctx.restore();
   };
   
