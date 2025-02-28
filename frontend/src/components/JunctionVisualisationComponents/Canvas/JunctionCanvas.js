@@ -69,6 +69,7 @@ const JunctionCanvas = ({ config }) => {
     // Load all required images
     const images = {
       boxJunction: new Image(),
+      roadMarking: new Image(),
       pedestrianCrossing: new Image(),
       leftOnlyArrow: new Image(),
       rightOnlyArrow: new Image(),
@@ -81,6 +82,7 @@ const JunctionCanvas = ({ config }) => {
     
     // Set image sources
     images.boxJunction.src = require('../images/box.png');
+    images.roadMarking.src = require('../images/roadMarking.png');
     images.pedestrianCrossing.src = require('../images/crossing.png');
     images.leftOnlyArrow.src = require('../images/left.png');
     images.rightOnlyArrow.src = require('../images/right.png');
@@ -229,6 +231,50 @@ const JunctionCanvas = ({ config }) => {
       default:
         break
     }
+  };
+
+  const drawExitingCarLanes = (ctx, centreX, centreY, lanesToDraw, img, width, direction) => {
+    // TODO: 
+      // 1. Place north and south in same y position, flipped x about the centre
+      // 2. Place east and west in same x position, flipped y about the centre
+    switch (direction) {
+      case 'North':
+        for (let i = 0; i < lanesToDraw; i++) {
+          ctx.save()
+          ctx.translate(centreX - 134 - 20, centreY - 274 + 50); // Translate to the center of the image
+          ctx.rotate(Math.PI); // Rotate by 180 degrees
+          ctx.drawImage(img, -20 - (i * width), -50, width, 100);
+          ctx.restore()
+        }
+        break
+      case 'South':
+        for (let i = 0; i < lanesToDraw; i++) {
+          ctx.drawImage(img, centreX + 174 - (i * width), centreY + 174, width, 100);
+        }
+        break
+      case 'East':
+        for (let i = 0; i < lanesToDraw; i++) {
+          ctx.save();
+          ctx.translate(centreX - 275, centreY + 135);
+          ctx.rotate(Math.PI/2);
+          ctx.scale(-1, -1); // Flips image again, can be read by oncoming traffic from the east
+          ctx.drawImage(img, -40 - (i * width), -100, width, 100);
+          ctx.restore();
+        }
+        break
+      case 'West':
+        for (let i = 0; i < lanesToDraw; i++) {
+          ctx.save();
+          ctx.translate(centreX + 173, centreY - 175);
+          ctx.rotate(-Math.PI/2);
+          ctx.scale(-1, -1);
+          ctx.drawImage(img, 0 - (i * width), 0, width, 100);
+          ctx.restore();
+        }
+        break
+      default:
+        break
+    }
   }
 
   // Cars coming from the north
@@ -259,16 +305,14 @@ const JunctionCanvas = ({ config }) => {
       lanesToDraw--;
     }
 
-    // Draws the other car lanes depending on vph data and how many are left
+    // Draw car lanes only if the user has entered data
     if (entering !== 0) {
+      // Draws the other car lanes depending on vph data and how many are left
       drawEnteringCarLanes(ctx, centreX, centreY, lanesToDraw, images, specialImg, carData, enteringLaneWidth, 'North');
 
-      // ctx.save();
-      // drawExitingCarLanes(ctx, centreX, centreY, images);
-      // ctx.restore();
+      // Draws car lanes exiting the junction northbound
+      drawExitingCarLanes(ctx, centreX, centreY, exiting, images.roadMarking, exitingLaneWidth, 'North');
     }
-
-    // Draws car lanes exiting the junction northbound
   };
 
   // Cars coming from the south
@@ -295,9 +339,10 @@ const JunctionCanvas = ({ config }) => {
 
     if (entering !== 0) {
       drawEnteringCarLanes(ctx, centreX, centreY, lanesToDraw, images, specialImg, carData, enteringLaneWidth, 'South');
-    }
 
-    // Draw straight arrows
+      // Draws car lanes exiting the junction northbound
+      drawExitingCarLanes(ctx, centreX, centreY, exiting, images.roadMarking, exitingLaneWidth, 'South');
+    }
   };
   
   // Cars coming from the east
@@ -329,6 +374,9 @@ const JunctionCanvas = ({ config }) => {
 
     if (entering !== 0) {
       drawEnteringCarLanes(ctx, centreX, centreY, lanesToDraw, images, specialImg, carData, enteringLaneWidth, 'East');
+
+      // Draws car lanes exiting the junction northbound
+      drawExitingCarLanes(ctx, centreX, centreY, exiting, images.roadMarking, exitingLaneWidth, 'East');
     }
 
   };
@@ -362,6 +410,9 @@ const JunctionCanvas = ({ config }) => {
 
     if (entering !== 0) {
       drawEnteringCarLanes(ctx, centreX, centreY, lanesToDraw, images, specialImg, carData, enteringLaneWidth, 'West');
+
+      // Draws car lanes exiting the junction northbound
+      drawExitingCarLanes(ctx, centreX, centreY, exiting, images.roadMarking, exitingLaneWidth, 'West');
     }
 
   };
