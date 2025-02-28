@@ -69,7 +69,6 @@ const JunctionCanvas = ({ config }) => {
     // Load all required images
     const images = {
       boxJunction: new Image(),
-      trafficLight: new Image(),
       pedestrianCrossing: new Image(),
       leftOnlyArrow: new Image(),
       rightOnlyArrow: new Image(),
@@ -82,7 +81,6 @@ const JunctionCanvas = ({ config }) => {
     
     // Set image sources
     images.boxJunction.src = require('../images/box.png');
-    images.trafficLight.src = require('../images/trafficLights.png');
     images.pedestrianCrossing.src = require('../images/crossing.png');
     images.leftOnlyArrow.src = require('../images/left.png');
     images.rightOnlyArrow.src = require('../images/right.png');
@@ -189,7 +187,6 @@ const JunctionCanvas = ({ config }) => {
     });
   };
   
-  // FIXME: When drawing the north case, lights start to move away from their position, and not sure why
   const drawEnteringCarLanes = (ctx, centreX, centreY, lanesToDraw, images, isSpecialLane, carData, width, direction) => {
     // Values in carData (ie vphX for directionX) determines what images are drawn in what order
 
@@ -258,13 +255,6 @@ const JunctionCanvas = ({ config }) => {
     }
 
     // Draws car lanes exiting the junction northbound
-    
-    // Draw traffic light
-    ctx.save();
-    ctx.translate(centreX + 155, centreY - 175); // Translate to the top right corner of the box
-    ctx.rotate(Math.PI); // Rotate by 180 degrees
-    ctx.drawImage(images.trafficLight, -20, -40, 20, 40); // Draw the image centered at the new origin
-    ctx.restore();
   };
 
   // Cars coming from the south
@@ -290,9 +280,6 @@ const JunctionCanvas = ({ config }) => {
     }
 
     // Draw straight arrows
-    
-    // Draw traffic light
-    ctx.drawImage(images.trafficLight, centreX - 175, centreY + 135, 20, 40);
   };
   
   // Cars coming from the east
@@ -320,13 +307,6 @@ const JunctionCanvas = ({ config }) => {
       ctx.drawImage(specialImg, -40, -100, 40, 100);
       ctx.restore();
     }
-    
-    // Draw traffic light
-    ctx.save();
-    ctx.translate(centreX + 175, startY + 135);
-    ctx.rotate(-Math.PI / 2);
-    ctx.drawImage(images.trafficLight, -40, -40, 20, 40);
-    ctx.restore();
   };
 
   // Cars coming from the west
@@ -354,13 +334,6 @@ const JunctionCanvas = ({ config }) => {
       ctx.drawImage(specialImg, 0, 0, 40, 100);
       ctx.restore();
     }
-    
-    // Draw traffic light
-    ctx.save();
-    ctx.translate(centreX - 95, startY - 175);
-    ctx.rotate(Math.PI / 2);
-    ctx.drawImage(images.trafficLight, 0, 40, 20, 40);
-    ctx.restore();
   };
   
   // Draw pedestrian crossings if enabled
