@@ -189,8 +189,6 @@ const JunctionCanvas = ({ config }) => {
   const drawEnteringCarLanes = (ctx, centreX, centreY, lanesToDraw, images, isSpecialLane, carData, width, direction) => {
     // Values in carData (ie vphX for directionX) determines what images are drawn in what order
 
-    // TODO: If isSpecialLane, move the pointer to start further away from edge - DEALING WITH NOW
-
     // TODO: Lanes need to be different depending on (a) number of lanes and (b) vph data (ie traffic flow, see first comment of the function)
     let xOffset = isSpecialLane ? width : 0;
     switch (direction) {
