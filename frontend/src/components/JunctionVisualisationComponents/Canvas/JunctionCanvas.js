@@ -59,7 +59,7 @@ const JunctionCanvas = ({ config }) => {
   
   // Effect to redraw the canvas whenever the config or dimensions change
   useEffect(() => {
-    if (!config) return;
+    if (!config || !config.lanesEntering) return;
     
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -133,6 +133,7 @@ const JunctionCanvas = ({ config }) => {
       
       // Draw pedestrian crossings if enabled
       // FIXME: If crossings is configured, positions of lanes should be further away from the box junction
+        // Not a priority right now
       if (config.isCrossings) {
         drawPedestrianCrossings(ctx, centreX, centreY, images);
       }
@@ -170,7 +171,7 @@ const JunctionCanvas = ({ config }) => {
       // Draw lanes based on direction
       switch(direction) {
         case 'North':
-          drawNorthQuarter(ctx, centreX, centreY, enteringLanes, exitingLanes, hasLeftTurn, images, busData, config.isBusOrCycle);
+          drawNorthQuarter(ctx, centreX, centreY, enteringLanes, exitingLanes, hasLeftTurn, images, busData, config.vphNorth, config.isBusOrCycle);
           break;
         case 'South':
           drawSouthQuarter(ctx, centreX, centreY, enteringLanes, exitingLanes, hasLeftTurn, images, busData, config.isBusOrCycle);
@@ -187,13 +188,46 @@ const JunctionCanvas = ({ config }) => {
     });
   };
   
+  // FIXME: When drawing the north case, lights start to move away from their position, and not sure why
+  const drawEnteringCarLanes = (ctx, centreX, centreY, lanesToDraw, images, isSpecialLane, carData, width, direction) => {
+    // Values in carData (ie vphX for directionX) determines what images are drawn in what order
+
+    // TODO: If isSpecialLane, move the pointer to start further away from edge
+
+    console.log("WHY ARE YOU RENDERING SO QUICKLY");
+
+    switch (direction) {
+      case 'North':
+        for (let i = 0; i < lanesToDraw; i++) {
+          ctx.save();
+          ctx.translate(centreX + 134 + 20, centreY - 274 + 50); // Translate to the center of the image
+          ctx.rotate(Math.PI); // Rotate by 180 degrees
+          ctx.drawImage(images.straightArrow, -20 + (i * 5), -50 + (i * 5), width, 100);
+          ctx.restore();
+        }
+        break
+      case 'South':
+        break
+      case 'East':
+        break
+      case 'West':
+        break
+      default:
+        break
+    }
+  }
+
   // Cars coming from the north
-  const drawNorthQuarter = (ctx, centreX, centreY, entering, exiting, hasLeftTurn, images, busData, busOrBike) => {
-    // TODO: Entering lane widths = ((height of box junction)/2) / number of entering lanes
-    // TODO: Exiting lane widths = ((height of box junction)/2) / number of exiting lanes
-    const laneWidth = 40; 
-    const totalEnteringWidth = entering * laneWidth;
-    const startX = centreX + (totalEnteringWidth / 2);
+  const drawNorthQuarter = (ctx, centreX, centreY, entering, exiting, hasLeftTurn, images, busData, carData, busOrBike) => {
+    // Entering lane widths = ((height of box junction)/2) / number of entering lanes
+    // Exiting lane widths = ((height of box junction)/2) / number of exiting lanes
+    const enteringLaneWidth = (350 / 2) / entering;
+    const exitingLaneWidth = (350 / 2) / exiting;
+    let lanesToDraw = entering
+
+    // const laneWidth = 40; 
+    // const totalEnteringWidth = entering * laneWidth;
+    // const startX = centreX + (totalEnteringWidth / 2);
 
     let specialImg = null;
 
@@ -210,9 +244,19 @@ const JunctionCanvas = ({ config }) => {
       ctx.save();
       ctx.translate(centreX + 134 + 20, centreY - 274 + 50); // Translate to the center of the image
       ctx.rotate(Math.PI); // Rotate by 180 degrees
-      ctx.drawImage(specialImg, -20, -50, 40, 100); // Draw the image centered at the new origin
+      ctx.drawImage(specialImg, -20, -50, enteringLaneWidth, 100); // Draw the image centered at the new origin
       ctx.restore();
+      lanesToDraw--;
     }
+
+    // Draws the other car lanes depending on vph data and how many are left
+    if (carData && lanesToDraw > 0) {
+      console.log(carData);
+      drawEnteringCarLanes(ctx, centreX, centreY, lanesToDraw, images, specialImg, carData, enteringLaneWidth, 'North');
+      // drawExitingCarLanes(ctx, centreX, centreY, images);
+    }
+
+    // Draws car lanes exiting the junction northbound
     
     // Draw traffic light
     ctx.save();
