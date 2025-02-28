@@ -132,8 +132,6 @@ const JunctionCanvas = ({ config }) => {
       drawLanes(ctx, config, centreX, centreY, images);
       
       // Draw pedestrian crossings if enabled
-      // FIXME: If crossings is configured, positions of lanes should be further away from the box junction
-        // Not a priority right now
       if (config.isCrossings) {
         drawPedestrianCrossings(ctx, centreX, centreY, images);
       }
@@ -336,7 +334,7 @@ const JunctionCanvas = ({ config }) => {
 
     // Draws the special lane only if the user has specified left, bus or cycle lane
     if (specialImg) {
-      ctx.drawImage(specialImg, centreX - 174, centreY + 174, 40, 100);
+      ctx.drawImage(specialImg, centreX - 174, centreY + 174, enteringLaneWidth, 100);
       lanesToDraw--;
     }
 
@@ -370,7 +368,7 @@ const JunctionCanvas = ({ config }) => {
       ctx.translate(centreX + 275, centreY + 135);
       ctx.rotate(Math.PI/2);
       ctx.scale(-1, -1); // Flips image again, can be read by oncoming traffic from the east
-      ctx.drawImage(specialImg, -40, -100, 40, 100);
+      ctx.drawImage(specialImg, -40, -100, enteringLaneWidth, 100);
       ctx.restore();
       lanesToDraw--;
     }
@@ -406,7 +404,7 @@ const JunctionCanvas = ({ config }) => {
       ctx.translate(centreX - 173, centreY - 175);
       ctx.rotate(-Math.PI/2);
       ctx.scale(-1, -1);
-      ctx.drawImage(specialImg, 0, 0, 40, 100);
+      ctx.drawImage(specialImg, 0, 0, enteringLaneWidth, 100);
       ctx.restore();
       lanesToDraw--;
     }
@@ -423,23 +421,23 @@ const JunctionCanvas = ({ config }) => {
   // Draw pedestrian crossings if enabled
   const drawPedestrianCrossings = (ctx, centreX, centreY, images) => {
     // North crossing
-    ctx.drawImage(images.pedestrianCrossing, centreX - 175, centreY - 197, 350, 22);
+    ctx.drawImage(images.pedestrianCrossing, centreX - 175, centreY - 185, 350, 10);
 
     // South crossing
-    ctx.drawImage(images.pedestrianCrossing, centreX - 175, centreY + 174, 350, 22);
+    ctx.drawImage(images.pedestrianCrossing, centreX - 175, centreY + 174, 350, 10);
     
     // East crossing
     ctx.save();
     ctx.translate(centreX + 22, centreY - 160);
     ctx.rotate(Math.PI/2);
-    ctx.drawImage(images.pedestrianCrossing, -15, -175, 350, 22);
+    ctx.drawImage(images.pedestrianCrossing, -15, -163, 350, 10);
     ctx.restore(); // Restores to previously saved state (used so centre of canvas is now (0,0) again)
 
     // West crossing
     ctx.save();
     ctx.translate(centreX - 21, centreY + 160);
     ctx.rotate(-Math.PI/2);
-    ctx.drawImage(images.pedestrianCrossing, -15, -175, 350, 22);
+    ctx.drawImage(images.pedestrianCrossing, -15, -163, 350, 10);
     ctx.restore();
   };
   
