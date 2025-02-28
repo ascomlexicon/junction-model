@@ -253,31 +253,46 @@ const JunctionCanvas = ({ config }) => {
         if (needStraight) {
           laneConfiguration.push('straightLeft');
         } else {
+          // TODO: Might get rid of this, as this is a left-only lane, which is special
+          // However, are we saying that "left-only lane" as an option clicked by the user is different to just routing traffic left??
           laneConfiguration.push('left');
         }
+      } else if (needRight && !needStraight) {
+        laneConfiguration.push('right');
       } else {
         laneConfiguration.push('straight');
       }
       
-      // Middle lanes (if any)
-      // TODO: Issue with this, what happens if there are 5 lanes but NO forward-going traffic
-      for (let i = 1; i < numLanes - 1; i++) {
-        laneConfiguration.push('straight');
+      // Middle lanes (only applicable in the case of >2)
+      if (numLanes != 2) {
+        for (let i = 1; i < numLanes - 1; i++) {
+          if (needStraight) {
+            laneConfiguration.push('straight');
+          } else {
+            if (needLeft && needRight) {
+              // Left and right, no straight traffic
+            } else if (needLeft) {
+              // Left only
+              laneConfiguration.push('left');
+            } else {
+              // Right only
+              laneConfiguration.push('right');
+            }
+          }
+        }
       }
       
       // Right lane handling
-      // TODO: Think through this logic again (Mr C), the if statement will never fail to run
-      // as a condition of being inside the outer one is that >= 2 already
-      if (numLanes > 1) {
-        if (needRight) {
-          if (needStraight) {
-            laneConfiguration.push('straightRight');
-          } else {
-            laneConfiguration.push('right');
-          }
+      if (needRight) {
+        if (needStraight) {
+          laneConfiguration.push('straightRight');
         } else {
-          laneConfiguration.push('straight');
+          laneConfiguration.push('right');
         }
+      } else if (needLeft && !needStraight) {
+        laneConfiguration.push('left');
+      } else {
+        laneConfiguration.push('straight');
       }
     }
 
@@ -309,13 +324,7 @@ const JunctionCanvas = ({ config }) => {
     // the road
     let xOffset = isSpecialLane ? width : 0;
     
-    // TODO: This will need to include whether there is a special lane or not
-      // |laneLayout| = lanesToDraw always
-      // This means the layout is only about cars, we don't care about the special
-      // lane because that is always fixed to the left
-      // Furthermore, our assumptions are ensuring that forms are not submitted if junctions are invalid
-      // So, there will never be the case that here, we will have to deal with left turning traffic
-      // with a bus lane, causing a collision
+    // Configuration of road markings for regular cars
     const laneLayout = determineLayout(lanesToDraw, carData, direction);
 
     // Draw each junction quarter
@@ -574,7 +583,7 @@ const JunctionCanvas = ({ config }) => {
       ref={containerRef} 
       style={{ 
         width: '100%', 
-        height: '70vh',
+        height: '100vh',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center'
@@ -585,8 +594,8 @@ const JunctionCanvas = ({ config }) => {
         width={dimensions.width} 
         height={dimensions.height} 
         style={{ 
-          border: '1px solid #000', 
-          backgroundColor: '#f0f0f0',
+          // border: '1px solid #000', 
+          // backgroundColor: '#f0f0f0',
           maxWidth: '100%',
           maxHeight: '100%'
         }}
