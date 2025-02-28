@@ -260,12 +260,12 @@ const JunctionCanvas = ({ config }) => {
         break;
       case 'East':
         ctx.save();
-        ctx.translate(centreX + 275, centreY + 135);
-        ctx.rotate(Math.PI/2);
-        ctx.scale(-1, -1); // Flips image again, can be read by oncoming traffic from the east
+        ctx.translate(centreX - 173, centreY - 175);
+        ctx.rotate(-Math.PI/2);
+        ctx.scale(-1, -1);
 
         for (let i = 0; i < lanesToDraw; i++) {
-          ctx.drawImage(img, -40 - (i * width), -100, width, 100);
+          ctx.drawImage(img, 0 + (i * width), -448, width, 100);
         }
 
         ctx.restore();
