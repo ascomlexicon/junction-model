@@ -258,8 +258,10 @@ const JunctionCanvas = ({ config }) => {
           laneConfiguration.push('left');
         }
       } else if (needRight && !needStraight) {
+        // When all traffic routed only to the right
         laneConfiguration.push('right');
       } else {
+        // When all traffic routed straight only
         laneConfiguration.push('straight');
       }
       
@@ -271,6 +273,11 @@ const JunctionCanvas = ({ config }) => {
           } else {
             if (needLeft && needRight) {
               // Left and right, no straight traffic
+              if (i < 2) {
+                laneConfiguration.push('left');
+              } else {
+                laneConfiguration.push('right');
+              }
             } else if (needLeft) {
               // Left only
               laneConfiguration.push('left');
@@ -290,8 +297,10 @@ const JunctionCanvas = ({ config }) => {
           laneConfiguration.push('right');
         }
       } else if (needLeft && !needStraight) {
+        // When all traffic routed only to the left
         laneConfiguration.push('left');
       } else {
+        // When all traffic routed straight only
         laneConfiguration.push('straight');
       }
     }
