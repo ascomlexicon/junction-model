@@ -40,6 +40,8 @@ const ProjectLeaderboard = () => {
     //   .catch(function (error) {
     //     // Handle error
     //   });
+
+    // setSelectedProject(project);
   };
   
   return (
