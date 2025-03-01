@@ -46,7 +46,7 @@ const ScoreBreakdown = ({ junctionName, score }) => {
             </tbody>
         </table>
         
-
+        {/* TODO: Spelling mistake, but change in stylesheet also */}
         <div className='styles.confiurableParameters'>
             <h3>Configurable Parameters</h3>
             <DisplayLaneCustomisation />

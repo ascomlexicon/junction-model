@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './DisplayLaneCustomisation.module.css';
 
+// TODO: Remove all this parameter bs and change it so only the laneCustomisation stuff from the received JSON file is loaded
 const DisplayLaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllForms }) => {
   // Dummy data for display
   const dummyData = {
