@@ -132,14 +132,16 @@ function MainPage() {
           junctionImage
         });
       }
-
-      // TODO: MAKE THIS AN IF...ELSE IF...ELSE WHERE THE ELSE HANDLES THE JUNCTION IMAGE
       
       setCompleteJSON(newJSON);
     };
 
     // Save data associated with each form
     const saveFormData = (formName, data) => {
+      if (formName === 'junctionView') {
+        updateJSON();
+      };
+      
       setFormData(prev => ({
         ...prev,
         [formName]: data
@@ -291,9 +293,6 @@ function MainPage() {
             <div className="junction-visual">
                 {/* Add canvas */}
                 <JunctionCanvas config={completeJSON} />
-
-                {/* <div className='image'>Junction graphicIMAGE</div>
-                <div className='Leaderboard'>See junction Leaderboard</div> */}
             </div>
             <div className='menu'>
                 <Sidebar setActiveStep={setActiveStep} activeStep={activeStep} />
@@ -301,7 +300,7 @@ function MainPage() {
                     {renderForm()}
                 </div>
             </div>
-            <JSONViewer data={completeJSON} />
+            {/* <JSONViewer data={completeJSON} /> */}
         </div>
     );
 }

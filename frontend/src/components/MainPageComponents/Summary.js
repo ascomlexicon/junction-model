@@ -2,6 +2,7 @@ import React from 'react';
 import './Summary.css';
 import BackButton from '../ButtonComponents/BackButton';
 import { useNavigate } from 'react-router-dom';
+import ImageRenderer from '../../pages/ImageRenderer.js'
 import axios from 'axios';
 
 function Summary({ formData, setActiveStep, saveFormData }) {
@@ -59,10 +60,10 @@ function Summary({ formData, setActiveStep, saveFormData }) {
     //   console.error('Error sending JSON data:', error);
     // }
 
-    const canvas = document.querySelector('.junction-visual');
-    const junctionImageData = canvas.toDataURL('image/png');
-
-    saveFormData('junctionView', { junctionImageData });
+    // Save the finalised junction so it can be viewed by user later
+    const canvas = document.querySelector('.junction-graphic');
+    const junctionImage = canvas.toDataURL('image/png');
+    saveFormData('junctionView', { junctionImage });
 
     // TODO: MOVE THIS WHEN ENDPOINTS ESTABLISHED, CURRENTLY WILL REROUTE THE USER NO MATTER WHAT
     // navigate('/RankingsPage');
@@ -205,6 +206,14 @@ function Summary({ formData, setActiveStep, saveFormData }) {
       <div className="button-container">
         <BackButton onClick={handleBack} label="Back to Lane Prioritisation" />
         <button className="simulate-button" onClick={handleClick}>Run Simulation</button>
+      </div>
+
+      {/* TODO: DELETE THIS, WAS FOR TESTING PURPOSES */}
+      <div className="summary-section">
+        <h3>Junction Visualization Preview</h3>
+        <div className="summary-content">
+          <ImageRenderer imageData={formData.junctionImage} />
+        </div>
       </div>
     </div>
   );

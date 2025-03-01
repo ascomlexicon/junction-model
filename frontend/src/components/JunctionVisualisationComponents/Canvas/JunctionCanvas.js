@@ -600,6 +600,7 @@ const JunctionCanvas = ({ config }) => {
     >
       <canvas 
         ref={canvasRef} 
+        className='junction-graphic'
         width={dimensions.width} 
         height={dimensions.height} 
         style={{ 
