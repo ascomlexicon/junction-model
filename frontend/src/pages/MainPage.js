@@ -60,8 +60,7 @@ function MainPage() {
       trafficFlow: {},
       laneCustomisation: {},
       pedestrianCrossing: {},
-      lanePrioritisation: {},
-      junctionView: {}
+      lanePrioritisation: {}
     });
     
     // Update JSON whenever form data changes
@@ -124,24 +123,12 @@ function MainPage() {
           lanePrioritisation
         });
       }
-
-      if (Object.keys(formData.junctionView).length > 0) {
-        const { junctionImage } = formData.junctionView;
-
-        Object.assign(newJSON, {
-          junctionImage
-        });
-      }
       
       setCompleteJSON(newJSON);
     };
 
     // Save data associated with each form
     const saveFormData = (formName, data) => {
-      if (formName === 'junctionView') {
-        updateJSON();
-      };
-      
       setFormData(prev => ({
         ...prev,
         [formName]: data
@@ -152,8 +139,6 @@ function MainPage() {
     const resetForm = (formName) => {
       const newJSON = { ...completeJSON };
 
-      // Don't need to reset for the junctionView case, as this image is only saved 
-      // just before the data is sent to the backend
       switch (formName) {
         case 'trafficFlow':
           newJSON.vphNorth = {};
@@ -223,8 +208,7 @@ function MainPage() {
         trafficFlow: {},
         laneCustomisation: {},
         pedestrianCrossing: {},
-        lanePrioritisation: {},
-        junctionView: {}
+        lanePrioritisation: {}
       });
       // Optionally navigate back to first step
       setActiveStep(0);
@@ -279,7 +263,6 @@ function MainPage() {
                   <Summary 
                     formData={completeJSON}
                     setActiveStep={setActiveStep}
-                    saveFormData={saveFormData}
                   />
                 );
             default:
