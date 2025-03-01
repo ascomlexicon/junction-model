@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './JunctionRankings.module.css';
 import JunctionList from './JunctionList';
 import ScoreBreakdown from './ScoreBreakdown';
 import { Link } from "react-router-dom";
 import VPHDisplayForm from './VPHDisplayForm';
+import axios from 'axios';
 
+// TODO: When retrieving the ranking for the junction for the first time, it needs to be the same junction that the user configured
+  // Need to remember this somehow so we make the correct request
 const JunctionRankings = () => {
     // Keep track of both selected junction and junctions state
     const [selectedJunction, setSelectedJunction] = useState(null);
