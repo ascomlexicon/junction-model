@@ -73,11 +73,12 @@
     padding: 15px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     cursor: pointer;
+    transition: background-color 0.2s;
   }
   
   .highlighted {
-    background-color: #FFD700;
-    color: black;
+    background-color: #00BFFF;
+    color: #001F3F;
   }
   
   .score {

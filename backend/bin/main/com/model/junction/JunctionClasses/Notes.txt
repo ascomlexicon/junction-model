@@ -51,10 +51,6 @@ into account the fact that we will have to implement a pedestrian crossing where
 minute for example it will be maybe once a minute and then with the crossing, add another minute to it so that the next call takes place in two.
 
 */
-
-
-
-
 // Car entering task using recursive scheduling
         Runnable enterCarsTask = new Runnable() {
             @Override
