@@ -6,45 +6,29 @@ import { Link } from "react-router-dom";
 import VPHDisplayForm from './VPHDisplayForm';
 import axios from 'axios';
 
-// TODO: When retrieving the ranking for the junction for the first time, it needs to be the same junction that the user configured
-  // Need to remember this somehow so we make the correct request - FIXME: SEE NOTES ON MACBOOK/ICLOUD
 const JunctionRankings = ({ firstConfiguredJunction }) => {
+  // Used whilst the data is being served from the backend
+  // When this is true, display a loading screen so the user is still engaged
+  const [loading, setLoading] = useState(true);
+  
+  const [error, setError] = useState(null);
+
   // Keep track of both selected junction and junctions state
-  // const [selectedJunction, setSelectedJunction] = useState(null);
+  const [selectedJunction, setSelectedJunction] = useState(null);
 
-  const [selectedJunction, setSelectedJunction] = useState((firstConfiguredJunction) => {
-    // TODO: Make get request for the default junction passed
-      // Use the information in firstConfiguredJunction to get the junction info the user has just configured
-    // axios.get('___')
-    //   .then(function (response) {
-    //     // handle success
-    //     console.log(response);
-    //   })
-    //   .catch(function (error) {
-    //     // handle error
-    //     console.log(error);
-    //   });
-  });
+  const [junctions, setJunctions] = useState([]);
 
-  const [junctions, setJunctions] = useState([
-    // TODO: make a get request which gets all of the junctions in use (ie fetch the project for the junction that was just configured) 
-    // axios.get('___')
-    //   .then(function (response) {
-    //     // handle success
-    //     console.log(response);
-    //   })
-    //   .catch(function (error) {
-    //     // handle error
-    //     console.log(error);
-    //   });
-  ]);
-
+  // This code runs once when the component mounts
+  // TODO: Lookup how to do multiple GET requests at once (should be a tab in a tab group on Kians mac)
   useEffect(() => {
-    // This code runs once when the component mounts
+    // FIXME: GET Request for the name of all junctions with the same vph data as firstConfiguredJunction
+      // Ie get all junctions from the same project as firstConfiguredJunction
     // axios.get('your_api_endpoint/junctions')
     //   .then(function (response) {
     //     // handle success
-    //     setProjects(response.data);
+    // TODO: Add all junctions to a list with their name and the attribute of highlight : false first
+      // Eg = [{name : "Junction 1", highlight: false}, {name : "Junction 2", highlight: false}]
+    //     setJunctions(response.data);
     //     setLoading(false);
     //   })
     //   .catch(function (error) {
@@ -52,6 +36,18 @@ const JunctionRankings = ({ firstConfiguredJunction }) => {
     //     console.log(error);
     //     setError(error);
     //     setLoading(false);
+    //   });
+
+    // FIXME: GET Request for data of firstConfiguredJunction
+    // axios.get('___')
+    //   .then(function (response) {
+    //     // handle success
+    // TODO: Change the value of highlights to true for the relevant junction
+    //     setSelectedJunction(response.data)
+    //   })
+    //   .catch(function (error) {
+    //     // handle error
+    //     console.log(error);
     //   });
   }, []);
 
@@ -61,17 +57,20 @@ const JunctionRankings = ({ firstConfiguredJunction }) => {
       ...junction,
       highlight: junction.name === selectedJunction.name
     }));
-    
-    // TODO: Add a getrequest here, see above
+
+    setJunctions(updatedJunctions);
+
+    // FIXME: GET Request for selectedJunction
     // axios.get('___')
     //   .then(function (response) {
-    //     setSelectedProject(response.data);
-    //   }) 
+    //     // handle success
+    // TODO: Change the value of highlights to true for the relevant junction
+    //     setSelectedJunction(response.data)
+    //   })
     //   .catch(function (error) {
-    //     // Handle error
+    //     // handle error
+    //     console.log(error);
     //   });
-    setJunctions(updatedJunctions);
-    setSelectedJunction(selectedJunction);
   };
   
   return (
