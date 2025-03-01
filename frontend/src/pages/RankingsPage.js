@@ -1,9 +1,9 @@
 import React from "react";
 import JunctionRankings from "../components/RankingsPageComponents/JunctionRankings";
 
-function RankingsPage(){
+function RankingsPage({junctionData}){
     return(
-        <JunctionRankings/>
+        <JunctionRankings firstConfiguredJunction={junctionData}/>
     )
 }
 
