@@ -6,14 +6,46 @@ import SaveNextButton from '../ButtonComponents/SaveNextButton';
 import ResetAllButton from '../ButtonComponents/ResetAllButton';
 import BackButton from '../ButtonComponents/BackButton';
 
+// formData is now the JSON file containing information for the junction the user is configuring
 function TrafficFlow({ setActiveStep, saveFormData, resetForm, resetAllForms, formData = {} }) {
     // Initialize state with passed formData or default values
     const [trafficData, setTrafficData] = useState(() => {
-        return Object.keys(formData).length > 0 ? formData : {
-            north: { south: 0, east: 0, west: 0 },
-            south: { north: 0, east: 0, west: 0 },
-            east: { north: 0, south: 0, west: 0 },
-            west: { north: 0, south: 0, east: 0 }
+        // Check if formData has the expected JSON structure
+        if (formData.vphNorth && formData.vphSouth && formData.vphEast && formData.vphWest) {
+            // Transform JSON format into the component's internal format
+            return {
+                north: {
+                    enter: formData.vphNorth?.enter || 0, 
+                    south: formData.vphNorth?.exitSouth || 0,
+                    east: formData.vphNorth?.exitEast || 0,
+                    west: formData.vphNorth?.exitWest || 0
+                },
+                south: {
+                    enter: formData.vphSouth?.enter || 0,
+                    north: formData.vphSouth?.exitNorth || 0,
+                    east: formData.vphSouth?.exitEast || 0,
+                    west: formData.vphSouth?.exitWest || 0
+                },
+                east: {
+                    enter: formData.vphEast?.enter || 0,
+                    north: formData.vphEast?.exitNorth || 0,
+                    south: formData.vphEast?.exitSouth || 0,
+                    west: formData.vphEast?.exitWest || 0
+                },
+                west: {
+                    enter: formData.vphWest?.enter || 0,
+                    north: formData.vphWest?.exitNorth || 0,
+                    south: formData.vphWest?.exitSouth || 0,
+                    east: formData.vphWest?.exitEast || 0
+                }
+            };
+        }
+        // Default empty state if no valid formData
+        return {
+            north: { enter: 0, south: 0, east: 0, west: 0 },
+            south: { enter: 0, north: 0, east: 0, west: 0 },
+            east: { enter: 0, north: 0, south: 0, west: 0 },
+            west: { enter: 0, north: 0, south: 0, east: 0 }
         };
     });
 
@@ -41,6 +73,38 @@ function TrafficFlow({ setActiveStep, saveFormData, resetForm, resetAllForms, fo
         setIsValid(hasTraffic);
     };
 
+    // Convert traffic data to required JSON format
+    const formatTrafficDataToJSON = () => {
+        const formatDirectionData = (direction, data) => {
+            const exits = {
+                north: { key: 'exitNorth', value: parseInt(data.north) || 0 },
+                south: { key: 'exitSouth', value: parseInt(data.south) || 0 },
+                east: { key: 'exitEast', value: parseInt(data.east) || 0 },
+                west: { key: 'exitWest', value: parseInt(data.west) || 0 }
+            };
+
+            const entry = {
+                enter: parseInt(data.enter) || 0
+            };
+
+            // Add all exits except for the entry direction
+            Object.entries(exits).forEach(([exitDir, exitData]) => {
+                if (exitDir !== direction) {
+                    entry[exitData.key] = exitData.value;
+                }
+            });
+
+            return entry;
+        };
+
+        return {
+            vphNorth: formatDirectionData('north', trafficData.north),
+            vphSouth: formatDirectionData('south', trafficData.south),
+            vphEast: formatDirectionData('east', trafficData.east),
+            vphWest: formatDirectionData('west', trafficData.west)
+        };
+    };
+
     // Handle input updates from JunctionInput components
     const handleInputUpdate = (incomingDirection, data) => {
         setTrafficData(prevData => ({
@@ -53,17 +117,18 @@ function TrafficFlow({ setActiveStep, saveFormData, resetForm, resetAllForms, fo
     const handleResetVPH = () => {
         resetForm('trafficFlow');
         setTrafficData({
-            north: { south: 0, east: 0, west: 0 },
-            south: { north: 0, east: 0, west: 0 },
-            east: { north: 0, south: 0, west: 0 },
-            west: { north: 0, south: 0, east: 0 }
+            north: { enter: 0, south: 0, east: 0, west: 0 },
+            south: { enter: 0, north: 0, east: 0, west: 0 },
+            east: { enter: 0, north: 0, south: 0, west: 0 },
+            west: { enter: 0, north: 0, south: 0, east: 0 }
         });
     };
 
     // Save and proceed to next form
     const handleSaveNext = () => {
         if (isValid) {
-            saveFormData('trafficFlow', trafficData);
+            const formattedData = formatTrafficDataToJSON();
+            saveFormData('trafficFlow', formattedData);
             setActiveStep(1); // Move to Lane Customisation
         }
     };
