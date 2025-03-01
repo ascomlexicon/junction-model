@@ -131,14 +131,16 @@ function MainPage() {
           junctionImage
         });
       }
-
-      // TODO: MAKE THIS AN IF...ELSE IF...ELSE WHERE THE ELSE HANDLES THE JUNCTION IMAGE
       
       setCompleteJSON(newJSON);
     };
 
     // Save data associated with each form
     const saveFormData = (formName, data) => {
+      if (formName === 'junctionView') {
+        updateJSON();
+      };
+      
       setFormData(prev => ({
         ...prev,
         [formName]: data
@@ -295,7 +297,7 @@ function MainPage() {
                     {renderForm()}
                 </div>
             </div>
-            <JSONViewer data={completeJSON} />
+            {/* <JSONViewer data={completeJSON} /> */}
         </div>
     );
 }

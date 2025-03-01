@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../LeaderboardComponents/ProjectLeaderboard.module.css';
 import { Link } from "react-router-dom";
 import VPHDataDisplay from './VPHDisplayData'; // Import the VPH data component
@@ -15,7 +15,7 @@ const ProjectLeaderboard = () => {
   // Project clicked on by the user, initially set to null
   const [selectedProject, setSelectedProject] = useState(null);
 
-  useEffect(() => {
+  // useEffect(() => {
     // This code runs once when the component mounts
     // axios.get('your_api_endpoint/projects')
     //   .then(function (response) {
@@ -29,7 +29,7 @@ const ProjectLeaderboard = () => {
     //     setError(error);
     //     setLoading(false);
     //   });
-  }, []);
+  // }, []);
 
   const handleSelectProject = (project) => {
     // TODO: Make get request for the project passed through
