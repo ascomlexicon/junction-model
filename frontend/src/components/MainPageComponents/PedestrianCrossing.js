@@ -8,7 +8,14 @@ import ResetAllButton from '../ButtonComponents/ResetAllButton';
 function PedestrianCrossing({ setActiveStep, saveFormData, resetForm, resetAllForms, formData = {} }) {
   // Initialize state with passed formData or default values
   const [crossingData, setCrossingData] = useState(() => {
-    return Object.keys(formData).length > 0 ? formData : {
+    if (formData.isCrossings) {
+      return {
+        addCrossings: true,
+        crossingDuration: formData.crossingDuration,
+        requestsPerHour: formData.crossingRequestsPerHour,
+      };
+    }
+    return {
       addCrossings: false,
       crossingDuration: '',
       requestsPerHour: '',
@@ -44,9 +51,12 @@ function PedestrianCrossing({ setActiveStep, saveFormData, resetForm, resetAllFo
   };
 
   const handleAddCrossingsChange = (e) => {
+    const checked = e.target.checked;
     setCrossingData(prev => ({
       ...prev,
-      addCrossings: e.target.checked
+      addCrossings: checked,
+      crossingDuration: checked ? prev.crossingDuration : 0,
+      requestsPerHour: checked ? prev.requestsPerHour : 0,
     }));
   };
 
@@ -64,10 +74,32 @@ function PedestrianCrossing({ setActiveStep, saveFormData, resetForm, resetAllFo
     }));
   };
 
+  // Format lane data to match required JSON structure
+  const formatPedestrianDataToJSON = () => {
+    // Determine if there are pedestrian crossings
+    const isCrossings = crossingData.addCrossings;
+
+    // Add crossing duration and requests to JSON
+    const crossingDuration = (() => {
+      return parseInt(crossingData.crossingDuration);
+    })();
+
+    const crossingRequestsPerHour = (() => {
+      return parseInt(crossingData.requestsPerHour);
+    })();
+
+    return {
+      isCrossings,
+      crossingDuration,
+      crossingRequestsPerHour
+    };
+  };
+
   // Handle button click events
   const handleSaveNext = () => {
     if (isValid) {
-      saveFormData('pedestrianCrossing', crossingData);
+      const formattedData = formatPedestrianDataToJSON(); // Formats data to JSON
+      saveFormData('pedestrianCrossing', formattedData);
       setActiveStep(3); // Move to the next step (LanePrioritisation)
     }
   };

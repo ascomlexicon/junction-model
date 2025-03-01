@@ -1,0 +1,99 @@
+{
+  // Array of directions where there is a left turn lane
+  // [North, South, East, West] - in this example, only North has a left turn lane
+  "leftTurnLanes": {
+      "north": true,
+      "south": false,
+      "east": false,
+      "west": false
+  },
+  // [North, South, East, West] - never null
+  "lanesEntering": {
+      "north": 2,
+      "south": 3,
+      "east": 4,
+      "west": 1
+    },
+  "lanesExiting": {
+      "north": 1,
+      "south": 2,
+      "east": 3,
+      "west": 4
+    },
+  // Either bus, cycle or none
+  "isBusOrCycle": "bus",
+  "busCycleLaneDuration": [
+    {
+      "vphSpecialNorth": [
+        {
+          "enter": 200,
+          "exitSouth": 100,
+          "exitEast": 50,
+          "exitWest": 50
+        }
+      ],
+      "vphSpecialSouth": [
+        {
+          "enter": 200,
+          "exitNorth": 100,
+          "exitEast": 50,
+          "exitWest": 50
+        }
+      ],
+      // Left empty if there is no bus lane coming from that direction
+      "vphSpecialEast": [],
+      "vphSpecialWest": [],
+    }
+  ],
+  // If no prioritisation, then empty array
+  // Here, east is priority 1, and west is priority 4
+  "lanePrioritisation": ["east", "south", "north", "west"],
+  // Pedestrian crossings
+  "isCrossings": true,
+  "crossingDuration": 1,
+  "crossingRequestsPerHour": 10,
+  // vph for each direction has its own entry, always non-empty
+  "vphNorth": [
+    {
+      "enter": 200,
+      "exitSouth": 100,
+      "exitEast": 50,
+      "exitWest": 50
+    }
+  ],
+  "vphSouth": [
+    {
+      "enter": 200,
+      "exitNorth": 100,
+      "exitEast": 50,
+      "exitWest": 50
+    }
+  ],
+  "vphEast": [
+    {
+      "enter": 200,
+      "exitSouth": 100,
+      "exitNorth": 50,
+      "exitWest": 50
+    }
+  ],
+  "vphWest": [
+    {
+      "enter": 200,
+      "exitSouth": 100,
+      "exitEast": 50,
+      "exitNorth": 50
+    }
+  ]
+}
+
+
+1. store vph for each direction
+7. duration of crossing
+8. number of crossings per hour
+9. lane prioritisation order
+6. bus/cycle lane duration AND directions
+5. bus/cycle lanes
+2. lanes entering the junction
+3. lanes exiting the junction
+4. left turn lanes

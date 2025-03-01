@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/MainPage.css';
 import Sidebar from '../components/MainPageComponents/SideBar';
 import TrafficFlow from '../components/MainPageComponents/TrafficFlow';
@@ -6,6 +6,7 @@ import LaneCustomisation from '../components/MainPageComponents/LaneCustomisatio
 import PedestrianCrossing from '../components/MainPageComponents/PedestrianCrossing';
 import LanePrioritisation from '../components/MainPageComponents/LanePrioritisation';
 import Summary from '../components/MainPageComponents/Summary';
+import JSONViewer from './JSONViewer';
 
 // New component for instructions
 const InstructionsPage = () => {
@@ -28,6 +29,30 @@ const InstructionsPage = () => {
 function MainPage() {
     const [activeStep, setActiveStep] = useState(-1);
     
+    // Initialize complete JSON structure
+    // See jsonFileFormat.json for notes on structure
+    const [completeJSON, setCompleteJSON] = useState({
+      leftTurnLanes: {},
+      lanesEntering: {},
+      lanesExiting: {},
+      isBusOrCycle: "none",
+      busCycleLaneDuration : {
+        "vphSpecialNorth": 0,
+        "vphSpecialSouth": 0,
+        "vphSpecialEast": 0,
+        "vphSpecialWest": 0
+      },
+      enablePrioritisation: false,
+      lanePrioritisation: [],
+      isCrossings: false,
+      crossingDuration: 0,
+      crossingRequestsPerHour: 0,
+      vphNorth: {},
+      vphSouth: {},
+      vphEast: {},
+      vphWest: {}
+    });
+    
     // State to store form data
     const [formData, setFormData] = useState({
       trafficFlow: {},
@@ -36,7 +61,74 @@ function MainPage() {
       lanePrioritisation: {}
     });
     
+    // Update JSON whenever form data changes
+    useEffect(() => {
+      updateJSON();
+    }, [formData]);
+
+    // Function to update complete JSON
+    const updateJSON = () => {
+      const newJSON = { ...completeJSON };
+      
+      // Update with traffic flow data if it exists
+      if (Object.keys(formData.trafficFlow).length > 0) {
+        Object.assign(newJSON, formData.trafficFlow);
+      }
+      
+      if (Object.keys(formData.laneCustomisation).length > 0) {
+        // Update lane customisation fields
+        const {
+            leftTurnLanes,
+            lanesEntering,
+            lanesExiting,
+            isBusOrCycle,
+            busCycleLaneDuration
+        } = formData.laneCustomisation;
+        
+        Object.assign(newJSON, {
+            leftTurnLanes,
+            lanesEntering,
+            lanesExiting,
+            isBusOrCycle,
+            busCycleLaneDuration
+        });
+      }
+
+      if (Object.keys(formData.pedestrianCrossing).length > 0) {
+        // Update pedestrian crossing fields
+        const {
+            isCrossings,
+            crossingDuration,
+            crossingRequestsPerHour
+        } = formData.pedestrianCrossing;
+        
+        Object.assign(newJSON, {
+          isCrossings,
+          crossingDuration,
+          crossingRequestsPerHour,
+        });
+      }
+
+      if (Object.keys(formData.lanePrioritisation).length > 0) {
+        const {
+            enablePrioritisation,
+            lanePrioritisation,
+        } = formData.lanePrioritisation;
+
+        // Update lane prioritisation field
+        Object.assign(newJSON, {
+          enablePrioritisation,
+          lanePrioritisation
+        });
+      }
+      
+      setCompleteJSON(newJSON);
+    };
+
     // Save form data
+    // TODO: Change the way in which this is used
+      //  This saves multiple copies of the JSON file in the state
+      // We only need to save the form data once, need to rethink design, starting with traffic flow
     const saveFormData = (formName, data) => {
       setFormData(prev => ({
         ...prev,
@@ -44,16 +136,74 @@ function MainPage() {
       }));
     };
     
-    // Reset specific form
+    // Reset specific form and JSON data for the form
     const resetForm = (formName) => {
+      const newJSON = { ...completeJSON };
+
+      switch (formName) {
+        case 'trafficFlow':
+          newJSON.vphNorth = {};
+          newJSON.vphSouth = {};
+          newJSON.vphEast = {};
+          newJSON.vphWest = {};
+          break;
+        case 'laneCustomisation':
+          newJSON.leftTurnLanes = {};
+          newJSON.lanesEntering = {};
+          newJSON.lanesExiting = {};
+          newJSON.isBusOrCycle = "none";
+          newJSON.busCycleLaneDuration = {
+            "vphSpecialNorth": 0,
+            "vphSpecialSouth": 0,
+            "vphSpecialEast": 0,
+            "vphSpecialWest": 0
+          };
+          break;
+        case 'pedestrianCrossing':
+          newJSON.isCrossings = false;
+          newJSON.crossingDuration = 0;
+          newJSON.crossingRequestsPerHour = 0;
+          break;
+        case 'lanePrioritisation':
+          newJSON.enablePrioritisation = false;
+          newJSON.lanePrioritisation = [];
+          break;
+        default:
+          break;
+      }
+
+      setCompleteJSON(newJSON);
+
       setFormData(prev => ({
         ...prev,
         [formName]: {}
       }));
     };
     
-    // Reset all forms
+    // Reset all forms, as well as the JSON file being configured
     const resetAllForms = () => {
+      // Resets all JSON information
+      setCompleteJSON({
+        leftTurnLanes: {},
+        lanesEntering: {},
+        lanesExiting: {},
+        isBusOrCycle: "none",
+        busCycleLaneDuration : {
+          "vphSpecialNorth": 0,
+          "vphSpecialSouth": 0,
+          "vphSpecialEast": 0,
+          "vphSpecialWest": 0
+        },
+        lanePrioritisation: [],
+        isCrossings: false,
+        crossingDuration: 0,
+        crossingRequestsPerHour: 0,
+        vphNorth: {},
+        vphSouth: {},
+        vphEast: {},
+        vphWest: {}
+      });
+
       setFormData({
         trafficFlow: {},
         laneCustomisation: {},
@@ -73,8 +223,9 @@ function MainPage() {
                   <TrafficFlow 
                     setActiveStep={setActiveStep}
                     saveFormData={saveFormData}
+                    resetForm={resetForm}
                     resetAllForms={resetAllForms}
-                    formData={formData.trafficFlow}
+                    formData = {completeJSON}
                   />
                 );
             case 1:
@@ -84,7 +235,7 @@ function MainPage() {
                     saveFormData={saveFormData}
                     resetForm={resetForm}
                     resetAllForms={resetAllForms}
-                    formData={formData.laneCustomisation}
+                    formData={completeJSON}
                   />
                 );
             case 2:
@@ -94,7 +245,7 @@ function MainPage() {
                     saveFormData={saveFormData}
                     resetForm={resetForm}
                     resetAllForms={resetAllForms}
-                    formData={formData.pedestrianCrossing}
+                    formData={completeJSON}
                   />
                 );
             case 3:
@@ -104,13 +255,13 @@ function MainPage() {
                     saveFormData={saveFormData}
                     resetForm={resetForm}
                     resetAllForms={resetAllForms}
-                    formData={formData.lanePrioritisation}
+                    formData={completeJSON}
                   />
                 );
             case 4:
                 return (
                   <Summary 
-                    formData={formData}
+                    formData={completeJSON}
                     setActiveStep={setActiveStep}
                   />
                 );
@@ -123,8 +274,7 @@ function MainPage() {
         <div className="container">
             <h1 className='main-title'>Junction Simulator</h1>
             <div className="junction-visual">
-                <div className='image'>{/* Junction graphic */}IMAGE</div>
-                <div className='Leaderboard'>See junction Leaderboard</div>
+                {/* Junction graphic */}
             </div>
             <div className='menu'>
                 <Sidebar setActiveStep={setActiveStep} activeStep={activeStep} />
@@ -132,6 +282,7 @@ function MainPage() {
                     {renderForm()}
                 </div>
             </div>
+            {/* <JSONViewer data={completeJSON} /> */}
         </div>
     );
 }
