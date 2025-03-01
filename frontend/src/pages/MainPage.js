@@ -124,6 +124,14 @@ function MainPage() {
         });
       }
 
+      if (Object.keys(formData.junctionView).length > 0) {
+        const { junctionImage } = formData.junctionView;
+
+        Object.assign(newJSON, {
+          junctionImage
+        });
+      }
+
       // TODO: MAKE THIS AN IF...ELSE IF...ELSE WHERE THE ELSE HANDLES THE JUNCTION IMAGE
       
       setCompleteJSON(newJSON);
