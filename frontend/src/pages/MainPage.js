@@ -50,7 +50,8 @@ function MainPage() {
       vphNorth: {},
       vphSouth: {},
       vphEast: {},
-      vphWest: {}
+      vphWest: {},
+      // junctionImage: TODO: NOT SURE HOW TO DEFINE THIS YET
     });
     
     // State to store form data
@@ -121,6 +122,8 @@ function MainPage() {
           lanePrioritisation
         });
       }
+
+      // TODO: MAKE THIS AN IF...ELSE IF...ELSE WHERE THE ELSE HANDLES THE JUNCTION IMAGE
       
       setCompleteJSON(newJSON);
     };

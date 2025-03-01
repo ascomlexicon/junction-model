@@ -2,35 +2,63 @@ import React from 'react';
 import './Summary.css';
 import BackButton from '../ButtonComponents/BackButton';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function Summary({ formData, setActiveStep }) {
   const navigate = useNavigate();
 
   const handleClick = async (e) => {
     e.preventDefault();
-    try {
-      // TODO: Set API endpoint URL
-      const response = await fetch('/api/simulate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
-  
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      
-      // Optionally, handle the returned data:
-      // TODO: This is only for testing
-      const result = await response.json();
-      console.log('Simulation result:', result);
-      
-      // TODO: Will probably have an intermediate page which is a loading screen
-      navigate('/RankingsPage');
-    } catch (error) {
-      console.error('Error sending JSON data:', error);
-    }
 
+    // TODO: Before sending data to backend, need to convert canvas to an image and store that data
+
+    // TODO: Replace ___ with API endpoint
+    // axios.post("___", formData).then((response) => {
+    //   console.log(response.status, response.data.token);
+    // });
+
+    // TODO: Use this rather than to ensure we are catching errors
+    // axios
+    //   .post("___", formData)
+    //   .then((response) => {
+    //     console.log(response);
+    //   })
+    //   .catch((error) => {
+    //     if (error.response) {
+    //       console.log(error.response);
+    //       console.log("server responded");
+    //     } else if (error.request) {
+    //       console.log("network error");
+    //     } else {
+    //       console.log(error);
+    //     }
+    //   });
+
+    // try {
+    //   // TODO: Set API endpoint URL instead of /api/simulate
+    //   const response = await fetch('/api/simulate', {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify(formData)
+    //   });
+  
+    //   if (!response.ok) {
+    //     throw new Error('Network response was not ok');
+    //   }
+      
+    //   // Optionally, handle the returned data:
+    //   // TODO: This is only for testing
+    //   const result = await response.json();
+    //   console.log('Simulation result:', result);
+      
+    //   // TODO: Implement loading screen component as in https://www.youtube.com/watch?v=00lxm_doFYw
+    //   // TODO: Will need to pass this JSON file as a default, then make the GET request for this first, I think?
+    //   navigate('/RankingsPage');
+    // } catch (error) {
+    //   console.error('Error sending JSON data:', error);
+    // }
+
+    // TODO: DELETE THIS WHEN ENDPOINTS ESTABLISHED, CURRENTLY WILL REROUTE THE USER NO MATTER WHAT
     navigate('/RankingsPage');
   };
   
