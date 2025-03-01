@@ -5,24 +5,29 @@ import { useNavigate } from 'react-router-dom';
 import ImageRenderer from '../../pages/ImageRenderer.js'
 import axios from 'axios';
 
-function Summary({ formData, setActiveStep, saveFormData }) {
+function Summary({ formData, setActiveStep }) {
   const navigate = useNavigate();
 
   const handleClick = async (e) => {
     e.preventDefault();
 
-    // TODO: Before sending data to backend, need to convert canvas to an image and store that data
+    // Convert the canvas element to a data URL
+    const canvas = document.querySelector('.junction-graphic');
+    if (!canvas) {
+      console.error("Canvas element not found");
+      return;
+    }
+    const junctionImage = canvas.toDataURL('image/png');
 
-    // TODO: Replace ___ with API endpoint
-    // axios.post("___", formData).then((response) => {
-    //   console.log(response.status, response.data.token);
-    // });
+    // Attach image to the current configuration of the junction
+    formData.junctionImage = junctionImage;
 
-    // TODO: Use this rather than to ensure we are catching errors
+    // FIXME: POST JSON object to the backend for processing
     // axios
-    //   .post("___", formData)
+    //   .post("___", finalJunctionConfig)
     //   .then((response) => {
-    //     console.log(response);
+    //     console.log(response.status);
+    //     navigate('/RankingsPage', { state: { finalJunctionConfig } });
     //   })
     //   .catch((error) => {
     //     if (error.response) {
@@ -34,39 +39,6 @@ function Summary({ formData, setActiveStep, saveFormData }) {
     //       console.log(error);
     //     }
     //   });
-
-    // FIXME: FORGET ABOUT THIS WAY, AXIOS SEEMS BETTER
-    // try {
-    //   // TODO: Set API endpoint URL instead of /api/simulate
-    //   const response = await fetch('/api/simulate', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify(formData)
-    //   });
-  
-    //   if (!response.ok) {
-    //     throw new Error('Network response was not ok');
-    //   }
-      
-    //   // Optionally, handle the returned data:
-    //   // TODO: This is only for testing
-    //   const result = await response.json();
-    //   console.log('Simulation result:', result);
-      
-    //   // TODO: Implement loading screen component as in https://www.youtube.com/watch?v=00lxm_doFYw
-    //   // TODO: Will need to pass this JSON file as a default, then make the GET request for this first, I think?
-    //   navigate('/RankingsPage');
-    // } catch (error) {
-    //   console.error('Error sending JSON data:', error);
-    // }
-
-    // Save the finalised junction so it can be viewed by user later
-    const canvas = document.querySelector('.junction-graphic');
-    const junctionImage = canvas.toDataURL('image/png');
-    saveFormData('junctionView', { junctionImage });
-
-    // TODO: MOVE THIS WHEN ENDPOINTS ESTABLISHED, CURRENTLY WILL REROUTE THE USER NO MATTER WHAT
-    // navigate('/RankingsPage');
   };
   
   const handleBack = () => {
