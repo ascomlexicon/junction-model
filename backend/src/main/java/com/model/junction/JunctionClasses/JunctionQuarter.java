@@ -104,13 +104,16 @@ public class JunctionQuarter{
     }
 
     // TODO: There's a lot of variable type mismatch here. What are the types that you actually want?
-    public String getBusLaneDirection(){
-        return busLaneDirection;
-    }
+    
     public void setBusLaneDirection(String busLaneDirection){
         this.busLaneDirection = busLaneDirection;
     }
-    public String getCycleLaneDirection(){
+
+    public arrayList<Integer> getBusLaneDirection(){
+        return busLaneDirection;
+    }
+
+    public ArrayList<Integer> getCycleLaneDirection(){
         return cycleLaneDirection;
     }
     public void setCycleLaneDirection(String cycleLaneDirection){
