@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Info } from 'lucide-react';
+import { Info, AlertCircle } from 'lucide-react';
 import './LaneCustomisation.css';
 import SaveNextButton from '../ButtonComponents/SaveNextButton';
 import BackButton from '../ButtonComponents/BackButton';
@@ -70,11 +70,92 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
   const [showTooltip, setShowTooltip] = useState(false);
   const [showEnteringTooltip, setShowEnteringTooltip] = useState(false);
   const [showExitingTooltip, setShowExitingTooltip] = useState(false);
+  const [showWarning, setShowWarning] = useState(false);
+  const [warningMessage, setWarningMessage] = useState('');
   
+  // Track left-turning traffic from each direction
+  const [leftTurningTraffic, setLeftTurningTraffic] = useState({
+    north: false,
+    south: false,
+    east: false,
+    west: false,
+  });
 
   useEffect(() => {
     validateLanes();
+    checkLeftTurningTraffic();
   }, [laneData.entering, laneData.exiting]);
+  
+  // Function to check if there is left-turning traffic from each direction
+  const checkLeftTurningTraffic = () => {
+    const leftTurns = {
+      north: true,
+      south: hasLeftTurningTraffic('south'),
+      east: hasLeftTurningTraffic('east'),
+      west: hasLeftTurningTraffic('west'),
+    };
+    
+    setLeftTurningTraffic(leftTurns);
+    
+    // Reset any left turn lanes or special lanes if there's left turning traffic in that direction
+    Object.keys(leftTurns).forEach(direction => {
+      if (leftTurns[direction] && (laneData.leftTurn[direction] || laneData.busLane[direction] || laneData.cycleLane[direction])) {
+        setLaneData(prev => ({
+          ...prev,
+          leftTurn: {
+            ...prev.leftTurn,
+            [direction]: false,
+          },
+          busLane: {
+            ...prev.busLane,
+            [direction]: false,
+          },
+          cycleLane: {
+            ...prev.cycleLane,
+            [direction]: false,
+          },
+          busCycleLaneDuration: {
+            ...prev.busCycleLaneDuration,
+            [`vphSpecial${direction.charAt(0).toUpperCase() + direction.slice(1)}`]: 0,
+          },
+        }));
+      }
+    });
+  };
+  
+  // Helper function to determine if there's left-turning traffic from a direction
+  const hasLeftTurningTraffic = (direction) => {
+    if (!formData || !formData[`vph${direction.charAt(0).toUpperCase() + direction.slice(1)}`]) {
+      return false;
+    }
+    
+    const trafficData = formData[`vph${direction.charAt(0).toUpperCase() + direction.slice(1)}`];
+    
+    // Map directions to their left turn exits
+    const leftTurnMap = {
+      north: 'exitWest',
+      south: 'exitEast',
+      east: 'exitNorth',
+      west: 'exitSouth',
+    };
+    
+    // Check if trafficData is an array
+    if (Array.isArray(trafficData)) {
+      return trafficData.some(entry => 
+        entry[leftTurnMap[direction]] && entry[leftTurnMap[direction]] > 0
+      );
+    } 
+    // If it's an object with values
+    else if (typeof trafficData === 'object' && trafficData !== null) {
+      // Check if any value in the object represents left turning traffic
+      return Object.values(trafficData).some(entry => 
+        entry && typeof entry === 'object' && 
+        entry[leftTurnMap[direction]] && entry[leftTurnMap[direction]] > 0
+      );
+    }
+    
+    return false;
+  };
 
   const validateLanes = () => {
     const totalEntering = Object.values(laneData.entering).reduce(
@@ -102,6 +183,13 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
   };
 
   const handleLeftTurnChange = (direction) => {
+    // Check if there's left-turning traffic in this direction
+    if (leftTurningTraffic[direction]) {
+      setWarningMessage(`Cannot add a left turn lane for ${direction} direction. There is already traffic turning left in the Traffic Flow settings. Please remove the left turn traffic first.`);
+      setShowWarning(true);
+      return;
+    }
+    
     setLaneData((prev) => ({
       ...prev,
       leftTurn: {
@@ -112,6 +200,13 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
   };
 
   const handleSpecialLaneChange = (type, direction) => {
+    // Check if there's left-turning traffic in this direction
+    if (leftTurningTraffic[direction]) {
+      setWarningMessage(`Cannot add a ${type === 'busLane' ? 'bus' : 'cycle'} lane for ${direction} direction. There is already traffic turning left in the Traffic Flow settings. Please remove the left turn traffic first.`);
+      setShowWarning(true);
+      return;
+    }
+    
     setLaneData((prev) => {
       let newBusLane = { ...prev.busLane };
       let newCycleLane = { ...prev.cycleLane };
@@ -221,9 +316,30 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
     });
   };
 
+  const closeWarning = () => {
+    setShowWarning(false);
+    setWarningMessage('');
+  };
+
   return (
     <div className="lane-customization">
       <h2>Lane Customization</h2>
+
+      {/* Warning Popup */}
+      {showWarning && (
+        <div className="warning-popup">
+          <div className="warning-content">
+            <div className="warning-header">
+              <AlertCircle size={24} color="red" />
+              <h4>Configuration Conflict</h4>
+            </div>
+            <p>{warningMessage}</p>
+            <button className="close-warning" onClick={closeWarning}>
+              OK
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Lanes Entering Section */}
       <section className="lanes-section">
@@ -286,13 +402,17 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
         <h3>Left Turn Lanes</h3>
         {Object.keys(laneData.leftTurn).map((direction) => (
           <div key={`left-turn-${direction}`} className="checkbox-group">
-            <label>
+            <label className={leftTurningTraffic[direction] ? 'disabled-option' : ''}>
               <input
                 type="checkbox"
                 checked={laneData.leftTurn[direction]}
                 onChange={() => handleLeftTurnChange(direction)}
+                disabled={leftTurningTraffic[direction]}
               />
               {direction.charAt(0).toUpperCase() + direction.slice(1)}
+              {leftTurningTraffic[direction] && (
+                <span className="disabled-label"> (Left-turning traffic exists)</span>
+              )}
             </label>
           </div>
         ))}
@@ -310,7 +430,8 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
             <Info size={20} />
             {showTooltip && (
               <div className="tooltip">
-                Only one type of special lane (bus or cycle) can be selected per direction
+                Only one type of special lane (bus or cycle) can be selected per direction.
+                Cannot be added where left-turning traffic exists.
               </div>
             )}
           </div>
@@ -320,13 +441,17 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
             <h4>Bus Lanes</h4>
             {Object.keys(laneData.busLane).map((direction) => (
               <div key={`bus-${direction}`} className="checkbox-group">
-                <label>
+                <label className={leftTurningTraffic[direction] ? 'disabled-option' : ''}>
                   <input
                     type="checkbox"
                     checked={laneData.busLane[direction]}
                     onChange={() => handleSpecialLaneChange('busLane', direction)}
+                    disabled={leftTurningTraffic[direction]}
                   />
                   {direction.charAt(0).toUpperCase() + direction.slice(1)}
+                  {leftTurningTraffic[direction] && (
+                    <span className="disabled-label"> (Left-turning traffic exists)</span>
+                  )}
                 </label>
               </div>
             ))}
@@ -335,13 +460,17 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
             <h4>Cycle Lanes</h4>
             {Object.keys(laneData.cycleLane).map((direction) => (
               <div key={`cycle-${direction}`} className="checkbox-group">
-                <label>
+                <label className={leftTurningTraffic[direction] ? 'disabled-option' : ''}>
                   <input
                     type="checkbox"
                     checked={laneData.cycleLane[direction]}
                     onChange={() => handleSpecialLaneChange('cycleLane', direction)}
+                    disabled={leftTurningTraffic[direction]}
                   />
                   {direction.charAt(0).toUpperCase() + direction.slice(1)}
+                  {leftTurningTraffic[direction] && (
+                    <span className="disabled-label"> (Left-turning traffic exists)</span>
+                  )}
                 </label>
               </div>
             ))}
