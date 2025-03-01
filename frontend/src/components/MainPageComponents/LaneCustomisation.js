@@ -70,8 +70,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
   const [showTooltip, setShowTooltip] = useState(false);
   const [showEnteringTooltip, setShowEnteringTooltip] = useState(false);
   const [showExitingTooltip, setShowExitingTooltip] = useState(false);
-  const [showEnteringTooltip, setShowEnteringTooltip] = useState(false);
-  const [showExitingTooltip, setShowExitingTooltip] = useState(false);
+  
 
   useEffect(() => {
     validateLanes();
@@ -249,8 +248,6 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
               className={`lane-input ${isValid ? 'valid' : 'invalid'}`}
               min="0"
               max="5"
-              min="0"
-              max="5"
             />
           </div>
         ))}
@@ -277,8 +274,6 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
               value={laneData.exiting[direction]}
               onChange={(e) => handleInputChange('exiting', direction, e.target.value)}
               className={`lane-input ${isValid ? 'valid' : 'invalid'}`}
-              min="0"
-              max="5"
               min="0"
               max="5"
             />
