@@ -8,10 +8,10 @@ public class Junction {
   private Double score;
   
   // TODO: Are EastJunction etc supposed to implement the abstract class JunctionQuarter?
-  private Junction East;
-  private Junction West;
-  private Junction South;
-  private Junction North;
+  private JunctionQuarter East;
+  private JunctionQuarter West;
+  private JunctionQuarter South;
+  private JunctionQuarter North;
   private String JunctionName;
     
 
