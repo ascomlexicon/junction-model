@@ -8,12 +8,13 @@ import axios from 'axios';
 
 // TODO: When retrieving the ranking for the junction for the first time, it needs to be the same junction that the user configured
   // Need to remember this somehow so we make the correct request - FIXME: SEE NOTES ON MACBOOK/ICLOUD
-const JunctionRankings = () => {
+const JunctionRankings = ({ firstConfiguredJunction }) => {
   // Keep track of both selected junction and junctions state
   // const [selectedJunction, setSelectedJunction] = useState(null);
 
-  const [selectedJunction, setSelectedJunction] = useState(() => {
-    // TODO: Make get request for the default junction passed 
+  const [selectedJunction, setSelectedJunction] = useState((firstConfiguredJunction) => {
+    // TODO: Make get request for the default junction passed
+      // Use the information in firstConfiguredJunction to get the junction info the user has just configured
     // axios.get('___')
     //   .then(function (response) {
     //     // handle success
@@ -23,17 +24,9 @@ const JunctionRankings = () => {
     //     // handle error
     //     console.log(error);
     //   });
-      // TODO: Optionally add a finally clause too
   });
 
   const [junctions, setJunctions] = useState([
-    // { name: 'Junction 2', score: 79, highlight: false },
-    // { name: 'Junction 1', score: 75, highlight: false },
-    // { name: 'Bus Lane Junction', score: 70, highlight: false },
-    // { name: 'Pedestrian Crossing Junction', score: 57, highlight: false },
-    // { name: 'Junction 3', score: 23, highlight: false }
-
-    
     // TODO: make a get request which gets all of the junctions in use (ie fetch the project for the junction that was just configured) 
     // axios.get('___')
     //   .then(function (response) {
@@ -44,9 +37,23 @@ const JunctionRankings = () => {
     //     // handle error
     //     console.log(error);
     //   });
-    // TODO: Optionally add a finally clause too
-
   ]);
+
+  useEffect(() => {
+    // This code runs once when the component mounts
+    // axios.get('your_api_endpoint/junctions')
+    //   .then(function (response) {
+    //     // handle success
+    //     setProjects(response.data);
+    //     setLoading(false);
+    //   })
+    //   .catch(function (error) {
+    //     // handle error
+    //     console.log(error);
+    //     setError(error);
+    //     setLoading(false);
+    //   });
+  }, []);
 
   const handleSelect = (selectedJunction) => {
     // Update the highlights in the junctions array
@@ -56,6 +63,13 @@ const JunctionRankings = () => {
     }));
     
     // TODO: Add a getrequest here, see above
+    // axios.get('___')
+    //   .then(function (response) {
+    //     setSelectedProject(response.data);
+    //   }) 
+    //   .catch(function (error) {
+    //     // Handle error
+    //   });
     setJunctions(updatedJunctions);
     setSelectedJunction(selectedJunction);
   };
