@@ -6,6 +6,14 @@ public class Junction {
   // Attributes
   private String name;
   private Double score;
+  
+  // TODO: Are EastJunction etc supposed to implement the abstract class JunctionQuarter?
+  private JunctionQuarter East;
+  private JunctionQuarter West;
+  private JunctionQuarter South;
+  private JunctionQuarter North;
+  private String JunctionName;
+    
 
   // Constructors
   public Junction(String junctionName) {
