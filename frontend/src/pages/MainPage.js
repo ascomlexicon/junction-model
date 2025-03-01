@@ -52,7 +52,7 @@ function MainPage() {
       vphSouth: {},
       vphEast: {},
       vphWest: {},
-      // junctionImage: TODO: NOT SURE HOW TO DEFINE THIS YET
+      junctionImage: null
     });
     
     // State to store form data
@@ -120,7 +120,7 @@ function MainPage() {
         // Update direction prioritisation field
         Object.assign(newJSON, {
           enablePrioritisation,
-          directionPrioritisation
+          lanePrioritisation
         });
       }
 
@@ -129,10 +129,7 @@ function MainPage() {
       setCompleteJSON(newJSON);
     };
 
-    // Save form data
-    // TODO: Change the way in which this is used
-      //  This saves multiple copies of the JSON file in the state
-      // We only need to save the form data once, need to rethink design, starting with traffic flow
+    // Save data associated with each form
     const saveFormData = (formName, data) => {
       setFormData(prev => ({
         ...prev,
@@ -144,6 +141,8 @@ function MainPage() {
     const resetForm = (formName) => {
       const newJSON = { ...completeJSON };
 
+      // Don't need to reset for the junctionView case, as this image is only saved 
+      // just before the data is sent to the backend
       switch (formName) {
         case 'trafficFlow':
           newJSON.vphNorth = {};
@@ -205,7 +204,8 @@ function MainPage() {
         vphNorth: {},
         vphSouth: {},
         vphEast: {},
-        vphWest: {}
+        vphWest: {},
+        junctionImage: null
       });
 
       setFormData({
@@ -267,6 +267,7 @@ function MainPage() {
                   <Summary 
                     formData={completeJSON}
                     setActiveStep={setActiveStep}
+                    saveFormData={saveFormData}
                   />
                 );
             default:
@@ -286,7 +287,7 @@ function MainPage() {
                     {renderForm()}
                 </div>
             </div>
-            {/* <JSONViewer data={completeJSON} /> */}
+            <JSONViewer data={completeJSON} />
         </div>
     );
 }

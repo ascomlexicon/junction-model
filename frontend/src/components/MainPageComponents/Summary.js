@@ -4,7 +4,7 @@ import BackButton from '../ButtonComponents/BackButton';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-function Summary({ formData, setActiveStep }) {
+function Summary({ formData, setActiveStep, saveFormData }) {
   const navigate = useNavigate();
 
   const handleClick = async (e) => {
@@ -59,8 +59,13 @@ function Summary({ formData, setActiveStep }) {
     //   console.error('Error sending JSON data:', error);
     // }
 
-    // TODO: DELETE THIS WHEN ENDPOINTS ESTABLISHED, CURRENTLY WILL REROUTE THE USER NO MATTER WHAT
-    navigate('/RankingsPage');
+    const canvas = document.querySelector('.junction-visual');
+    const junctionImageData = canvas.toDataURL('image/png');
+
+    saveFormData('junctionView', { junctionImageData });
+
+    // TODO: MOVE THIS WHEN ENDPOINTS ESTABLISHED, CURRENTLY WILL REROUTE THE USER NO MATTER WHAT
+    // navigate('/RankingsPage');
   };
   
   const handleBack = () => {
