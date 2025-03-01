@@ -105,18 +105,18 @@ public class JunctionQuarter{
 
     // TODO: There's a lot of variable type mismatch here. What are the types that you actually want?
     
-    public void setBusLaneDirection(String busLaneDirection){
+    public void setBusLaneDirection(ArrayList<Integer> busLaneDirection){
         this.busLaneDirection = busLaneDirection;
     }
 
-    public arrayList<Integer> getBusLaneDirection(){
+    public ArrayList<Integer> getBusLaneDirection(){
         return busLaneDirection;
     }
 
     public ArrayList<Integer> getCycleLaneDirection(){
         return cycleLaneDirection;
     }
-    public void setCycleLaneDirection(String cycleLaneDirection){
+    public void setCycleLaneDirection(ArrayList<Integer> cycleLaneDirection){
         this.cycleLaneDirection = cycleLaneDirection;
     }
 
@@ -146,11 +146,10 @@ public class JunctionQuarter{
      * Lanes are numbered 1 to n where n does not exceed 5
      */
 
-    // TODO: Both of these methods are private, should they not be public?
     // Also, to make storing and verifying junction configurations easier, 
     // the JSON object passed from the frontend will ONLY be passed if it is a valid
     // junction.
-    private boolean verifyLanes(){
+    public boolean verifyLanes(){
         return true;
     }
 
@@ -159,7 +158,7 @@ public class JunctionQuarter{
      * This method checks if this constraint is satisfied
      * I will need to add that the lanes specified are valid, i.e. they are either in entering or exiting lanes
      */
-    private boolean verifyBusAndCycleLanes(){
+    public boolean verifyBusAndCycleLanes(){
         if(busLaneDirection.size() == 0 || cycleLaneDirection.size() == 0){
             return true;
         }
