@@ -34,6 +34,7 @@ function Summary({ formData, setActiveStep }) {
     //     }
     //   });
 
+    // FIXME: FORGET ABOUT THIS WAY, AXIOS SEEMS BETTER
     // try {
     //   // TODO: Set API endpoint URL instead of /api/simulate
     //   const response = await fetch('/api/simulate', {
