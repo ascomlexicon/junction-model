@@ -6,7 +6,7 @@ import VPHDataDisplay from './VPHDisplayData'; // Import the VPH data component
 const ProjectLeaderboard = () => {
   // Used whilst the data is being served from the backend
   // When this is true, display a loading screen so the user is still engaged
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [error, setError] = useState(null);
 
@@ -31,18 +31,18 @@ const ProjectLeaderboard = () => {
       //     // TODO: Ask Josh about the need/use of ID
       //     id: element.name,
       //     vphData: {
-      //       north: { entering: element.north.entering, exitEast: element.north.exitEast, exitSouth: element.north.exitSouth, exitWest: element.north.exitWest },
-      //       south: { entering: element.south.entering, exitNorth: element.south.exitNorth, exitEast: element.south.exitEast, exitWest: element.south.exitWest },
-      //       east: { entering: element.east.entering, exitNorth: element.east.exitNorth, exitSouth: element.east.exitSouth, exitWest: element.east.exitWest },
-      //       west: { entering: element.west.entering, exitNorth: element.west.exitNorth, exitEast: element.west.exitEast, exitSouth: element.west.exitSouth }
+      //       north: { entering: element.vphNorth.enter, exitEast: element.vphNorth.exitEast, exitSouth: element.vphNorth.exitSouth, exitWest: element.vphNorth.exitWest },
+      //       south: { entering: element.vphSouth.entering, exitNorth: element.vphSouth.exitNorth, exitEast: element.vphSouth.exitEast, exitWest: element.vphSouth.exitWest },
+      //       east: { entering: element.vphEast.entering, exitNorth: element.vphEast.exitNorth, exitSouth: element.vphEast.exitSouth, exitWest: element.vphEast.exitWest },
+      //       west: { entering: element.vphWest.entering, exitNorth: element.vphWest.exitNorth, exitEast: element.vphWest.exitEast, exitSouth: element.vphWest.exitSouth }
       //     }
       //   };
       //   allProjects.push(project);
       // });
       // setProjects(allProjects);
-      // setLoading(false);
+      // setIsLoading(false);
 
-      // TODO: This should be the structure of allProjects from above:
+      // This should be the structure of allProjects from above:
       // const allProjects = [{ 
       //   name: 'Coventry A', 
       //   id: 'coventry-a',
@@ -68,19 +68,12 @@ const ProjectLeaderboard = () => {
     //     // handle error
     //     console.log(error);
     //     setError(error);
-    //     setLoading(false);
+    //     setIsLoading(false);
     //   });
   // }, []);
 
   const handleSelectProject = (project) => {
-    // FIXME: Make get request for the project passed clicked on
-    // axios.get('___')
-    //   .then(function (response) {
-    //     setSelectedProject(response.data);
-    //   }) 
-    //   .catch(function (error) {
-    //     // Handle error
-    //   });
+    setSelectedProject(project);
   };
   
   return (
@@ -93,29 +86,36 @@ const ProjectLeaderboard = () => {
         </Link>
       </div>
       
-      <div className={styles.container}>
-        <div className={styles.leftPanel}>
-          <h1 className={styles.title}>Projects</h1>
-          <p className={styles.subtitle}>Please select a project to view VPH data</p>
+      {isLoading && <p>Fetching data from the backend...</p>}
+      {error && <p>Error: {error.message}</p>}
+
+      {!isLoading && !error && (
+        <>
+          <div className={styles.container}>
+          <div className={styles.leftPanel}>
+            <h1 className={styles.title}>Projects</h1>
+            <p className={styles.subtitle}>Please select a project to view VPH data</p>
+            
+            <div className={styles.junctionList}>
+              {projects.map((project) => (
+                <div 
+                  key={project.id}
+                  className={`${styles.junctionRow} ${selectedProject && selectedProject.id === project.id ? styles.highlighted : ''}`}
+                  onClick={() => handleSelectProject(project)}
+                >
+                  <span>{project.name}</span>
+                </div>
+              ))}
+            </div>
+            </div>
           
-          <div className={styles.junctionList}>
-            {projects.map((project) => (
-              <div 
-                key={project.id}
-                className={`${styles.junctionRow} ${selectedProject && selectedProject.id === project.id ? styles.highlighted : ''}`}
-                onClick={() => handleSelectProject(project)}
-              >
-                <span>{project.name}</span>
-              </div>
-            ))}
+            <div className={styles.rightPanel}>
+              {/* Use the reusable VPH data component */}
+              <VPHDataDisplay projectData={selectedProject} />
+            </div>
           </div>
-        </div>
-        
-        <div className={styles.rightPanel}>
-          {/* Use the reusable VPH data component */}
-          <VPHDataDisplay projectData={selectedProject} />
-        </div>
-      </div>
+        </>
+      )};
     </div>
   );
 };
