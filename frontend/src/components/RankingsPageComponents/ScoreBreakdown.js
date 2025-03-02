@@ -6,6 +6,7 @@ import DisplayDirectionPrioritisation from './DisplayDirectionPrioritisation';
 
 
 const ScoreBreakdown = ({ junctionName, score }) => {
+    // FIXME: Need a GET request to get the information for the relevant junction
     return(
         <div className={styles.scoreBreakdown}>
           <h2 className={styles.scoreBreakdownTitle}>Score Breakdown for: {junctionName}</h2>

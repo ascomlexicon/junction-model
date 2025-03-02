@@ -22,7 +22,27 @@ const ProjectLeaderboard = () => {
     // axios.get('your_api_endpoint/projects')
     //   .then(function (response) {
     //     // handle success
-    // TODO: Convert response to a list in the following form (might not need id?)
+      // TODO: Target is to iterate through each object in the returned GET request, need to check the format of the response
+      // const allProjects = [];
+      // Response.data.array.forEach(element => {
+      //   // Convert each response to the below format
+      //   const project = {
+      //     name: element.name,
+      //     // TODO: Ask Josh about the need/use of ID
+      //     id: element.name,
+      //     vphData: {
+      //       north: { entering: element.north.entering, exitEast: element.north.exitEast, exitSouth: element.north.exitSouth, exitWest: element.north.exitWest },
+      //       south: { entering: element.south.entering, exitNorth: element.south.exitNorth, exitEast: element.south.exitEast, exitWest: element.south.exitWest },
+      //       east: { entering: element.east.entering, exitNorth: element.east.exitNorth, exitSouth: element.east.exitSouth, exitWest: element.east.exitWest },
+      //       west: { entering: element.west.entering, exitNorth: element.west.exitNorth, exitEast: element.west.exitEast, exitSouth: element.west.exitSouth }
+      //     }
+      //   };
+      //   allProjects.push(project);
+      // });
+      // setProjects(allProjects);
+      // setLoading(false);
+
+      // TODO: This should be the structure of allProjects from above:
       // const allProjects = [{ 
       //   name: 'Coventry A', 
       //   id: 'coventry-a',
@@ -42,9 +62,7 @@ const ProjectLeaderboard = () => {
       //     east: { entering: "750", exitNorth: "250", exitSouth: "210", exitWest: "290" },
       //     west: { entering: "820", exitNorth: "310", exitEast: "230", exitSouth: "280" }
       //   }
-      // }]
-    //     setProjects(allProjects);
-    //     setLoading(false);
+      // }];
     //   })
     //   .catch(function (error) {
     //     // handle error
