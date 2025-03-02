@@ -77,6 +77,7 @@ const JunctionCanvas = ({ config }) => {
       straightLeftArrow: new Image(),
       straightRightArrow: new Image(),
       leftRightArrow: new Image(),
+      allDirectionsArrow: new Image(),
       busLane: new Image(),
       cycleLane: new Image()
     };
@@ -91,6 +92,7 @@ const JunctionCanvas = ({ config }) => {
     images.straightLeftArrow.src = require('../images/straightLeft.png');
     images.straightRightArrow.src = require('../images/straightRight.png');
     images.leftRightArrow.src = require('../images/leftRight.png');
+    images.allDirectionsArrow.src = require('../images/straightLeftRight.png');
     images.busLane.src = require('../images/busLane.png');
     images.cycleLane.src = require('../images/cycleLane.png');
     
@@ -225,11 +227,8 @@ const JunctionCanvas = ({ config }) => {
 
     // 1 lane
     if (numLanes === 1) {
-      // TODO: Need to think about this case
-        // The straight only arrow would not cover it naturally, however is it too complex to have all 3?
-        // I think this should be disallowed, talk with the team
       if (needLeft && needStraight && needRight) {
-        laneConfiguration.push('straight');
+        laneConfiguration.push('straightLeftRight');
       } else if (needLeft && needStraight) {
         laneConfiguration.push('straightLeft');
       } else if (needRight && needStraight) {
@@ -323,6 +322,8 @@ const JunctionCanvas = ({ config }) => {
         return images.straightRightArrow;
       case 'leftRight':
         return images.leftRightArrow;
+      case 'straightLeftRight':
+        return images.allDirectionsArrow;
       default:
         break;
     }
