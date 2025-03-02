@@ -27,7 +27,8 @@ function Summary({ formData, setActiveStep }) {
     //   .post("___", finalJunctionConfig)
     //   .then((response) => {
     //     console.log(response.status);
-    //     navigate('/RankingsPage', { state: { finalJunctionConfig } });
+          // pass the JSON object for the configured junction to the rankings page
+    //     navigate('/RankingsPage', { state: formData });
     //   })
     //   .catch((error) => {
     //     if (error.response) {

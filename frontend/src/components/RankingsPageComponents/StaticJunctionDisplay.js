@@ -10,12 +10,13 @@ function StaticJunctionDisplay({ incomingDirection, outgoingDirection1, outgoing
     [outgoingDirection3.toLowerCase()]: generateRandomTraffic()
   };
 
+  // FIXME: Don't need this, just get the .enter attribute for a given vph
   const totalTraffic = Object.values(displayValues).reduce((sum, value) => sum + value, 0);
 
   return (
-    <div className={styles.junctionDisplay}> {/* ✅ Apply CSS Module */}
+    <div className={styles.junctionDisplay}>
       <div className={styles.incomingSection}>
-        <h3 className={styles.directionHeading}>Entering</h3>
+        <h3 className={styles.directionHeading}>Entering from the {incomingDirection}</h3>
         <div className={styles.staticDisplay}>{totalTraffic} vehicles</div>
       </div>
 
