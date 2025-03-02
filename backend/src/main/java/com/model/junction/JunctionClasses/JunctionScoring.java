@@ -1,5 +1,6 @@
 package com.model.junction.JunctionClasses;
 
+import java.text.DecimalFormat;
 
 public class JunctionScoring {
 
