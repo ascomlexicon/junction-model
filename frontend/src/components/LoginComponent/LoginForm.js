@@ -22,7 +22,7 @@ function LoginForm() {
                     <div className={styles.input}>
                         {/*Add relationship between label and form element with htmlFor*/}
                         <label htmlFor="email">Email:</label>
-                        <input id="email" type="text" name="Email" required/>
+                        <input id="email" type="email" name="Email" required/>
                     </div>
                     <div className={styles.input}>
                         {/*Add relationship between label and form element with htmlFor*/}

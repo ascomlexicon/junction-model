@@ -1,21 +1,55 @@
 .container {
-    display: flex;
-    min-height: 100vh;
+  background-color: #001F3F;
+    display: grid;
+    grid-template-columns:.7fr 1.7fr 2fr;
+    grid-template-rows: auto 1fr;
+    height: 100vh;
     font-family: Arial, sans-serif;
+    grid-template-areas: 
+        'head1 head2 head3'
+        'side leaderboard breakdown';
   }
   
+  .header{
+    grid-area: head2;
+    grid-column-end: 1 span 3;
+    background-color: #001F3F;
+    color: white;
+    justify-self: center;
+  }
+
+  .side {
+    grid-area: side;
+    background-color: #2C0052;
+    color: rgb(0, 0, 0);
+    overflow-y: auto; /* Allow vertical scrolling if needed */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+    scrollbar-color: white #001F3F ; /* Scrollbar color */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers content horizontally */
+    justify-content: start; /* Aligns content to the top */
+    width: 100%;
+    max-width: 100%; /* Prevents content from overflowing */
+    box-sizing: border-box; /* Ensures padding doesn't cause overflow */
+}
+
   .leftPanel {
-    width: 400px;
+    grid-area: leaderboard;
+    /* width: 400px; */
+
     background-color: #001F3F;
     padding: 20px;
     color: white;
   }
   
   .rightPanel {
-    flex: 1;
+    grid-area: breakdown;
     background-color: #2C0052;
     padding: 20px;
     color: white;
+    overflow-y: scroll;
+    scrollbar-color: black transparent;
   }
   
   .title {
@@ -39,25 +73,33 @@
     padding: 15px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     cursor: pointer;
+    transition: background-color 0.2s;
   }
   
   .highlighted {
-    background-color: #FFD700;
-    color: black;
+    background-color: #00BFFF;
+    color: #001F3F;
   }
   
   .score {
     font-weight: bold;
   }
-  
+  .backButtonContainer {
+    grid-area: head3;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 10px;
+  }
   .backButton {
+    grid-area: head3;
     width: 100%;
-    padding: 15px;
     background-color: #DC3545;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    align-self: right;
   }
   
   .criteriaTable, .trafficFlow {

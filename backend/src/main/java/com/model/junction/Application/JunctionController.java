@@ -1,13 +1,24 @@
 package com.model.junction.Application;
 
+import java.util.HashMap;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.model.junction.ProjectClasses.Project;
+import com.model.junction.ProjectClasses.ProjectStorage;
+
 @RestController
 public class JunctionController {
-  @GetMapping("/hello")
-  public String sayHello() {
-      return "Hello, World!";
+  private final ProjectStorage projectStorage;
+  
+  public JunctionController(ProjectStorage projectStore) {
+    this.projectStorage = projectStore; 
+  }
+
+  @GetMapping("api/projects")
+  public HashMap<String, Project> getProjects() {
+      return this.projectStorage.getAllProjects();
   }
 }
 

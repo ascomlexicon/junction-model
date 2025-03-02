@@ -1,5 +1,4 @@
-package com.model.junction;
-
+package com.model.junction.Attributes;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;

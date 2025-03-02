@@ -1,109 +1,63 @@
-/* Global reset and base styling */
-body, html {
-    margin: 0;
-    padding: 0;
-    height:100%;
-    font-family: Arial, sans-serif;
-    background-color: #faf6ed;
-}
-
 /* Main container styling */
 .container {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto 1fr auto;
+    grid-template-columns: 1.7fr 2fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas: 
+        'header header'
+        'menu pic';
     height: 100vh;
-    max-width: 1200px;
     margin: 0 auto;
-    gap: 20px;
-    padding: 20px;
-    background-color: #faf6ed;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* Junction visual representation */
-.junction-visual {
-    grid-column: 1;
-    grid-row: 1 / span 2;
-    background-color: #f0f0f0;
-    border-radius: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background-color: #ffffff;
     overflow: hidden;
 }
 
+.menu, .junction-visual {
+    height: 100%;
+    overflow: hidden;
+    display: grid;
+    border-style: solid;
+    border-color: rgb(2, 2, 2);
+}
+
+.menu {
+    grid-area: menu;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
 /* Input form styling */
-.input-form {
+.main-form {
     grid-column: 2;
     grid-row: 1;
-    background-color: #373f6d;
+    background-color: #ffffff;
     color: rgb(15, 15, 15);
     border-radius: 10px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
+    margin: 10px;
+    height: calc(100% - 20px);
+    overflow-y: auto;
+    overflow-x: hidden;
+   
 }
 
-/* Traffic flow inputs */
-.traffic-flow-section {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-}
-
-.traffic-flow-section input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-
-/* Bottom action buttons */
-.action-buttons {
-    grid-column: 1 / span 2;
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-}
-
-.action-buttons button {
-    padding: 12px 24px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.run-button {
-    background-color: #e74c3c;
-    color: white;
-}
-
-.rankings-button {
-    background-color: #3498db;
-    color: white;
-}
-
-.progress-bar {
-    grid-column: 1 / span 2;
-    background-color: #b42571;
+/* Update junction visual to maintain fixed size */
+.junction-visual {
+    grid-area: pic;
+    background-color: #f0f0f0;
     border-radius: 10px;
-    padding: 15px;
-    text-align: center;
+    /* Get rid of grid layout for junction for now */
+    /* display: grid; */
+    /* grid-template-rows: 4fr 1fr; */
+    /* justify-content: center; */
+    /* align-items: center; */
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
-    .container {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto;
-    }
-
-    .junction-visual,
-    .input-form,
-    .action-buttons {
-        grid-column: 1;
-    }
+/* Adjust header to prevent it from affecting layout */
+.main-title {
+    grid-area: header;
+    margin: 0;
+    padding: 20px;
+    justify-self: center;
 }
