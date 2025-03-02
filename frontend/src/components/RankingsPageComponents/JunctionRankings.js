@@ -6,9 +6,9 @@ import { Link } from "react-router-dom";
 import VPHDisplayForm from './VPHDisplayForm';
 import axios from 'axios';
 
-// Structure of firstConfiguredJunction
+// Structure of clickedJunction
 // TODO: Think we should add a name attribute to the junction
-// firstConfiguredJunction = {
+// clickedJunction = {
 //   "name": "Junction 1",
 //   "leftTurnLanes": {},
 //   "lanesEntering": {},
@@ -76,7 +76,7 @@ import axios from 'axios';
 //   junctionImage: null
 // }
 
-const JunctionRankings = ({ firstConfiguredJunction }) => {
+const JunctionRankings = ({ clickedJunction }) => {
   // Used whilst the data is being retrieved from the backend
   const [isLoading, setIsLoading] = useState(true);
   
@@ -85,14 +85,19 @@ const JunctionRankings = ({ firstConfiguredJunction }) => {
   // Keep track of both selected junction and junctions state
   const [selectedJunction, setSelectedJunction] = useState(null);
   
+  // Junctions contains a list of junctions, each of which are an object, for the vph
+  // data which is the same as clickedJunction (ie from the same project)
   const [junctions, setJunctions] = useState([]);
   
+  // Current project that all of the junctions displayed are from
+  const [currentProject, setCurrentProject] = useState(null);
+
   // TODO: Lookup how to do multiple GET requests at once (should be a tab in a tab group on Kians mac)
 
   // This code runs once when the component mounts
   // useEffect(() => {
-  //   // FIXME: GET Request for the name of all junctions with the same vph data as firstConfiguredJunction
-  //     // Ie get all junctions from the same project as firstConfiguredJunction
+  //   // FIXME: GET Request for the name of all junctions with the same vph data as clickedJunction
+  //     // Ie get all junctions from the same project as clickedJunction
   //   axios.get('your_api_endpoint/junctions')
   //     .then(function (response) {
   //       // handle success
@@ -106,9 +111,13 @@ const JunctionRankings = ({ firstConfiguredJunction }) => {
   //         const junction = {
   //           ...element,
   //         };
+          // if (junction.name === clickedJunction.name) {
+          //   if we have found the data for the junction we initially clicked on, set this as the selected junction
+          //   setSelectedJunction(junction);
+          // };
   //         allJunctions.push(junction);
   //       });
-  //       setJunctions(response.data);
+  //       setJunctions(allJunctions);
   //       setIsLoading(false);
   //     })
   //     .catch(function (error) {
@@ -118,11 +127,11 @@ const JunctionRankings = ({ firstConfiguredJunction }) => {
   //       setIsLoading(false);
   //     });
 
-    // FIXME: GET Request for data of firstConfiguredJunction
+    // FIXME: GET Request for the project that clickedJunction is from
     // axios.get('___')
     //   .then(function (response) {
-    //     // handle success
-    //     setSelectedJunction({response.data.name, response.data.score})
+    //     // handle success (assume response.data gives us the JSON object of the project, might change to be the name)
+    //     setCurrentProject({response.data.name});
     //   })
     //   .catch(function (error) {
     //     // handle error
@@ -131,25 +140,7 @@ const JunctionRankings = ({ firstConfiguredJunction }) => {
   // }, []);
 
   const handleSelect = (selectedJunction) => {
-    // Update the highlights in the junctions array
-    const updatedJunctions = junctions.map(junction => ({
-      ...junction,
-      highlight: junction.name === selectedJunction.name
-    }));
-
-    setJunctions(updatedJunctions);
-
-    // FIXME: GET Request for selectedJunction
-    // axios.get('___')
-    //   .then(function (response) {
-    //     // handle success
-    // TODO: Change the value of highlights to true for the relevant junction
-    //     setSelectedJunction(response.data)
-    //   })
-    //   .catch(function (error) {
-    //     // handle error
-    //     console.log(error);
-    //   });
+    setSelectedJunction(selectedJunction);
   };
   
   return (
@@ -157,6 +148,7 @@ const JunctionRankings = ({ firstConfiguredJunction }) => {
       <div className = {styles.header}>
         {/* TODO: This needs to be the project that we are working with */}
         <h1>Named Junction!</h1>
+        {/* <h1>{currentProject}</h1> */}
       </div>
       <div className={styles.backButtonContainer}>
                   {/* TODO: Change this; not advised to have Link tag within button (I think) */}
@@ -168,6 +160,7 @@ const JunctionRankings = ({ firstConfiguredJunction }) => {
       <div className={styles.side}>
         <VPHDisplayForm />
       </div>
+
       {/* Displays a loading screen whilst GET request being served */}
       {isLoading && <p>Fetching data from the backend...</p>}
       {error && <p>Error: {error.message}</p>}
@@ -177,11 +170,13 @@ const JunctionRankings = ({ firstConfiguredJunction }) => {
             <h1 className={styles.title}>Junction Rankings</h1>
             <p className={styles.subtitle}>Click on a score to see how it was calculated</p>
             
-            {/* <JunctionList 
+            {/* OLD */}
+            <JunctionList 
               junctions={junctions}
               onSelect={handleSelect}
-            /> */}
+            />
 
+            {/* NEW */}
             {/* Using same approach for highlighting as the ProjectLeaderboard
             => delete JunctionList component */}
             {/* <div className={styles.junctionList}>
@@ -189,7 +184,7 @@ const JunctionRankings = ({ firstConfiguredJunction }) => {
                 <div 
                     key={junction.name}
                     className={`${styles.junctionRow} ${junction.name === selectedJunction.name ? styles.highlighted : ''}`}
-                    onClick={() => onSelect(junction)}
+                    onClick={() => handleSelect(junction)}
                 >
                     <span className={styles.junctionName}>{junction.name}</span>
                     <span className={styles.score}>{junction.score}</span>
