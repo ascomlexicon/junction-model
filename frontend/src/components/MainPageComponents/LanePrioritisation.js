@@ -3,8 +3,8 @@ import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import './LanePrioritisation.css';
 import SaveNextButton from '../ButtonComponents/SaveNextButton';
 import BackButton from '../ButtonComponents/BackButton';
-import ResetLaneChangesButton from '../ButtonComponents/ResetLaneChangesButton';
 import ResetAllButton from '../ButtonComponents/ResetAllButton';
+import ResetPrioritisationButton from '../ButtonComponents/ResetPrioritisationButton';
 
 function LanePrioritisation({ setActiveStep, saveFormData, resetForm, resetAllForms, formData = {} }) {
   // Initialize state with passed formData or default values
@@ -35,7 +35,7 @@ function LanePrioritisation({ setActiveStep, saveFormData, resetForm, resetAllFo
     };
   });
 
-  // Always valid since prioritization is optional
+  // Always valid since prioritisation is optional
   const [isValid, setIsValid] = useState(true);
 
   const handleenablePrioritisation = (e) => {
@@ -101,7 +101,7 @@ function LanePrioritisation({ setActiveStep, saveFormData, resetForm, resetAllFo
 
   return (
     <div className="lane-prioritization-container">
-      <h2>Lane Prioritization</h2>
+      <h2>Lane Prioritisation</h2>
       
       <div className="info-box">
         <h3>Info:</h3>
@@ -115,7 +115,7 @@ function LanePrioritisation({ setActiveStep, saveFormData, resetForm, resetAllFo
       <div className="prioritization-controls">
         <div className="control-row">
           <label htmlFor="add-prioritization">
-            Add direction prioritization:
+            Add direction Prioritisation:
             <input
               id="add-prioritization"
               type="checkbox"
@@ -173,7 +173,7 @@ function LanePrioritisation({ setActiveStep, saveFormData, resetForm, resetAllFo
       {/* Button container */}
       <div className="button-container">
         <BackButton onClick={handleBack} label="Back to Pedestrian Crossings" />
-        <ResetLaneChangesButton onClick={handleResetChanges} />
+        <ResetPrioritisationButton onClick={handleResetChanges} />
         <ResetAllButton onClick={resetAllForms} />
         <SaveNextButton onClick={handleSaveNext} disabled={!isValid} />
       </div>
