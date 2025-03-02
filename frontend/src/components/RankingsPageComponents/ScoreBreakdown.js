@@ -51,7 +51,7 @@ const ScoreBreakdown = ({ junctionData }) => {
           <div className={styles.configurableParameters}>
               <h2 className={styles.configHeading}>Configurable Parameters</h2>
               <DisplayLaneCustomisation />
-              <DisplayPedestrianCrossing />
+              <DisplayPedestrianCrossing addCrossings={junctionData.isCrossings} crossingDuration={junctionData.crossingDuration} requestsPerHour={junctionData.crossingRequestsPerHour} />
               <DisplayDirectionPrioritisation />
           </div>
 
