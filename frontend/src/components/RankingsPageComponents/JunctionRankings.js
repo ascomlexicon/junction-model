@@ -10,6 +10,7 @@ import axios from 'axios';
 // TODO: Think we should add a name attribute to the junction
 // clickedJunction = {
 //   "name": "Junction 1",
+//   "score": 0,
 //   "leftTurnLanes": {},
 //   "lanesEntering": {},
 //   "lanesExiting": {},
@@ -198,11 +199,18 @@ const JunctionRankings = ({ clickedJunction }) => {
           </div>
           
           <div className={styles.rightPanel}>
+            {/* OLD */}
             {selectedJunction && (
               <>
                 <ScoreBreakdown junctionName={selectedJunction.name} score={selectedJunction.score} />
               </>
             )}
+            {/* NEW */}
+            {/* {selectedJunction && (
+              <>
+                <ScoreBreakdown junction={selectedJunction} />
+              </>
+            )} */}
           </div>
         </>
       )}
