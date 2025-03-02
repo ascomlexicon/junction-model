@@ -1,45 +1,37 @@
 package com.model.junction.JunctionClasses;
-/*  scoring for a junction quarter*/
+
+
 public class JunctionScoring {
 
-  public double quarterScore(double northboundVpH, double SimulationTime, long averageWaitTimeInSeconds, long maximumWaitingTimeInSeconds, long maximumQueueLength, double weightingMWT,  double weightingAWT, double weightingMQL) {
 
-    worstMaximumWaitingTime= SimulationTime*15;
-    worstAverageWaitingTime= SimulationTime*15;
-    worstMaximumQueueLength= northboundVpH;
+  double quarterScores[] = new double[4]; // quarter Score array, indexes are North, East, South, West
 
-    double score = weightingAWT * (1 - averageWaitTimeInSeconds / worstAverageWaitingTime) + weightingMWT * (1 - maximumWaitingTimeInSeconds / worstMaximumWaitingTime) + weightingMQL * (1 - maximumQueueLength / worstMaximumQueueLength);
-    return score;
+  /* calculate a score for a quarter, the score is effected by cars remaining after the simulation time */
+  public void quarterScore(nt directionIndex,double outboundVph, double SimulationTime, long averageWaitTimeInMS, long maximumWaitingTimeInMS, long maximumQueueLength, int carsEntered, int totalCarsExited, double weightingMWT,  double weightingAWT, double weightingMQL) {
 
-  } 
+
+    double worstMaximumWaitingTime= SimulationTime*15*1000;
+    double worstAverageWaitingTime= SimulationTime*15*1000;
+    int worstMaximumQueueLength= outboundVph;
+
+    double score = weightingMWT * (1 - averageWaitTimeInMS / worstAverageWaitingTime) + weightingMWT * (1 - maximumWaitingTimeInMS / worstMaximumWaitingTime) + weightingMQL * (1 - maximumQueueLength / worstMaximumQueueLength);
+    DecimalFormat df = new DecimalFormat("#.##");      
+    score = Double.valueOf(df.format(score*100));
+   
+    double remainingCarsRate= 1 - (totalCarsExited / (double)carsEntered);  
+    remainingCarsRate =Double.valueOf(df.format(remainingCarsRate*100));
+
+    quarterScores[directionIndex]= score-remainingCarsRate;
+
+  }
+
+  /* Harmonic mean approach, penalize very small quarter scores */
+  public double junctionScore() {
+
+    return 4/((1/quarterScores[0])+(1/quarterScores[1])+(1/quarterScores[2])+(1/quarterScores[3]));
+
+  }
 
 
 
 }
-
-/*TODO: complete the scoring for the junction*/ 
-// public class JunctionScoring {
-
-//   // Attributes
-//   private double northScore;
-//   private double southScore;
-//   private double eastScore;
-//   private double westScore; 
-
-
-// //parameter (flow rate to determine worst MQL, SimulationTime worst AWT/MWT, weightings, matrices)
-//   public void quarterScore(....) {
-
-//     double score = p1 * (1 - averageWaitTimeInSeconds / worstAverageWaitingTime) + p2 * (1 - maximumWaitingTimeInSeconds / worstMaximumWaitingTime) + p3 * (1 - maximumQueueLength / worstMaximumQueueLength);
-
-//   } 
-
-
-//   //Harmonic mean approach
-//   public double junctionScore(....) {
-
-//     	return 4/((1/northScore)+(1/southScore)+(1/eastScore)+(1/westScore);
-
-//   }
-
-// }
