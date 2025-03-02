@@ -173,7 +173,7 @@ const JunctionRankings = ({ clickedJunction }) => {
             <h1 className={styles.title}>Junction Rankings</h1>
             <p className={styles.subtitle}>Click on a score to see how it was calculated</p>
             
-            {/* OLD */}
+            {/* OLD TODO: DELETE*/}
             <JunctionList 
               junctions={junctions}
               onSelect={handleSelect}
@@ -205,7 +205,7 @@ const JunctionRankings = ({ clickedJunction }) => {
           </div>
           
           <div className={styles.rightPanel}>
-            {/* OLD */}
+            {/* OLD TODO: DELETE*/}
             {selectedJunction && (
               <>
                 <ScoreBreakdown junctionName={selectedJunction.name} score={selectedJunction.score} />
