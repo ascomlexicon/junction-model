@@ -50,7 +50,7 @@ const ScoreBreakdown = ({ junctionData }) => {
 
           <div className={styles.configurableParameters}>
               <h2 className={styles.configHeading}>Configurable Parameters</h2>
-              <DisplayLaneCustomisation />
+              <DisplayLaneCustomisation entering={junctionData.lanesEntering} exiting={junctionData.lanesExiting} leftTurn={junctionData.leftTurnLanes} busOrCycle={junctionData.isBusOrCycle === 'bus' || junctionData.isBusOrCycle === 'cycle'} busCycleDurations={junctionData.busCycleLaneDuration}/>
               <DisplayPedestrianCrossing addCrossings={junctionData.isCrossings} crossingDuration={junctionData.crossingDuration} requestsPerHour={junctionData.crossingRequestsPerHour} />
               <DisplayDirectionPrioritisation enablePrioritisation={junctionData.lanePrioritisation.length !== 0} directions={junctionData.lanePrioritisation}/>
           </div>

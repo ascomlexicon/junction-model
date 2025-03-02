@@ -1,16 +1,15 @@
 import React from 'react';
 import styles from './DisplayLaneCustomisation.module.css';
 
-// TODO: Remove all this parameter bs and change it so only the laneCustomisation stuff from the received JSON file is loaded
-const DisplayLaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllForms }) => {
+const DisplayLaneCustomisation = ({ entering, exiting, leftTurn, busOrCycle, busCycleDurations }) => {
   // Dummy data for display
-  const dummyData = {
-    entering: { north: '2', south: '3', east: '1', west: '2' },
-    exiting: { north: '2', south: '3', east: '1', west: '2' },
-    leftTurn: { north: true, south: false, east: true, west: false },
-    busLane: { north: true, south: false, east: true, west: false },
-    cycleLane: { north: false, south: false, east: false, west: false },
-  };
+  // const dummyData = {
+  //   entering: { north: '2', south: '3', east: '1', west: '2' },
+  //   exiting: { north: '2', south: '3', east: '1', west: '2' },
+  //   leftTurn: { north: true, south: false, east: true, west: false },
+  //   busLane: { north: true, south: false, east: true, west: false },
+  //   cycleLane: { north: false, south: false, east: false, west: false },
+  // };
 
   return (
     <div className={styles.laneCustomisation}>
@@ -20,10 +19,10 @@ const DisplayLaneCustomisation = ({ setActiveStep, saveFormData, resetForm, rese
       <section className={styles.lanesSection}>
         <h3>Lanes Entering Junction</h3>
         <div className={styles.grid}>
-          {Object.keys(dummyData.entering).map((direction) => (
+          {Object.keys(entering).map((direction) => (
             <div key={`entering-${direction}`} className={styles.inputGroup}>
               <label className={styles.label}>From {direction.charAt(0).toUpperCase() + direction.slice(1)}:</label>
-              <span className={styles.staticData}>{dummyData.entering[direction]}</span>
+              <span className={styles.staticData}>{entering[direction]}</span>
             </div>
           ))}
         </div>
@@ -33,10 +32,10 @@ const DisplayLaneCustomisation = ({ setActiveStep, saveFormData, resetForm, rese
       <section className={styles.lanesSection}>
         <h3>Lanes Exiting Junction</h3>
         <div className={styles.grid}>
-          {Object.keys(dummyData.exiting).map((direction) => (
+          {Object.keys(exiting).map((direction) => (
             <div key={`exiting-${direction}`} className={styles.inputGroup}>
               <label className={styles.label}>To {direction.charAt(0).toUpperCase() + direction.slice(1)}:</label>
-              <span className={styles.staticData}>{dummyData.exiting[direction]}</span>
+              <span className={styles.staticData}>{exiting[direction]}</span>
             </div>
           ))}
         </div>
@@ -46,10 +45,10 @@ const DisplayLaneCustomisation = ({ setActiveStep, saveFormData, resetForm, rese
       <section className={styles.leftTurnSection}>
         <h3>Left Turn Lanes</h3>
         <div className={styles.grid}>
-          {Object.keys(dummyData.leftTurn).map((direction) => (
+          {Object.keys(leftTurn).map((direction) => (
             <div key={`left-turn-${direction}`} className={styles.checkboxGroup}>
               <label>
-                <input type="checkbox" checked={dummyData.leftTurn[direction]} disabled />
+                <input type="checkbox" checked={leftTurn[direction]} disabled />
                 {direction.charAt(0).toUpperCase() + direction.slice(1)}
               </label>
             </div>
@@ -88,6 +87,13 @@ const DisplayLaneCustomisation = ({ setActiveStep, saveFormData, resetForm, rese
           </div>
         </div>
       </section>
+
+      {busOrCycle && (
+        <>
+          <h3>Bus/Cycle Lane Durations</h3>
+          {/* TODO: Display the durations input by the user here */}
+        </>
+      )};
     </div>
   );
 };
