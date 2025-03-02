@@ -52,7 +52,7 @@ const ScoreBreakdown = ({ junctionData }) => {
             <h3>Configurable Parameters</h3>
             <DisplayLaneCustomisation />
             <DisplayPedestrianCrossing addCrossings={junctionData.isCrossings} crossingDuration={junctionData.crossingDuration} requestsPerHour={junctionData.crossingRequestsPerHour} />
-            <DisplayLanePrioritisation />
+            <DisplayLanePrioritisation enablePrioritisation={junctionData.lanePrioritisation.length !== 0} directions={junctionData.lanePrioritisation}/>
         </div>
 
         </div>
