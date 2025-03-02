@@ -4,7 +4,6 @@ import DisplayLaneCustomisation from './DisplayLaneCustomisation';
 import DisplayPedestrianCrossing from './DisplayPedestrianCrossing';
 import DisplayLanePrioritisation from './DisplayLanePrioritisation';
 
-
 const ScoreBreakdown = ({ junctionData }) => {
     // junctionData is a JSON object which contains 
     return(
@@ -50,7 +49,7 @@ const ScoreBreakdown = ({ junctionData }) => {
         {/* TODO: Spelling mistake, but change in stylesheet also */}
         <div className='styles.confiurableParameters'>
             <h3>Configurable Parameters</h3>
-            <DisplayLaneCustomisation />
+            <DisplayLaneCustomisation entering={junctionData.lanesEntering} exiting={junctionData.lanesExiting} leftTurn={junctionData.leftTurnLanes} busOrCycle={junctionData.isBusOrCycle === 'bus' || junctionData.isBusOrCycle === 'cycle'} busCycleDurations={junctionData.busCycleLaneDuration}/>
             <DisplayPedestrianCrossing addCrossings={junctionData.isCrossings} crossingDuration={junctionData.crossingDuration} requestsPerHour={junctionData.crossingRequestsPerHour} />
             <DisplayLanePrioritisation enablePrioritisation={junctionData.lanePrioritisation.length !== 0} directions={junctionData.lanePrioritisation}/>
         </div>
