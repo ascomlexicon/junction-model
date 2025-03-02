@@ -5,12 +5,12 @@ import DisplayPedestrianCrossing from './DisplayPedestrianCrossing';
 import DisplayDirectionPrioritisation from './DisplayDirectionPrioritisation';
 
 
-const ScoreBreakdown = ({ junctionName, score }) => {
-    // FIXME: Need a GET request to get the information for the relevant junction
+const ScoreBreakdown = ({ junctionData }) => {
+    // junctionData is a JSON object which contains 
     return(
         <div className={styles.scoreBreakdown}>
-          <h2 className={styles.scoreBreakdownTitle}>Score Breakdown for: {junctionName}</h2>
-          <div className={styles.overallScore}>Overall Score: {score}</div>
+          <h2 className={styles.scoreBreakdownTitle}>Score Breakdown for: {junctionData.name}</h2>
+          <div className={styles.overallScore}>Overall Score: {junctionData.score}</div>
           
           <table className={styles.criteriaTable}>
               <thead>
