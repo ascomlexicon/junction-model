@@ -28,6 +28,15 @@ const JunctionRankings = ({ firstConfiguredJunction }) => {
     //     // handle success
     // TODO: Add all junctions to a list with their name and the attribute of highlight : false first
       // Eg = [{name : "Junction 1", highlight: false}, {name : "Junction 2", highlight: false}]
+        // const allJunctions = [];
+
+        // Response.data.array.forEach(element => {
+        //   const junction = {
+        //     name: element.name,
+        //     highlight: false
+        //   };
+        //   allJunctions.push(junction);
+        // });
     //     setJunctions(response.data);
     //     setLoading(false);
     //   })
@@ -43,7 +52,7 @@ const JunctionRankings = ({ firstConfiguredJunction }) => {
     //   .then(function (response) {
     //     // handle success
     // TODO: Change the value of highlights to true for the relevant junction
-    //     setSelectedJunction(response.data)
+    //     setSelectedJunction({response.data.name, response.data.score})
     //   })
     //   .catch(function (error) {
     //     // handle error
