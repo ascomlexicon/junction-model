@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './VPHDisplayForm.module.css';
 import StaticJunctionDisplay from './StaticJunctionDisplay';
 
+// TODO: Need to pass a parameter containing the data to here instead
 function VPHDisplayForm() {
   const [trafficData, setTrafficData] = useState({
     north: { south: 0, east: 0, west: 0 },
