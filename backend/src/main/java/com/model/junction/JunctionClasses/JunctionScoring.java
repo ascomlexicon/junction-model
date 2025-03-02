@@ -8,9 +8,9 @@ public class JunctionScoring {
   double quarterScores[] = new double[4]; // quarter Score array, indexes are North, East, South, West
 
   /* calculate a score for a quarter, the score is effected by cars remaining after the simulation time */
-  public void quarterScore(nt directionIndex,double outboundVph, double SimulationTime, long averageWaitTimeInMS, long maximumWaitingTimeInMS, long maximumQueueLength, int carsEntered, int totalCarsExited, double weightingMWT,  double weightingAWT, double weightingMQL) {
+  public void quarterScore(int directionIndex,double outboundVph, int SimulationTime, long averageWaitTimeInMS, long maximumWaitingTimeInMS, long maximumQueueLength, int carsEntered, int totalCarsExited, double weightingMWT,  double weightingAWT, double weightingMQL) {
 
-
+    /* used for Normalization*/ 
     double worstMaximumWaitingTime= SimulationTime*15*1000;
     double worstAverageWaitingTime= SimulationTime*15*1000;
     int worstMaximumQueueLength= outboundVph;
