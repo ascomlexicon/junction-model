@@ -158,6 +158,8 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
     return false;
   };
 
+  // Calculates the number of exit lanes needed in the 'direction' quarter 
+  // Ie if direction = north, calculating lanes exiting northbound
   function calculateExitLanes(direction) {
     // Initialize array to store how many lanes turn into our target direction from each other direction
     let lanesFlowingTo = []
@@ -227,8 +229,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
             case 4:
               return 2;
             case 5:
-              // TODO: Check how the configurations have been setup with the graphics
-              return 3;
+              return 2;
           }
         }
       case 'east':
@@ -246,32 +247,32 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
             case 2:
               return 1;
             case 3:
-              return 2;
+              return 1;
             case 4:
               return 2;
             case 5:
-              // TODO: Check how the configurations have been setup with the graphics
-              return 3;
+              return 2;
           }
         }
       default:
         break;
     }
-  } 
-
+  };
 
   const validateLanes = () => {
     const directions = ['north', 'south', 'east', 'west'];
-
+    let flag = true;
     directions.array.forEach(dir => {
       let res = calculateExitLanes(dir);
       // Check that res <= the value entered by the user; return false if not
       // TODO: Not sure of the best way to do this
       if (res > laneData.exiting[dir]) {
-        setIsValid(false);
+        flag = false;
         return;
       }
     });
+
+    setIsValid(flag);
   }
 
   const handleInputChange = (type, direction, value) => {
