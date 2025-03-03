@@ -72,9 +72,9 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
   const [showExitingTooltip, setShowExitingTooltip] = useState(false);
   const [showWarning, setShowWarning] = useState(false);
   const [warningMessage, setWarningMessage] = useState('');
-
-   // Track left-turning traffic from each direction
-   const [leftTurningTraffic, setLeftTurningTraffic] = useState({
+  
+  // Track left-turning traffic from each direction
+  const [leftTurningTraffic, setLeftTurningTraffic] = useState({
     north: false,
     south: false,
     east: false,
@@ -376,8 +376,9 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
 
       {/* Lanes Exiting Section */}
       <section className="lanes-section">
-        <h3>Lanes Exiting Junction</h3>
-        <div 
+        <div className="section-header">
+          <h3>Lanes Exiting Junction</h3>
+          <div 
             className="info-icon"
             onMouseEnter={() => setShowExitingTooltip(true)}
             onMouseLeave={() => setShowExitingTooltip(false)}
@@ -390,6 +391,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
               </div>
             )}
           </div>
+        </div>
         {Object.keys(laneData.exiting).map(direction => (
           <div key={`exiting-${direction}`} className="input-group">
             <label>To {direction.charAt(0).toUpperCase() + direction.slice(1)}:</label>
