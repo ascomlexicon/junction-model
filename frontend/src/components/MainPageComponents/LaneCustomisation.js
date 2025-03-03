@@ -29,10 +29,10 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
 
     if (formData.leftTurnLanes) {
       leftTurnLanes = {
-        north: formData.leftTurnLanes.north,
-        south: formData.leftTurnLanes.south,
-        east: formData.leftTurnLanes.east,
-        west: formData.leftTurnLanes.west,
+        north: formData.leftTurnLanes.north || false,
+        south: formData.leftTurnLanes.south || false,
+        east: formData.leftTurnLanes.east || false,
+        west: formData.leftTurnLanes.west || false,
       };
     }
 
@@ -89,7 +89,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
   // Function to check if there is left-turning traffic from each direction
   const checkLeftTurningTraffic = () => {
     const leftTurns = {
-      north: true,
+      north: hasLeftTurningTraffic('north'),
       south: hasLeftTurningTraffic('south'),
       east: hasLeftTurningTraffic('east'),
       west: hasLeftTurningTraffic('west'),
@@ -125,32 +125,46 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
   
   // Helper function to determine if there's left-turning traffic from a direction
   const hasLeftTurningTraffic = (direction) => {
-    if (!formData || !formData[`vph${direction.charAt(0).toUpperCase() + direction.slice(1)}`]) {
+    if (!formData) {
       return false;
     }
     
-    const trafficData = formData[`vph${direction.charAt(0).toUpperCase() + direction.slice(1)}`];
+    // Check the direct VPH data for the direction (from the JSON structure)
+    const trafficKey = `vph${direction.charAt(0).toUpperCase() + direction.slice(1)}`;
+    const trafficData = formData[trafficKey];
+    
+    if (!trafficData) {
+      return false;
+    }
     
     // Map directions to their left turn exits
     const leftTurnMap = {
-      north: 'exitWest',
-      south: 'exitEast',
-      east: 'exitNorth',
-      west: 'exitSouth',
+      north: 'exitEast',
+      south: 'exitWest',
+      east: 'exitSouth',
+      west: 'exitNorth',
     };
     
-    // Check if trafficData is an array
-    if (Array.isArray(trafficData)) {
-      return trafficData.some(entry => 
-        entry[leftTurnMap[direction]] && entry[leftTurnMap[direction]] > 0
-      );
-    } 
-    // If it's an object with values
-    else if (typeof trafficData === 'object' && trafficData !== null) {
-      // Check if any value in the object represents left turning traffic
+    const leftTurnKey = leftTurnMap[direction];
+    
+    // Handle different data structures
+    if (typeof trafficData === 'object' && trafficData !== null) {
+      // Handle direct object structure like in the example JSON
+      if (trafficData[leftTurnKey] && trafficData[leftTurnKey] > 0) {
+        return true;
+      }
+      
+      // Handle array structure (from the original function)
+      if (Array.isArray(trafficData)) {
+        return trafficData.some(entry => 
+          entry[leftTurnKey] && entry[leftTurnKey] > 0
+        );
+      }
+      
+      // Handle nested object structure
       return Object.values(trafficData).some(entry => 
         entry && typeof entry === 'object' && 
-        entry[leftTurnMap[direction]] && entry[leftTurnMap[direction]] > 0
+        entry[leftTurnKey] && entry[leftTurnKey] > 0
       );
     }
     
@@ -183,9 +197,9 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
   };
 
   const handleLeftTurnChange = (direction) => {
-    // Check if there's left-turning traffic in this direction
-    if (leftTurningTraffic[direction]) {
-      setWarningMessage(`Cannot add a left turn lane for ${direction} direction. There is already traffic turning left in the Traffic Flow settings. Please remove the left turn traffic first.`);
+    // Check if there's NO left-turning traffic in this direction
+    if (!leftTurningTraffic[direction]) {
+      setWarningMessage(`Cannot add a left turn lane for ${direction} direction. No left-turning traffic exists in the Traffic Flow settings. Please update the traffic flow first.`);
       setShowWarning(true);
       return;
     }
@@ -409,24 +423,24 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
 
       {/* Left Turn Section */}
       <section className="left-turn-section">
-        <h3>Left Turn Lanes</h3>
-        {Object.keys(laneData.leftTurn).map((direction) => (
-          <div key={`left-turn-${direction}`} className="checkbox-group">
-            <label className={leftTurningTraffic[direction] ? 'disabled-option' : ''}>
-              <input
-                type="checkbox"
-                checked={laneData.leftTurn[direction]}
-                onChange={() => handleLeftTurnChange(direction)}
-                disabled={leftTurningTraffic[direction]}
-              />
-              {direction.charAt(0).toUpperCase() + direction.slice(1)}
-              {leftTurningTraffic[direction] && (
-                <span className="disabled-label"> (Left-turning traffic exists)</span>
-              )}
-            </label>
-          </div>
-        ))}
-      </section>
+      <h3>Left Turn Lanes</h3>
+      {Object.keys(laneData.leftTurn).map((direction) => (
+        <div key={`left-turn-${direction}`} className="checkbox-group">
+          <label className={!leftTurningTraffic[direction] ? 'disabled-option' : ''}>
+            <input
+              type="checkbox"
+              checked={laneData.leftTurn[direction]}
+              onChange={() => handleLeftTurnChange(direction)}
+              disabled={!leftTurningTraffic[direction]}
+            />
+            {direction.charAt(0).toUpperCase() + direction.slice(1)}
+            {!leftTurningTraffic[direction] && (
+              <span className="disabled-label"> (No left-turning traffic exists)</span>
+            )}
+          </label>
+        </div>
+      ))}
+    </section>
 
       {/* Special Lanes Section */}
       <section className="special-lanes-section">
@@ -460,7 +474,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
                   />
                   {direction.charAt(0).toUpperCase() + direction.slice(1)}
                   {leftTurningTraffic[direction] && (
-                    <span className="disabled-label"> (Left-turning traffic exists)</span>
+                    <span className="disabled-label"> (Left-turning traffic exists.Cannot have a special lane when left turning traffic exists)</span>
                   )}
                 </label>
               </div>
@@ -479,7 +493,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
                   />
                   {direction.charAt(0).toUpperCase() + direction.slice(1)}
                   {leftTurningTraffic[direction] && (
-                    <span className="disabled-label"> (Left-turning traffic exists)</span>
+                    <span className="disabled-label"> (Left-turning traffic exists.Cannot have a special lane when left turning traffic exists)</span>
                   )}
                 </label>
               </div>
