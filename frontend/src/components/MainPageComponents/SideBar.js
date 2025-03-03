@@ -17,8 +17,15 @@ const Sidebar = ({ setActiveStep, activeStep }) => {
         {menuItems.map((item) => (
           <li
             key={item.step}
-            className={`sidebar-item ${activeStep === item.step ? 'active' : ''}`}
-            onClick={() => setActiveStep(item.step)}
+            className={`sidebar-item ${activeStep === item.step ? 'active' : ''} ${
+              (item.step > activeStep && item.step !== 0) ? 'disabled' : ''
+            }`}
+            onClick={() => {
+                // We only want to be able to click back to previous sections or stay on current
+                if (item.step <= activeStep || item.step === 0) {
+                  setActiveStep(item.step);
+                }
+            }}
           >
             {item.label}
           </li>
