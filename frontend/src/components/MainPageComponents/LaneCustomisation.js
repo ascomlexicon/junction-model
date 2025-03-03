@@ -172,17 +172,121 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
     return false;
   };
 
+  function calculateExitLanes(direction) {
+    // Initialize array to store how many lanes turn into our target direction from each other direction
+    let lanesFlowingTo = []
+    
+    // For each of the other 3 directions
+    ["north", "south", "east", "west"].forEach(entryDirection => {
+        // Skip if this is the same as our exit direction (can't enter and exit same direction)
+        if (entryDirection === direction) {
+          return;
+        };
+        
+        // Get how many lanes from this entry turn toward our exit direction
+        // We need to map the relationship (e.g., traffic from west turning "north")
+        if (direction == "north") {
+          // Calculates number of cars going FROM entryDirection TO North
+          lanesFromThisEntry = calculateLanesTurningNorth(entryDirection)
+        } else if (direction == "south") {
+          // TODO: Do other functions if we aren't going to generalise
+          lanesFromThisEntry = calculateLanesTurningSouth(entryDirection)
+        } else if (direction == "east") {
+          lanesFromThisEntry = calculateLanesTurningEast(entryDirection)
+        } else {
+          lanesFromThisEntry = calculateLanesTurningWest(entryDirection)
+        };
+            
+        // Add to our array
+        lanesFlowingTo.push(lanesFromThisEntry);
+    });
+    
+    // Return the maximum number of lanes turning into this direction
+    return Math.max(...lanesFlowingTo, 1); // Use 0 as fallback if array is empty
+  }
+
+  // Helper function example for one direction
+  function calculateLanesTurningNorth(fromDirection) {
+    // Get number of entry lanes in the fromDirection
+    const entryLanes = laneData.entering[fromDirection]
+    
+    // Get the traffic distribution for this entry
+    const trafficFlow = formData[`vph${fromDirection.charAt(0).toUpperCase() + fromDirection.slice(1)}`];
+
+    // If no traffic exits north, then no lanes are needed for this fromDirection, so return 0
+    if (!trafficFlow.exitNorth) {
+      return 0;
+    };
+
+    switch (fromDirection) {
+      case 'south':
+        // If we go from south to north, all lanes are utilised as straight
+        return entryLanes;
+      case 'west':
+        if (trafficFlow.exitEast) {
+          // Traffic flows to east (straight), hence only 1 northbound lane
+          return 1;
+        } else if (!trafficFlow.exitSouth) {
+          // Traffic flows only to the north
+          return entryLanes;
+        } else {
+          // Traffic flows north and south only
+          switch (entryLanes) {
+            case 1:
+              return 1;
+            case 2:
+              return 1;
+            case 3:
+              return 2;
+            case 4:
+              return 2;
+            case 5:
+              // TODO: Check how the configurations have been setup with the graphics
+              return 3;
+          }
+        }
+      case 'east':
+        if (trafficFlow.exitWest) {
+          // Traffic flows to west (straight), hence only 1 northbound lane
+          return 1;
+        } else if (!trafficFlow.exitSouth) {
+          // Traffic flows only to the north
+          return entryLanes;
+        } else {
+          // Traffic flows north and south only
+          switch (entryLanes) {
+            case 1:
+              return 1;
+            case 2:
+              return 1;
+            case 3:
+              return 2;
+            case 4:
+              return 2;
+            case 5:
+              // TODO: Check how the configurations have been setup with the graphics
+              return 3;
+          }
+        }
+      default:
+        break;
+    }
+  } 
+
+
   const validateLanes = () => {
-    const totalEntering = Object.values(laneData.entering).reduce(
-      (sum, val) => sum + (parseInt(val) || 0), 0
-      (sum, val) => sum + (parseInt(val) || 0), 0
-    );
-    const totalExiting = Object.values(laneData.exiting).reduce(
-      (sum, val) => sum + (parseInt(val) || 0),
-      0
-    );
-    setIsValid(totalEntering === totalExiting && totalEntering > 0);
-  };
+    const directions = ['north', 'south', 'east', 'west'];
+
+    directions.array.forEach(dir => {
+      let res = calculateExitLanes(dir);
+      // Check that res <= the value entered by the user; return false if not
+      // TODO: Not sure of the best way to do this
+      if (res > laneData.exiting[dir]) {
+        setIsValid(false);
+        return;
+      }
+    });
+  }
 
   const handleInputChange = (type, direction, value) => {
     // Ensure the value doesn't exceed 5
