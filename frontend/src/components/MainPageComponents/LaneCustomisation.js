@@ -190,15 +190,13 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
         if (direction == "north") {
           // Calculates number of cars going FROM entryDirection TO North
           lanesFromThisEntry = calculateLanesTurningNorth(entryDirection)
-        } 
-        // else if (direction == "south") {
-        //   // TODO: Do other functions if we aren't going to generalise
-        //   lanesFromThisEntry = calculateLanesTurningSouth(entryDirection)
-        // } else if (direction == "east") {
-        //   lanesFromThisEntry = calculateLanesTurningEast(entryDirection)
-        // } else {
-        //   lanesFromThisEntry = calculateLanesTurningWest(entryDirection)
-        // };
+        } else if (direction == "south") {
+          lanesFromThisEntry = calculateLanesTurningSouth(entryDirection)
+        } else if (direction == "east") {
+          lanesFromThisEntry = calculateLanesTurningEast(entryDirection)
+        } else {
+          lanesFromThisEntry = calculateLanesTurningWest(entryDirection)
+        };
             
         // Add to our array
         lanesFlowingTo.push(lanesFromThisEntry);
@@ -234,7 +232,6 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
           return entryLanes;
         } else {
           // Traffic flows north and south only
-          // FIXME: Issue here
           if (entryLanes <= 2) {
             return 1;
           } else {
@@ -261,32 +258,156 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
     }
   };
 
-  const validateLanes = () => {
-    // const directions = ['north', 'south', 'east', 'west'];
-    // let flag = true;
-    // directions.array.forEach(dir => {
-    //   let res = calculateExitLanes(dir);
-    //   // Check that res <= the value entered by the user; return false if not
-    //   // TODO: Not sure of the best way to do this
-    //   if (res > laneData.exiting[dir]) {
-    //     flag = false;
-    //     return;
-    //   }
-    // });
+  function calculateLanesTurningSouth(fromDirection) {
+    // Get number of entry lanes in the fromDirection
+    const entryLanes = laneData.entering[fromDirection]
+    
+    // Get the traffic distribution for this entry
+    const trafficFlow = formData[`vph${fromDirection.charAt(0).toUpperCase() + fromDirection.slice(1)}`];
 
-    // FIXME: Working in every case except when there's no traffic going straight ahead
-      // Eg traffic filters south and north from the west, but not east
-      // Suggests something is wrong with the switch statement
-    if (laneData.exiting['north'] >= calculateExitLanes('north')) {
-      console.log('yayyyy success');
-      setIsValid(true);
-    } else {
-      // console.log(calculateExitLanes('north'));
-      console.log('over here');
-      setIsValid(false);
+    if (!trafficFlow.exitSouth) {
+      return 0;
+    };
+
+    switch (fromDirection) {
+      case 'north':
+        return entryLanes;
+      case 'east':
+        if (trafficFlow.exitWest) {
+          return 1;
+        } else if (!trafficFlow.exitNorth) {
+          return entryLanes;
+        } else {
+          if (entryLanes <= 2) {
+            return 1;
+          } else {
+            return 2;
+          }
+        }
+      case 'west':
+        if (trafficFlow.exitEast) {
+          return 1;
+        } else if (!trafficFlow.exitNorth) {
+          return entryLanes;
+        } else {
+          if (entryLanes <= 3) {
+            return 1;
+          } else {
+            return 2;
+          }
+        }
+      default:
+        break;
     }
+  };
 
-    // setIsValid(flag);
+  function calculateLanesTurningEast(fromDirection) {
+    // Get number of entry lanes in the fromDirection
+    const entryLanes = laneData.entering[fromDirection]
+    
+    // Get the traffic distribution for this entry
+    const trafficFlow = formData[`vph${fromDirection.charAt(0).toUpperCase() + fromDirection.slice(1)}`];
+
+    if (!trafficFlow.exitEast) {
+      return 0;
+    };
+
+    switch (fromDirection) {
+      case 'west':
+        return entryLanes;
+      case 'north':
+        if (trafficFlow.exitSouth) {
+          return 1;
+        } else if (!trafficFlow.exitWest) {
+          return entryLanes;
+        } else {
+          if (entryLanes <= 2) {
+            return 1;
+          } else {
+            return 2;
+          }
+        }
+      case 'south':
+        if (trafficFlow.exitNorth) {
+          return 1;
+        } else if (!trafficFlow.exitWest) {
+          return entryLanes;
+        } else {
+          if (entryLanes <= 3) {
+            return 1;
+          } else {
+            return 2;
+          }
+        }
+      default:
+        break;
+    }
+  };
+
+  function calculateLanesTurningWest(fromDirection) {
+    // Get number of entry lanes in the fromDirection
+    const entryLanes = laneData.entering[fromDirection]
+    
+    // Get the traffic distribution for this entry
+    const trafficFlow = formData[`vph${fromDirection.charAt(0).toUpperCase() + fromDirection.slice(1)}`];
+
+    if (!trafficFlow.exitWest) {
+      return 0;
+    };
+
+    switch (fromDirection) {
+      case 'east':
+        return entryLanes;
+      case 'south':
+        if (trafficFlow.exitNorth) {
+          return 1;
+        } else if (!trafficFlow.exitEast) {
+          return entryLanes;
+        } else {
+          if (entryLanes <= 2) {
+            return 1;
+          } else {
+            return 2;
+          }
+        }
+      case 'north':
+        if (trafficFlow.exitSouth) {
+          return 1;
+        } else if (!trafficFlow.exitEast) {
+          return entryLanes;
+        } else {
+          if (entryLanes <= 3) {
+            return 1;
+          } else {
+            return 2;
+          }
+        }
+      default:
+        break;
+    }
+  };
+
+  const validateLanes = () => {
+    const directions = ['north', 'south', 'east', 'west'];
+    let flag = true;
+    directions.array.forEach(dir => {
+      let res = calculateExitLanes(dir);
+      // Check that res <= the value entered by the user; return false if not
+      if (res > laneData.exiting[dir]) {
+        flag = false;
+        return;
+      }
+    });
+
+    // if (laneData.exiting['north'] >= calculateExitLanes('north')) {
+    //   console.log('yayyyy success');
+    //   setIsValid(true);
+    // } else {
+    //   console.log('over here');
+    //   setIsValid(false);
+    // }
+
+    setIsValid(flag);
   }
 
   const handleInputChange = (type, direction, value) => {
