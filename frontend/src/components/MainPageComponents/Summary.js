@@ -40,6 +40,8 @@ function Summary({ formData, setActiveStep }) {
     //       console.log(error);
     //     }
     //   });
+
+    navigate('/RankingsPage', { state: formData });
   };
   
   const handleBack = () => {
