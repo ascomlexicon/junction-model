@@ -8,8 +8,10 @@
         'menu pic';
     height: 100vh;
     margin: 0 auto;
+    padding: 10px;
     background-color: #ffffff;
     overflow: hidden;
+    box-sizing: border-box; /* Include padding in element's total width and height */
 }
 
 .menu, .junction-visual {
