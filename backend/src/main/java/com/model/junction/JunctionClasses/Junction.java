@@ -5,36 +5,40 @@ import java.util.Objects;
 public class Junction {
 
   // Attributes
-  private String name;
-  private Double score;
-
-  // Junction quarters in different directions
   private JunctionQuarter east;
   private JunctionQuarter west;
   private JunctionQuarter south;
   private JunctionQuarter north;
 
+  private Double score;
   private String junctionName;
+  private String junctionImage;
 
   // Constructors
-
   public Junction(String junctionName) {
-    this.name = junctionName;
+    this.junctionName = junctionName;
   }
 
   public Junction(String junctionName, Double junctionScore) {
-    this.name = junctionName;
+    this.junctionName = junctionName;
     this.score = junctionScore;
   }
 
   // Accessors and Mutators
-
   public String getName() {
-    return name;
+    return junctionName;
   }
 
   public void setName(String name) {
-    this.name = name;
+    this.junctionName = name;
+  }
+
+  public String getJunctionImage() {
+    return junctionImage;
+  }
+
+  public void setJunctionImage(String junctionImage) {
+    this.junctionImage = junctionImage;
   }
 
   public Double getScore() {
@@ -49,14 +53,12 @@ public class Junction {
   }
 
   // Conversions
-
   @Override
   public String toString() {
-    return "[Junction(name=" + name + ", score=" + score + ")]";
+    return "[Junction(name=" + junctionName + ", score=" + score + ")]";
   }
 
   // Comparison Methods
-
   @Override
   public boolean equals(Object other) {
     if (this == other) {
@@ -67,11 +69,11 @@ public class Junction {
     }
 
     Junction junction = (Junction) other;
-    return Objects.equals(name, junction.name);
+    return Objects.equals(junctionName, junction.getName());
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name);
+    return Objects.hash(junctionName);
   }
 }
