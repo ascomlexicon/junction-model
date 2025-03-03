@@ -171,16 +171,244 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
     return false;
   };
 
-  const validateLanes = () => {
-    const totalEntering = Object.values(laneData.entering).reduce(
-      (sum, val) => sum + (parseInt(val) || 0), 0
-    );
-    const totalExiting = Object.values(laneData.exiting).reduce(
-      (sum, val) => sum + (parseInt(val) || 0),
-      0
-    );
-    setIsValid(totalEntering === totalExiting && totalEntering > 0);
+  // Calculates the number of exit lanes needed in the 'direction' quarter 
+  // Ie if direction = north, calculating lanes exiting northbound
+  function calculateExitLanes(direction) {
+    // Initialize array to store how many lanes turn into our target direction from each other direction
+    let lanesFlowingTo = []
+    let lanesFromThisEntry = 0;
+    // For each of the other 3 directions
+    ["north", "south", "east", "west"].forEach(entryDirection => {
+        // Skip if this is the same as our exit direction (can't enter and exit same direction)
+        if (entryDirection === direction) {
+          return;
+        };
+        
+        // Get how many lanes from this entry turn toward our exit direction
+        // We need to map the relationship (e.g., traffic from west turning "north")
+        if (direction == "north") {
+          // Calculates number of cars going FROM entryDirection TO North
+          lanesFromThisEntry = calculateLanesTurningNorth(entryDirection)
+        } else if (direction == "south") {
+          lanesFromThisEntry = calculateLanesTurningSouth(entryDirection)
+        } else if (direction == "east") {
+          lanesFromThisEntry = calculateLanesTurningEast(entryDirection)
+        } else {
+          lanesFromThisEntry = calculateLanesTurningWest(entryDirection)
+        };
+            
+        // Add to our array
+        lanesFlowingTo.push(lanesFromThisEntry);
+    });
+    
+    // Return the maximum number of lanes turning into this direction
+    return Math.max(...lanesFlowingTo, 1); // Use 0 as fallback if array is empty
+  }
+
+  // Helper function example for one direction
+  function calculateLanesTurningNorth(fromDirection) {
+    // Get number of entry lanes in the fromDirection
+    const entryLanes = laneData.entering[fromDirection]
+    
+    // Get the traffic distribution for this entry
+    const trafficFlow = formData[`vph${fromDirection.charAt(0).toUpperCase() + fromDirection.slice(1)}`];
+
+    // If no traffic exits north, then no lanes are needed for this fromDirection, so return 0
+    if (!trafficFlow.exitNorth) {
+      return 0;
+    };
+
+    switch (fromDirection) {
+      case 'south':
+        // If we go from south to north, all lanes are utilised as straight
+        return entryLanes;
+      case 'west':
+        if (trafficFlow.exitEast) {
+          // Traffic flows to east (straight), hence only 1 northbound lane
+          return 1;
+        } else if (!trafficFlow.exitSouth) {
+          // Traffic flows only to the north
+          return entryLanes;
+        } else {
+          // Traffic flows north and south only
+          if (entryLanes <= 2) {
+            return 1;
+          } else {
+            return 2;
+          }
+        }
+      case 'east':
+        if (trafficFlow.exitWest) {
+          // Traffic flows to west (straight), hence only 1 northbound lane
+          return 1;
+        } else if (!trafficFlow.exitSouth) {
+          // Traffic flows only to the north
+          return entryLanes;
+        } else {
+          // Traffic flows north and south only
+          if (entryLanes <= 3) {
+            return 1;
+          } else {
+            return 2;
+          }
+        }
+      default:
+        break;
+    }
   };
+
+  function calculateLanesTurningSouth(fromDirection) {
+    // Get number of entry lanes in the fromDirection
+    const entryLanes = laneData.entering[fromDirection]
+    
+    // Get the traffic distribution for this entry
+    const trafficFlow = formData[`vph${fromDirection.charAt(0).toUpperCase() + fromDirection.slice(1)}`];
+
+    if (!trafficFlow.exitSouth) {
+      return 0;
+    };
+
+    switch (fromDirection) {
+      case 'north':
+        return entryLanes;
+      case 'east':
+        if (trafficFlow.exitWest) {
+          return 1;
+        } else if (!trafficFlow.exitNorth) {
+          return entryLanes;
+        } else {
+          if (entryLanes <= 2) {
+            return 1;
+          } else {
+            return 2;
+          }
+        }
+      case 'west':
+        if (trafficFlow.exitEast) {
+          return 1;
+        } else if (!trafficFlow.exitNorth) {
+          return entryLanes;
+        } else {
+          if (entryLanes <= 3) {
+            return 1;
+          } else {
+            return 2;
+          }
+        }
+      default:
+        break;
+    }
+  };
+
+  function calculateLanesTurningEast(fromDirection) {
+    // Get number of entry lanes in the fromDirection
+    const entryLanes = laneData.entering[fromDirection]
+    
+    // Get the traffic distribution for this entry
+    const trafficFlow = formData[`vph${fromDirection.charAt(0).toUpperCase() + fromDirection.slice(1)}`];
+
+    if (!trafficFlow.exitEast) {
+      return 0;
+    };
+
+    switch (fromDirection) {
+      case 'west':
+        return entryLanes;
+      case 'north':
+        if (trafficFlow.exitSouth) {
+          return 1;
+        } else if (!trafficFlow.exitWest) {
+          return entryLanes;
+        } else {
+          if (entryLanes <= 2) {
+            return 1;
+          } else {
+            return 2;
+          }
+        }
+      case 'south':
+        if (trafficFlow.exitNorth) {
+          return 1;
+        } else if (!trafficFlow.exitWest) {
+          return entryLanes;
+        } else {
+          if (entryLanes <= 3) {
+            return 1;
+          } else {
+            return 2;
+          }
+        }
+      default:
+        break;
+    }
+  };
+
+  function calculateLanesTurningWest(fromDirection) {
+    // Get number of entry lanes in the fromDirection
+    const entryLanes = laneData.entering[fromDirection]
+    
+    // Get the traffic distribution for this entry
+    const trafficFlow = formData[`vph${fromDirection.charAt(0).toUpperCase() + fromDirection.slice(1)}`];
+
+    if (!trafficFlow.exitWest) {
+      return 0;
+    };
+
+    switch (fromDirection) {
+      case 'east':
+        return entryLanes;
+      case 'south':
+        if (trafficFlow.exitNorth) {
+          return 1;
+        } else if (!trafficFlow.exitEast) {
+          return entryLanes;
+        } else {
+          if (entryLanes <= 2) {
+            return 1;
+          } else {
+            return 2;
+          }
+        }
+      case 'north':
+        if (trafficFlow.exitSouth) {
+          return 1;
+        } else if (!trafficFlow.exitEast) {
+          return entryLanes;
+        } else {
+          if (entryLanes <= 3) {
+            return 1;
+          } else {
+            return 2;
+          }
+        }
+      default:
+        break;
+    }
+  };
+
+  const validateLanes = () => {
+    const directions = ['north', 'south', 'east', 'west'];
+    let flag = true;
+
+    ['north', 'south', 'east', 'west'].forEach(dir => {
+      let res = calculateExitLanes(dir);
+      // Check that res <= the value entered by the user; return false if not
+      if (res > laneData.exiting[dir]) {
+        flag = false;
+        return;
+      }
+    });
+
+    // if (laneData.exiting['north'] >= calculateExitLanes('north')) {
+    //   console.log('yayyyy success');
+    //   setIsValid(true);
+    // } else {
+    //   console.log('over here');
+    //   setIsValid(false);
+    // }
+
+    setIsValid(flag);
+  }
 
   const handleInputChange = (type, direction, value) => {
     // Ensure the value doesn't exceed 5
