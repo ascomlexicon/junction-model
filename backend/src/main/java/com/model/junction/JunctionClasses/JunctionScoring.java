@@ -13,7 +13,7 @@ public class JunctionScoring {
     /* used for Normalization*/ 
     double worstMaximumWaitingTime= SimulationTime*15*1000;
     double worstAverageWaitingTime= SimulationTime*15*1000;
-    int worstMaximumQueueLength= outboundVph;
+    double worstMaximumQueueLength= outboundVph;
 
     double score = weightingMWT * (1 - averageWaitTimeInMS / worstAverageWaitingTime) + weightingMWT * (1 - maximumWaitingTimeInMS / worstMaximumWaitingTime) + weightingMQL * (1 - maximumQueueLength / worstMaximumQueueLength);
     DecimalFormat df = new DecimalFormat("#.##");      
