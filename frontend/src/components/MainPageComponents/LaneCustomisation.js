@@ -411,10 +411,18 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
   }
 
   const handleInputChange = (type, direction, value) => {
-    // Ensure the value doesn't exceed 5
+    // Ensure the value doesn't exceed 5 or is less than 0
     const numValue = parseInt(value) || 0;
-    const limitedValue = numValue > 5 ? '5' : value;
-    
+
+    let limitedValue = '';
+    if (numValue > 5) {
+      limitedValue = '5';
+    } else if (numValue < 0) {
+      limitedValue = '0';
+    } else {
+      limitedValue = value
+    };
+        
     setLaneData(prev => ({
       ...prev,
       [type]: {
