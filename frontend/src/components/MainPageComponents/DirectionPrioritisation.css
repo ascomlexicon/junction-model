@@ -1,11 +1,10 @@
-/* LanePrioritization.css */
-.lane-prioritization-container {
+.lane-prioritisation-container {
     background-color: #f9f9f9;
     border-radius: 8px;
     width: 100%;
   }
   
-  .lane-prioritization-container h2 {
+  .lane-prioritisation-container h2 {
     margin-top: 0;
     padding-bottom: 10px;
     border-bottom: 1px solid #ddd;
@@ -29,7 +28,7 @@
     padding-left: 20px;
   }
   
-  .prioritization-controls {
+  .prioritisation-controls {
     display: flex;
     flex-direction: column;
     gap: 15px;

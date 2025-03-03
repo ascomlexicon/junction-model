@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
-import './LanePrioritisation.css';
+import './DirectionPrioritisation.css';
 import SaveNextButton from '../ButtonComponents/SaveNextButton';
 import BackButton from '../ButtonComponents/BackButton';
 import ResetAllButton from '../ButtonComponents/ResetAllButton';
 import ResetPrioritisationButton from '../ButtonComponents/ResetPrioritisationButton';
 
-function LanePrioritisation({ setActiveStep, saveFormData, resetForm, resetAllForms, formData = {} }) {
+function DirectionPrioritisation({ setActiveStep, saveFormData, resetForm, resetAllForms, formData = {} }) {
   // Initialize state with passed formData or default values
   const [prioritisationData, setPrioritisationData] = useState(() => {
     // return Object.keys(formData).length > 0 ? formData : {
@@ -21,7 +21,7 @@ function LanePrioritisation({ setActiveStep, saveFormData, resetForm, resetAllFo
     if (formData.enablePrioritisation) {
       return {
         enablePrioritisation: true,
-        directions: formData.lanePrioritisation.map((direction, index) => ({ id: direction, content: direction }))
+        directions: formData.directionPrioritisation.map((direction, index) => ({ id: direction, content: direction }))
       };
     }
     return {
@@ -58,27 +58,27 @@ function LanePrioritisation({ setActiveStep, saveFormData, resetForm, resetAllFo
     }));
   };
 
-  // Convert lane prioritisation to required JSON format
+  // Convert direction prioritisation to required JSON format
   const formatLanePrioritiesToJSON = () => {
-    let lanePrioritisation = [];
+    let directionPrioritisation = [];
     if (!prioritisationData.enablePrioritisation) {
-      return { enablePrioritisation: false, lanePrioritisation };
+      return { enablePrioritisation: false, directionPrioritisation };
     }
 
     if (prioritisationData.enablePrioritisation) {
-      lanePrioritisation = prioritisationData.directions.map(direction => direction.content);
+      directionPrioritisation = prioritisationData.directions.map(direction => direction.content);
     }
 
     return {
       enablePrioritisation: true,
-      lanePrioritisation: lanePrioritisation
+      directionPrioritisation: directionPrioritisation
     };
   };
 
   // Handle button click events
   const handleSaveNext = () => {
     const formattedData = formatLanePrioritiesToJSON();
-    saveFormData('lanePrioritisation', formattedData);
+    saveFormData('directionPrioritisation', formattedData);
     setActiveStep(4); // Move to Summary step
   };
 
@@ -87,7 +87,7 @@ function LanePrioritisation({ setActiveStep, saveFormData, resetForm, resetAllFo
   };
 
   const handleResetChanges = () => {
-    resetForm('lanePrioritisation');
+    resetForm('directionPrioritisation');
     setPrioritisationData({
       enablePrioritisation: false,
       directions: [
@@ -100,8 +100,8 @@ function LanePrioritisation({ setActiveStep, saveFormData, resetForm, resetAllFo
   };
 
   return (
-    <div className="lane-prioritization-container">
-      <h2>Lane Prioritisation</h2>
+    <div className="lane-prioritisation-container">
+      <h2>Direction Prioritisation</h2>
       
       <div className="info-box">
         <h3>Info:</h3>
@@ -112,12 +112,12 @@ function LanePrioritisation({ setActiveStep, saveFormData, resetForm, resetAllFo
         </ul>
       </div>
 
-      <div className="prioritization-controls">
+      <div className="prioritisation-controls">
         <div className="control-row">
-          <label htmlFor="add-prioritization">
-            Add direction Prioritisation:
+          <label htmlFor="add-prioritisation">
+            Add direction prioritisation:
             <input
-              id="add-prioritization"
+              id="add-prioritisation"
               type="checkbox"
               checked={prioritisationData.enablePrioritisation}
               onChange={handleenablePrioritisation}
@@ -181,4 +181,4 @@ function LanePrioritisation({ setActiveStep, saveFormData, resetForm, resetAllFo
   );
 }
 
-export default LanePrioritisation;
+export default DirectionPrioritisation;

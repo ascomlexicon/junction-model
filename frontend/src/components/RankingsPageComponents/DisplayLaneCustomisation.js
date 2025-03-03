@@ -12,7 +12,7 @@ const DisplayLaneCustomisation = ({ setActiveStep, saveFormData, resetForm, rese
   };
 
   return (
-    <div className={styles.laneCustomization}>
+    <div className={styles.laneCustomisation}>
       <h2>Lane Customisation</h2>
 
       {/* Lanes Entering Section */}

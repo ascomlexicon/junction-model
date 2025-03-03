@@ -100,7 +100,7 @@ function PedestrianCrossing({ setActiveStep, saveFormData, resetForm, resetAllFo
     if (isValid) {
       const formattedData = formatPedestrianDataToJSON(); // Formats data to JSON
       saveFormData('pedestrianCrossing', formattedData);
-      setActiveStep(3); // Move to the next step (LanePrioritisation)
+      setActiveStep(3); // Move to the next step (DirectionPrioritisation)
     }
   };
 

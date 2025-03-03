@@ -563,8 +563,8 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
   };
 
   return (
-    <div className="lane-customization">
-      <h2>Lane Customization</h2>
+    <div className="lane-customisation">
+      <h2>Lane Customisation</h2>
 
       {/* Warning Popup */}
       {showWarning && (

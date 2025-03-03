@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './JunctionRankings.module.css';
 import DisplayLaneCustomisation from './DisplayLaneCustomisation';
 import DisplayPedestrianCrossing from './DisplayPedestrianCrossing';
-import DisplayLanePrioritisation from './DisplayLanePrioritisation';
+import DisplayDirectionPrioritisation from './DisplayDirectionPrioritisation';
 
 
 const ScoreBreakdown = ({ junctionName, score }) => {
@@ -51,7 +51,7 @@ const ScoreBreakdown = ({ junctionName, score }) => {
             <h3>Configurable Parameters</h3>
             <DisplayLaneCustomisation />
             <DisplayPedestrianCrossing />
-            <DisplayLanePrioritisation />
+            <DisplayDirectionPrioritisation />
         </div>
 
         </div>

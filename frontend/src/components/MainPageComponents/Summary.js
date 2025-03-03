@@ -35,7 +35,7 @@ function Summary({ formData, setActiveStep }) {
   };
   
   const handleBack = () => {
-    setActiveStep(3); // Go back to LanePrioritisation
+    setActiveStep(3); // Go back to DirectionPrioritisation
   };
 
   // Calculate total vehicles per hour for traffic flow summary
@@ -159,7 +159,7 @@ function Summary({ formData, setActiveStep }) {
             <>
               <p>Priority Order (highest to lowest):</p>
               <ol>
-                {formData.lanePrioritisation.map((direction, index) => (
+                {formData.directionPrioritisation.map((direction, index) => (
                   <li key={`priority-${index}`}>{direction}</li>
                 ))}
               </ol>
@@ -169,7 +169,7 @@ function Summary({ formData, setActiveStep }) {
       </div>
       
       <div className="button-container">
-        <BackButton onClick={handleBack} label="Back to Lane Prioritisation" />
+        <BackButton onClick={handleBack} label="Back to Direction Prioritisation" />
         <button className="simulate-button" onClick={handleClick}>Run Simulation</button>
       </div>
     </div>

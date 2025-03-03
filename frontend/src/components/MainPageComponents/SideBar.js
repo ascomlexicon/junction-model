@@ -7,7 +7,7 @@ const Sidebar = ({ setActiveStep, activeStep }) => {
     { label: 'Traffic Flow', step: 0 },
     { label: 'Lane Customisation', step: 1 },
     { label: 'Pedestrian Crossing', step: 2 },
-    { label: 'Lane Prioritisation', step: 3 },
+    { label: 'Direction Prioritisation', step: 3 },
     { label: 'Summary', step: 4 }
   ];
 
