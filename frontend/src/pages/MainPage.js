@@ -19,7 +19,7 @@ const InstructionsPage = () => {
       <ol>
         <li>Use the sidebar to navigate through different configuration steps</li>
         <li>Start with Traffic Flow settings to configure junction types and traffic patterns</li>
-        <li>Customize lane configurations in the Lane Customisation section</li>
+        <li>Customise lane configurations in the Lane Customisation section</li>
         <li>View your completed junction in the visual display area above</li>
       </ol>
       <p>Click any option in the sidebar to begin designing your junction.</p>

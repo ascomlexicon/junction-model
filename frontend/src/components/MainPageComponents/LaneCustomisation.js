@@ -564,6 +564,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
 
   return (
     <div className="lane-customisation">
+      {/* TODO: Add instructions area as with other components for consistency */}
       <h2>Lane Customisation</h2>
 
       {/* Warning Popup */}
