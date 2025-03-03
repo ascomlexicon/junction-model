@@ -12,10 +12,12 @@ import com.model.junction.ProjectClasses.ProjectStorage;
 public class JunctionController {
   private final ProjectStorage projectStorage;
   
+  // Constructors
   public JunctionController(ProjectStorage projectStore) {
     this.projectStorage = projectStore; 
   }
 
+  // Get Mappings
   @GetMapping("api/projects")
   public HashMap<String, Project> getProjects() {
       return this.projectStorage.getAllProjects();
