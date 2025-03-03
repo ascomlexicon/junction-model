@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Info, AlertCircle } from 'lucide-react';
+import { Info, AlertCircle } from 'lucide-react';
 import './LaneCustomisation.css';
 import SaveNextButton from '../ButtonComponents/SaveNextButton';
 import BackButton from '../ButtonComponents/BackButton';
@@ -80,9 +81,20 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
     east: false,
     west: false,
   });
+  const [showWarning, setShowWarning] = useState(false);
+  const [warningMessage, setWarningMessage] = useState('');
+  
+  // Track left-turning traffic from each direction
+  const [leftTurningTraffic, setLeftTurningTraffic] = useState({
+    north: false,
+    south: false,
+    east: false,
+    west: false,
+  });
 
   useEffect(() => {
     validateLanes();
+    checkLeftTurningTraffic();
     checkLeftTurningTraffic();
   }, [laneData.entering, laneData.exiting]);
   
@@ -161,10 +173,12 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
     const totalEntering = Object.values(laneData.entering).reduce(
       (sum, val) => sum + (parseInt(val) || 0), 0
     );
+
     const totalExiting = Object.values(laneData.exiting).reduce(
       (sum, val) => sum + (parseInt(val) || 0),
       0
     );
+
     setIsValid(totalEntering === totalExiting && totalEntering > 0);
   };
 
@@ -190,6 +204,13 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
       return;
     }
     
+    // Check if there's left-turning traffic in this direction
+    if (leftTurningTraffic[direction]) {
+      setWarningMessage(`Cannot add a left turn lane for ${direction} direction. There is already traffic turning left in the Traffic Flow settings. Please remove the left turn traffic first.`);
+      setShowWarning(true);
+      return;
+    }
+    
     setLaneData((prev) => ({
       ...prev,
       leftTurn: {
@@ -200,6 +221,13 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
   };
 
   const handleSpecialLaneChange = (type, direction) => {
+    // Check if there's left-turning traffic in this direction
+    if (leftTurningTraffic[direction]) {
+      setWarningMessage(`Cannot add a ${type === 'busLane' ? 'bus' : 'cycle'} lane for ${direction} direction. There is already traffic turning left in the Traffic Flow settings. Please remove the left turn traffic first.`);
+      setShowWarning(true);
+      return;
+    }
+    
     // Check if there's left-turning traffic in this direction
     if (leftTurningTraffic[direction]) {
       setWarningMessage(`Cannot add a ${type === 'busLane' ? 'bus' : 'cycle'} lane for ${direction} direction. There is already traffic turning left in the Traffic Flow settings. Please remove the left turn traffic first.`);
