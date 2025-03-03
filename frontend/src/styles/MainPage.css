@@ -48,12 +48,8 @@
 .junction-visual {
     grid-area: pic;
     background-color: #f0f0f0;
-    border-radius: 10px;
-    /* Get rid of grid layout for junction for now */
-    /* display: grid; */
-    /* grid-template-rows: 4fr 1fr; */
-    /* justify-content: center; */
-    /* align-items: center; */
+    /* border-radius: 10px; */
+    margin-left: 10px;
 }
 
 /* Adjust header to prevent it from affecting layout */

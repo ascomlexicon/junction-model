@@ -275,11 +275,7 @@ function MainPage() {
         <div className="container">
             <h1 className='main-title'>Junction Simulator</h1>
             <div className="junction-visual">
-                {/* Add canvas */}
                 <JunctionCanvas config={completeJSON} />
-
-                {/* <div className='image'>Junction graphicIMAGE</div>
-                <div className='Leaderboard'>See junction Leaderboard</div> */}
             </div>
             <div className='menu'>
                 <Sidebar setActiveStep={setActiveStep} activeStep={activeStep} />
