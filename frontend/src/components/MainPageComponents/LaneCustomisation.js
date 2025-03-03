@@ -81,16 +81,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
     east: false,
     west: false,
   });
-  const [showWarning, setShowWarning] = useState(false);
-  const [warningMessage, setWarningMessage] = useState('');
-  
-  // Track left-turning traffic from each direction
-  const [leftTurningTraffic, setLeftTurningTraffic] = useState({
-    north: false,
-    south: false,
-    east: false,
-    west: false,
-  });
+   
 
   useEffect(() => {
     validateLanes();
