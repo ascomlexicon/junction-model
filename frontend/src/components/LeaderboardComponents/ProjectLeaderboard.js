@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styles from '../LeaderboardComponents/ProjectLeaderboard.module.css';
 import { Link } from "react-router-dom";
 import VPHDataDisplay from './VPHDisplayData'; // Import the VPH data component
+import LoadingComponent from './LoadingComponent';
 
 const ProjectLeaderboard = () => {
   // Used whilst the data is being served from the backend
@@ -86,7 +87,7 @@ const ProjectLeaderboard = () => {
         </Link>
       </div>
       
-      {isLoading && <p>Fetching data from the backend...</p>}
+      {isLoading && <LoadingComponent />}
       {error && <p>Error: {error.message}</p>}
 
       {!isLoading && !error && (
