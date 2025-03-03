@@ -18,7 +18,7 @@ function DisplayDirectionPrioritisation({ formData = {} }) {
 
   return (
     <div className={styles.directionPrioritisationContainer}>
-      <h2>Lane Prioritisation</h2>
+      <h2>Direction Prioritisation</h2>
 
       {prioritisationData.enablePrioritisation ? (
         <div className={styles.staticData}>
@@ -33,7 +33,7 @@ function DisplayDirectionPrioritisation({ formData = {} }) {
           <p className={styles.subjectToChange}>Priority is subject to change based on traffic conditions.</p>
         </div>
       ) : (
-        <p className={styles.noPrioritisation}>No lane prioritisation.</p>
+        <p className={styles.noPrioritisation}>No direction prioritisation.</p>
       )}
     </div>
   );

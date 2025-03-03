@@ -59,7 +59,7 @@ function DirectionPrioritisation({ setActiveStep, saveFormData, resetForm, reset
   };
 
   // Convert direction prioritisation to required JSON format
-  const formatLanePrioritiesToJSON = () => {
+  const formatDirectionPrioritiesToJSON = () => {
     let directionPrioritisation = [];
     if (!prioritisationData.enablePrioritisation) {
       return { enablePrioritisation: false, directionPrioritisation };
@@ -77,7 +77,7 @@ function DirectionPrioritisation({ setActiveStep, saveFormData, resetForm, reset
 
   // Handle button click events
   const handleSaveNext = () => {
-    const formattedData = formatLanePrioritiesToJSON();
+    const formattedData = formatDirectionPrioritiesToJSON();
     saveFormData('directionPrioritisation', formattedData);
     setActiveStep(4); // Move to Summary step
   };
@@ -100,7 +100,7 @@ function DirectionPrioritisation({ setActiveStep, saveFormData, resetForm, reset
   };
 
   return (
-    <div className="lane-prioritisation-container">
+    <div className="direction-prioritisation-container">
       <h2>Direction Prioritisation</h2>
       
       <div className="info-box">
