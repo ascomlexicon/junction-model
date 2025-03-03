@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Slab } from 'react-loading-indicators';
 import styles from './JunctionRankings.module.css';
 import JunctionList from './JunctionList';
 import ScoreBreakdown from './ScoreBreakdown';
@@ -146,6 +147,19 @@ const JunctionRankings = ({ clickedJunction }) => {
     setSelectedJunction(selectedJunction);
   };
   
+  // Loading screen whilst GET request is being processed
+  // TODO: Change colour scheme
+  if (isLoading) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <Slab color="#32cd32" size="medium" text="Calculating Score..." textColor="" />
+        <Link to="/MainPage" className={styles.loadingBackButton}>
+          Back to Junction Configuration Menu
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.container}>
       <div className = {styles.header}>
@@ -166,8 +180,6 @@ const JunctionRankings = ({ clickedJunction }) => {
         <VPHDisplayForm />
       </div>
 
-      {/* Displays a loading screen whilst GET request being served */}
-      {isLoading && <p>Fetching data from the backend...</p>}
       {error && <p>Error: {error.message}</p>}
       {!isLoading && !error && (
         <>

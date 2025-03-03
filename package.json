@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "lucide-react": "^0.475.0"
+    "lucide-react": "^0.475.0",
+    "react-loading-indicators": "^1.0.0"
   }
 }
