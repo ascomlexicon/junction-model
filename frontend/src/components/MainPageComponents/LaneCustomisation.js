@@ -88,7 +88,6 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
   
   // Function to check if there is left-turning traffic from each direction
   const checkLeftTurningTraffic = () => {
-    // FIXME: Why is north true?
     const leftTurns = {
       north: hasLeftTurningTraffic('north'),
       south: hasLeftTurningTraffic('south'),
