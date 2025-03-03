@@ -287,7 +287,7 @@ function MainPage() {
                     {renderForm()}
                 </div>
             </div>
-            {/* <JSONViewer data={completeJSON} /> */}
+            <JSONViewer data={completeJSON} />
         </div>
     );
 }
