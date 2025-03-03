@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './PedestrianCrossing.css';
 import SaveNextButton from '../ButtonComponents/SaveNextButton';
 import BackButton from '../ButtonComponents/BackButton';
-import ResetLaneChangesButton from '../ButtonComponents/ResetLaneChangesButton';
 import ResetAllButton from '../ButtonComponents/ResetAllButton';
+import ResetCrossingsButton from '../ButtonComponents/ResetCrossingsButton';
 
 function PedestrianCrossing({ setActiveStep, saveFormData, resetForm, resetAllForms, formData = {} }) {
   // Initialize state with passed formData or default values
@@ -181,7 +181,7 @@ function PedestrianCrossing({ setActiveStep, saveFormData, resetForm, resetAllFo
       {/* Button container */}
       <div className="button-container">
         <BackButton onClick={handleBack} label="Back to Lane Customisation" />
-        <ResetLaneChangesButton onClick={handleResetChanges} />
+        <ResetCrossingsButton onClick={handleResetChanges} />
         <ResetAllButton onClick={resetAllForms} />
         <SaveNextButton onClick={handleSaveNext} disabled={!isValid} />
       </div>
