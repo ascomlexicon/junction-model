@@ -387,7 +387,6 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
   };
 
   const validateLanes = () => {
-    const directions = ['north', 'south', 'east', 'west'];
     let flag = true;
 
     ['north', 'south', 'east', 'west'].forEach(dir => {
@@ -398,14 +397,6 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
         return;
       }
     });
-
-    // if (laneData.exiting['north'] >= calculateExitLanes('north')) {
-    //   console.log('yayyyy success');
-    //   setIsValid(true);
-    // } else {
-    //   console.log('over here');
-    //   setIsValid(false);
-    // }
 
     setIsValid(flag);
   }
