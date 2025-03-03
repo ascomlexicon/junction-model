@@ -194,9 +194,9 @@ class JunctionSimulationLogic {
         }
 
         // Generate Poisson-distributed number of cars for each lane
-        int carsRight = generatePoisson((int) exitingRight / 60);
-        int carsForward = generatePoisson((int) exitingForward / 60);
-        int carsLeft = generatePoisson((int) exitingLeft / 60);
+        int carsRight = generatePoisson((int) exitingRight / 60.0);
+        int carsForward = generatePoisson((int) exitingForward / 60.0);
+        int carsLeft = generatePoisson((int) exitingLeft / 60.0);
         
         // Compute the total generated cars for this round
         int totalCars = carsRight + carsForward + carsLeft;
@@ -504,7 +504,7 @@ class JunctionSimulationLogic {
   }
 
   // Poisson distribution generator(this algorithm proposed by D. Knuth:)
-  private static int generatePoisson(int lambda) {
+  private static int generatePoisson(double lambda) {
       double L = Math.exp(-lambda); 
       double p = 1.0;
       int k = 0;
