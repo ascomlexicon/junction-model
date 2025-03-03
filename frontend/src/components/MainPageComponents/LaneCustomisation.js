@@ -628,7 +628,8 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
             {showExitingTooltip && (
               <div className="tooltip">
                 Maximum of 5 lanes per direction.
-                Total number of lanes entering and exiting must be equal
+                Total number of lanes entering and exiting must be equal.
+                Number of lanes entering includes any special lanes that are added.
               </div>
             )}
           </div>
@@ -650,6 +651,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
 
       {/* Left Turn Section */}
       <section className="left-turn-section">
+        {/* TODO: Add an info-icon to this too */}
       <h3>Left Turn Lanes</h3>
       {Object.keys(laneData.leftTurn).map((direction) => (
         <div key={`left-turn-${direction}`} className="checkbox-group">
@@ -701,7 +703,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
                   />
                   {direction.charAt(0).toUpperCase() + direction.slice(1)}
                   {leftTurningTraffic[direction] && (
-                    <span className="disabled-label"> (Left-turning traffic exists.Cannot have a special lane when left turning traffic exists)</span>
+                    <span className="disabled-label"> (Left-turning traffic exists. Cannot have a special lane when left turning traffic exists)</span>
                   )}
                 </label>
               </div>
@@ -720,7 +722,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
                   />
                   {direction.charAt(0).toUpperCase() + direction.slice(1)}
                   {leftTurningTraffic[direction] && (
-                    <span className="disabled-label"> (Left-turning traffic exists.Cannot have a special lane when left turning traffic exists)</span>
+                    <span className="disabled-label"> (Left-turning traffic exists. Cannot have a special lane when left turning traffic exists)</span>
                   )}
                 </label>
               </div>

@@ -55,7 +55,6 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 20px;
   }
 
   .info-icon {
@@ -214,4 +213,11 @@
   font-size: 0.8em;
   color: #d32f2f;
   font-style: italic;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
 }
