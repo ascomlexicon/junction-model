@@ -158,77 +158,121 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
     return false;
   };
 
-  // FIXME: Incorrect logic
-  // const validateLanes = () => {
-  //   const directions = ['north', 'south', 'east', 'west'];
+  function calculateExitLanes(direction) {
+    // Initialize array to store how many lanes turn into our target direction from each other direction
+    let lanesFlowingTo = []
+    
+    // For each of the other 3 directions
+    ["north", "south", "east", "west"].forEach(entryDirection => {
+        // Skip if this is the same as our exit direction (can't enter and exit same direction)
+        if (entryDirection === direction) {
+          return;
+        };
+        
+        // Get how many lanes from this entry turn toward our exit direction
+        // We need to map the relationship (e.g., traffic from west turning "north")
+        if (direction == "north") {
+          // Calculates number of cars going FROM entryDirection TO North
+          lanesFromThisEntry = calculateLanesTurningNorth(entryDirection)
+        } else if (direction == "south") {
+          // TODO: Do other functions if we aren't going to generalise
+          lanesFromThisEntry = calculateLanesTurningSouth(entryDirection)
+        } else if (direction == "east") {
+          lanesFromThisEntry = calculateLanesTurningEast(entryDirection)
+        } else {
+          lanesFromThisEntry = calculateLanesTurningWest(entryDirection)
+        };
+            
+        // Add to our array
+        lanesFlowingTo.push(lanesFromThisEntry);
+    });
+    
+    // Return the maximum number of lanes turning into this direction
+    return Math.max(...lanesFlowingTo, 1); // Use 0 as fallback if array is empty
+  }
 
-  //   const totalEntering = Object.values(laneData.entering).reduce(
-  //     (sum, val) => sum + (parseInt(val) || 0), 0
-  //   );
+  // Helper function example for one direction
+  function calculateLanesTurningNorth(fromDirection) {
+    // Get number of entry lanes in the fromDirection
+    const entryLanes = laneData.entering[fromDirection]
+    
+    // Get the traffic distribution for this entry
+    const trafficFlow = formData[`vph${fromDirection.charAt(0).toUpperCase() + fromDirection.slice(1)}`];
 
-  //   const totalExiting = Object.values(laneData.exiting).reduce(
-  //     (sum, val) => sum + (parseInt(val) || 0),
-  //     0
-  //   );
+    // If no traffic exits north, then no lanes are needed for this fromDirection, so return 0
+    if (!trafficFlow.exitNorth) {
+      return 0;
+    };
 
-  //   // Number of lanes that should be exiting in any given direction
-  //   let maxExitNorthbound = 0;
-  //   let maxExitSouthbound = 0;
-  //   let maxExitEastbound = 0;
-  //   let maxExitWestbound = 0;
+    switch (fromDirection) {
+      case 'south':
+        // If we go from south to north, all lanes are utilised as straight
+        return entryLanes;
+      case 'west':
+        if (trafficFlow.exitEast) {
+          // Traffic flows to east (straight), hence only 1 northbound lane
+          return 1;
+        } else if (!trafficFlow.exitSouth) {
+          // Traffic flows only to the north
+          return entryLanes;
+        } else {
+          // Traffic flows north and south only
+          switch (entryLanes) {
+            case 1:
+              return 1;
+            case 2:
+              return 1;
+            case 3:
+              return 2;
+            case 4:
+              return 2;
+            case 5:
+              // TODO: Check how the configurations have been setup with the graphics
+              return 3;
+          }
+        }
+      case 'east':
+        if (trafficFlow.exitWest) {
+          // Traffic flows to west (straight), hence only 1 northbound lane
+          return 1;
+        } else if (!trafficFlow.exitSouth) {
+          // Traffic flows only to the north
+          return entryLanes;
+        } else {
+          // Traffic flows north and south only
+          switch (entryLanes) {
+            case 1:
+              return 1;
+            case 2:
+              return 1;
+            case 3:
+              return 2;
+            case 4:
+              return 2;
+            case 5:
+              // TODO: Check how the configurations have been setup with the graphics
+              return 3;
+          }
+        }
+      default:
+        break;
+    }
+  } 
 
-  //   // Iterate through each direction
-  //   directions.forEach((direction) => {
-  //     // Get the vph data for the current direction
-  //     const directionKey = `vph${direction.charAt(0).toUpperCase() + direction.slice(1)}`;
-  //     const directionData = formData[directionKey];
 
-  //     if (typeof directionData === 'object' && directionData !== null) {
-  //       // If it's an object, iterate through its values
-  //       Object.values(directionData).forEach(entry => {
-  //         if (entry && typeof entry === 'object') {
-  //           if (entry.exitNorth) maxExitNorthbound++;
-  //           if (entry.exitSouth) maxExitSouthbound++;
-  //           if (entry.exitEast) maxExitEastbound++;
-  //           if (entry.exitWest) maxExitWestbound++;
-  //         }
-  //       });
-  //     }
+  const validateLanes = () => {
+    const directions = ['north', 'south', 'east', 'west'];
 
-  //     // Determines number of lanes entering the junction
-  //     switch (laneData.entering[direction]) {
-  //       case 1:
-  //         // If there's only 1 lane, then maxExitX = max(maxExitX, 1)
-  //         if (directionData.exitNorth) {
-  //           maxExitNorthbound = Math.max(maxExitNorthbound, 1);
-  //         } 
-  //         if (directionData.exitSouth) {
-  //           maxExitSouthbound = Math.max(maxExitSouthbound, 1);
-  //         } 
-  //         if (directionData.exitEast) {
-  //           maxExitEastbound = Math.max(maxExitEastbound, 1);
-  //         }
-  //         if (directionData.exitWest) {
-  //           maxExitWestbound = Math.max(maxExitWestbound, 1);
-  //         };
-  //         break;
-  //       case 2:
-  //         // This depends on the traffic flow more than first case
-  //           // if traffic only goes left, then maxLeftX = max(maxLeftX, 2), but then we're not using absolute directions any more
-  //           // if traffic goes straight and left, then maxLeftX = max(maxLeftX, 1) and maxStraightX = max(maxStraightX, 2)
-  //           // if traffic goes straight and right, then maxRightX = max(maxRightX, 1) and maxStraightX = max(maxStraightX, 2)
-  //           // if traffic goes straight, left, and right, then maxLeftX = max(maxLeftX, 1), maxRightX = max(maxRightX, 1), and maxStraightX = max(maxStraightX, 1)
-  //         break;
-  //       case 3:
-  //         break;
-  //       case 4:
-  //         break;
-  //       case 5:
-  //         break;
-  //       default:
-  //         break;
-  //     }
-  //   });
+    directions.array.forEach(dir => {
+      let res = calculateExitLanes(dir);
+      // Check that res <= the value entered by the user; return false if not
+      // TODO: Not sure of the best way to do this
+      if (res > laneData.exiting[dir]) {
+        setIsValid(false);
+        return;
+      }
+    });
+  }
 
   const handleInputChange = (type, direction, value) => {
     // Ensure the value doesn't exceed 5
