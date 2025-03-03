@@ -77,6 +77,8 @@ import axios from 'axios';
 //   junctionImage: null
 // }
 
+// TODO: Need to think about the case when we render this component from the projects page
+  // See VPHDisplayData
 const JunctionRankings = ({ clickedJunction }) => {
   // Used whilst the data is being retrieved from the backend
   const [isLoading, setIsLoading] = useState(true);
