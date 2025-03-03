@@ -260,19 +260,25 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
   };
 
   const validateLanes = () => {
-    const directions = ['north', 'south', 'east', 'west'];
-    let flag = true;
-    directions.array.forEach(dir => {
-      let res = calculateExitLanes(dir);
-      // Check that res <= the value entered by the user; return false if not
-      // TODO: Not sure of the best way to do this
-      if (res > laneData.exiting[dir]) {
-        flag = false;
-        return;
-      }
-    });
+    // const directions = ['north', 'south', 'east', 'west'];
+    // let flag = true;
+    // directions.array.forEach(dir => {
+    //   let res = calculateExitLanes(dir);
+    //   // Check that res <= the value entered by the user; return false if not
+    //   // TODO: Not sure of the best way to do this
+    //   if (res > laneData.exiting[dir]) {
+    //     flag = false;
+    //     return;
+    //   }
+    // });
 
-    setIsValid(flag);
+    if (calculateExitLanes['north'] > laneData.exiting['north']) {
+      setIsValid(true);
+    } else {
+      setIsValid(false);
+    }
+
+    // setIsValid(flag);
   }
 
   const handleInputChange = (type, direction, value) => {
