@@ -54,7 +54,7 @@ const JunctionRankings = () => {
           />
           
             <button className = {styles.backButton}>
-            <Link to="/Leaderboard">See other leaderboards</Link>
+            <Link to="/Leaderboard">See other Projects</Link>
           </button>
         </div>
         
