@@ -163,7 +163,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
   function calculateExitLanes(direction) {
     // Initialize array to store how many lanes turn into our target direction from each other direction
     let lanesFlowingTo = []
-    
+    let lanesFromThisEntry = 0;
     // For each of the other 3 directions
     ["north", "south", "east", "west"].forEach(entryDirection => {
         // Skip if this is the same as our exit direction (can't enter and exit same direction)
@@ -176,14 +176,15 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
         if (direction == "north") {
           // Calculates number of cars going FROM entryDirection TO North
           lanesFromThisEntry = calculateLanesTurningNorth(entryDirection)
-        } else if (direction == "south") {
-          // TODO: Do other functions if we aren't going to generalise
-          lanesFromThisEntry = calculateLanesTurningSouth(entryDirection)
-        } else if (direction == "east") {
-          lanesFromThisEntry = calculateLanesTurningEast(entryDirection)
-        } else {
-          lanesFromThisEntry = calculateLanesTurningWest(entryDirection)
-        };
+        } 
+        // else if (direction == "south") {
+        //   // TODO: Do other functions if we aren't going to generalise
+        //   lanesFromThisEntry = calculateLanesTurningSouth(entryDirection)
+        // } else if (direction == "east") {
+        //   lanesFromThisEntry = calculateLanesTurningEast(entryDirection)
+        // } else {
+        //   lanesFromThisEntry = calculateLanesTurningWest(entryDirection)
+        // };
             
         // Add to our array
         lanesFlowingTo.push(lanesFromThisEntry);
@@ -219,17 +220,11 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
           return entryLanes;
         } else {
           // Traffic flows north and south only
-          switch (entryLanes) {
-            case 1:
-              return 1;
-            case 2:
-              return 1;
-            case 3:
-              return 2;
-            case 4:
-              return 2;
-            case 5:
-              return 2;
+          // FIXME: Issue here
+          if (entryLanes <= 2) {
+            return 1;
+          } else {
+            return 2;
           }
         }
       case 'east':
@@ -241,17 +236,10 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
           return entryLanes;
         } else {
           // Traffic flows north and south only
-          switch (entryLanes) {
-            case 1:
-              return 1;
-            case 2:
-              return 1;
-            case 3:
-              return 1;
-            case 4:
-              return 2;
-            case 5:
-              return 2;
+          if (entryLanes <= 3) {
+            return 1;
+          } else {
+            return 2;
           }
         }
       default:
@@ -272,9 +260,15 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
     //   }
     // });
 
-    if (calculateExitLanes['north'] > laneData.exiting['north']) {
+    // FIXME: Working in every case except when there's no traffic going straight ahead
+      // Eg traffic filters south and north from the west, but not east
+      // Suggests something is wrong with the switch statement
+    if (laneData.exiting['north'] >= calculateExitLanes('north')) {
+      console.log('yayyyy success');
       setIsValid(true);
     } else {
+      // console.log(calculateExitLanes('north'));
+      console.log('over here');
       setIsValid(false);
     }
 
