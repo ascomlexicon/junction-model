@@ -46,6 +46,7 @@ const VPHDataDisplay = ({ projectData }) => {
       </div>
       
       <button className={styles.configuredNote}>
+        {/* TODO: Fix this, RankingsPage needs to have a junction passed to it. We can pass the top junction from the projects */}
         <Link to = '/RankingsPage'>See configured junctions for {projectData.name}</Link>
       </button>
     </div>
