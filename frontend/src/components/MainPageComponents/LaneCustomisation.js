@@ -391,8 +391,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
     const directions = ['north', 'south', 'east', 'west'];
     let flag = true;
 
-    // FIXME: Issue here, not running, try a different way as in the calculateExitLanes() function?
-    directions.array.forEach(dir => {
+    ['north', 'south', 'east', 'west'].forEach(dir => {
       let res = calculateExitLanes(dir);
       // Check that res <= the value entered by the user; return false if not
       if (res > laneData.exiting[dir]) {
