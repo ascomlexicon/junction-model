@@ -101,6 +101,21 @@
     cursor: pointer;
     align-self: right;
   }
+
+  .loadingBackButton {
+    background-color: #DC3545;
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+  }
+
+  .loadingBackButton:hover {
+    background-color: #c82333;
+  }
   
   .criteriaTable, .trafficFlow {
     width: 100%;

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../LeaderboardComponents/ProjectLeaderboard.module.css';
+import { Slab } from 'react-loading-indicators';
 import { Link } from "react-router-dom";
 import VPHDataDisplay from './VPHDisplayData'; // Import the VPH data component
 import axios from 'axios';
@@ -77,6 +78,19 @@ const ProjectLeaderboard = () => {
     setSelectedProject(project);
   };
   
+  // Loading screen whilst GET request is being processed
+  // TODO: Change colour scheme
+  if (isLoading) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <Slab color="#32cd32" size="medium" text="Loading Projects..." textColor="" />
+        <Link to="/MainPage" className={styles.backButton} style={{ marginTop: '20px' }}>
+          Back to Junction Configuration Menu
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.pageContainer}>
       {/* Page Header with Title and Back Button */}
@@ -87,7 +101,6 @@ const ProjectLeaderboard = () => {
         </Link>
       </div>
       
-      {isLoading && <p>Fetching data from the backend...</p>}
       {error && <p>Error: {error.message}</p>}
 
       {!isLoading && !error && (
