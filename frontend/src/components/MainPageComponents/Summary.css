@@ -61,3 +61,14 @@
 .button-container.summary-screen {
   justify-content: space-between;
 }
+
+.simulate-button {
+  background-color: rgba(248, 189, 80, 0.825);
+}
+
+.simulate-button:hover {
+  background-color: orange;
+  transform: scale(1.15);
+  width: 50%;
+  transition: transform 0.2s ease-out, width 0.3s ease-in-out, background-color 0.2s;
+}
