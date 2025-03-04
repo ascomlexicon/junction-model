@@ -96,6 +96,7 @@ class JunctionSimulationLogic {
     int greenLightOnTime = 0; // The time the green light is on for the lane in seconds
     
     // "KEY"
+    /* {"North", "East", "South", "West"} */ 
     long lanePriorities[] = {0, 3, 4, 1}; // priority array for the lanes where indexes are North, East, South, West
 
     long initialDelay = 0; // initial delay for the cars to start entering the junction
