@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import styles from './VPHDisplayForm.module.css'; // ✅ Import correctly
+import styles from './VPHDisplayForm.module.css';
 import StaticJunctionDisplay from './StaticJunctionDisplay';
 
 function VPHDisplayForm() {

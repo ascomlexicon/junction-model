@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './StaticJunctionDisplay.module.css'; // ✅ Import correctly
+import styles from './StaticJunctionDisplay.module.css'; 
 
 function StaticJunctionDisplay({ incomingDirection, outgoingDirection1, outgoingDirection2, outgoingDirection3, values }) {
   const generateRandomTraffic = () => Math.floor(Math.random() * 151) + 50;
