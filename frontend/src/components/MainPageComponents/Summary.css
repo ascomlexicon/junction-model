@@ -1,15 +1,15 @@
-/* Summary.css */
 .summary-container {
-    background-color: #f8f9fa;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    overflow: visible;
   }
   
   .summary-container h2 {
     color: #333;
     margin-bottom: 24px;
     text-align: center;
-    border-bottom: 2px solid #6a0dad;
+    border-bottom: 2px solid #ddd;
     padding-bottom: 10px;
   }
   
@@ -18,7 +18,7 @@
     padding: 16px;
     background-color: white;
     border-radius: 6px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
   }
   
   .summary-section h3 {

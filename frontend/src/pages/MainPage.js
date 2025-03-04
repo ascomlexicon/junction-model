@@ -273,7 +273,7 @@ function MainPage() {
 
     return(
         <div className="container">
-            <h1 className='main-title'>Junction Simulator</h1>
+            <h1 className='main-title'>The Junction Simulator</h1>
             <div className="junction-visual">
                 <JunctionCanvas config={completeJSON} />
             </div>
