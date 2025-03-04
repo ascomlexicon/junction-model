@@ -430,6 +430,14 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
       setShowWarning(true);
       return;
     }
+
+    // New constraint: Check if there are at least 2 entry lanes
+    const entryLanes = parseInt(laneData.entering[direction]) || 0;
+    if (entryLanes < 2) {
+      setWarningMessage(`Cannot add a left turn lane for ${direction} direction. At least 2 entry lanes are required for a left turn only lane.`);
+      setShowWarning(true);
+      return;
+    }
     
     setLaneData((prev) => ({
       ...prev,
@@ -652,25 +660,39 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
 
       {/* Left Turn Section */}
       <section className="left-turn-section">
-        {/* TODO: Add an info-icon to this too */}
-      <h3>Left Turn Lanes</h3>
-      {Object.keys(laneData.leftTurn).map((direction) => (
-        <div key={`left-turn-${direction}`} className="checkbox-group">
-          <label className={!leftTurningTraffic[direction] ? 'disabled-option' : ''}>
-            <input
-              type="checkbox"
-              checked={laneData.leftTurn[direction]}
-              onChange={() => handleLeftTurnChange(direction)}
-              disabled={!leftTurningTraffic[direction]}
-            />
-            {direction.charAt(0).toUpperCase() + direction.slice(1)}
-            {!leftTurningTraffic[direction] && (
-              <span className="disabled-label"> (No left-turning traffic exists)</span>
-            )}
-          </label>
-        </div>
-      ))}
-    </section>
+        {/* TODO add info icon */}
+        <h3>Left Turn Lanes</h3>
+        {Object.keys(laneData.leftTurn).map((direction) => {
+          const entryLanes = parseInt(laneData.entering[direction]) || 0;
+          const hasMinimumLanes = entryLanes >= 2;
+          
+          return (
+            <div key={`left-turn-${direction}`} className="checkbox-group">
+              <label 
+                className={
+                  (!leftTurningTraffic[direction] || !hasMinimumLanes) 
+                  ? 'disabled-option' 
+                  : ''
+                }
+              >
+                <input
+                  type="checkbox"
+                  checked={laneData.leftTurn[direction]}
+                  onChange={() => handleLeftTurnChange(direction)}
+                  disabled={!leftTurningTraffic[direction] || !hasMinimumLanes}
+                />
+                {direction.charAt(0).toUpperCase() + direction.slice(1)}
+                {!leftTurningTraffic[direction] && (
+                  <span className="disabled-label"> (No left-turning traffic exists)</span>
+                )}
+                {leftTurningTraffic[direction] && !hasMinimumLanes && (
+                  <span className="disabled-label"> (Requires at least 2 entry lanes)</span>
+                )}
+              </label>
+            </div>
+          );
+        })}
+      </section>
 
       {/* Special Lanes Section */}
       <section className="special-lanes-section">
