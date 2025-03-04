@@ -5,8 +5,6 @@ import ScoreBreakdown from './ScoreBreakdown';
 import { Link } from "react-router-dom";
 import VPHDisplayForm from './VPHDisplayForm';
 
-// TODO: When user hovers over junction, add a change in colour, as we have done on the projects page
-
 const JunctionRankings = () => {
     // Keep track of both selected junction and junctions state
     const [selectedJunction, setSelectedJunction] = useState(null);
@@ -36,7 +34,7 @@ const JunctionRankings = () => {
         </div>
         <div className={styles.backButtonContainer}>
           <button className={styles.backButton} >
-            <Link to="/MainPage" style={{ color: 'white' }}>Back to Junction Configuration Menu</Link>
+            <Link to="/MainPage">Back to Junction Configuration Menu</Link>
           </button>
         </div>  
         <div className={styles.side}>
@@ -53,8 +51,8 @@ const JunctionRankings = () => {
             onSelect={handleSelect}
           />
           
-            <button className = {styles.backButton}>
-            <Link to="/Leaderboard" style={{ color: 'white' }}>See other Projects</Link>
+          <button className = {styles.backButton}>
+            <Link to="/Leaderboard">See other Projects</Link>
           </button>
         </div>
         

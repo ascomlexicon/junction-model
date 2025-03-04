@@ -27,17 +27,21 @@
 }
 
 .backButton {
-  background-color: #DC3545;
-  color: white;
   text-decoration: none;
   padding: 10px 15px;
   border-radius: 4px;
   font-size: 14px;
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid #ddd;
+  align-self: right;
   transition: background-color 0.3s;
+  background-color: #f5f5f5;
+  color: black;
 }
 
 .backButton:hover {
-  background-color: #c82333;
+  background-color: #eeeeee;
 }
 
 .container {
@@ -156,8 +160,7 @@
 }
 
 .configuredNote {
-  /* TODO: Change colour of this, represents RESET button but should be different */
-  background-color: #DC3545;
+  background-color: #f5f5f5;
   width: 50%;
   text-decoration: none;
   padding: 10px 15px;
@@ -166,12 +169,14 @@
   transition: background-color 0.3s;
   display: flex;
   border: none;
+  border: 1px solid #ddd;
+}
+
+.configuredNote:hover {
+  background-color: #eeeeee;
+  color: #424242;
 }
 
 .projectName {
   color: black;
-}
-
-.configuredBtn {
-  color: white;
 }

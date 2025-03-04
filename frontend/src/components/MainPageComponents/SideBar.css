@@ -1,7 +1,9 @@
 .sidebar {
     width: 100px;
-    background-color: #ffffff;
     padding: 10px 15px;
+    border-right: 1px solid black;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .sidebar-menu {
