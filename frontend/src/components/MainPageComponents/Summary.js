@@ -168,7 +168,7 @@ function Summary({ formData, setActiveStep }) {
         </div>
       </div>
       
-      <div className="button-container">
+      <div className="button-container summary-screen">
         <BackButton onClick={handleBack} label="Back to Direction Prioritisation" />
         <button className="simulate-button" onClick={handleClick}>Run Simulation</button>
       </div>
