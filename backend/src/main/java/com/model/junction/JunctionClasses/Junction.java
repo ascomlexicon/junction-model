@@ -15,8 +15,9 @@ public class Junction {
   private String junctionImage;
 
   // Constructors
-  public Junction(String junctionName) {
+  public Junction(String junctionName, String image) {
     this.junctionName = junctionName;
+    this.junctionImage = image;
 
     this.east = new JunctionQuarter();
     this.west = new JunctionQuarter();
@@ -24,8 +25,8 @@ public class Junction {
     this.north = new JunctionQuarter();
   }
 
-  public Junction(String junctionName, Double junctionScore) {
-    this(junctionName);
+  public Junction(String junctionName, String image, Double junctionScore) {
+    this(junctionName, image);
     this.score = junctionScore;
   }
 

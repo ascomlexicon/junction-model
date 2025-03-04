@@ -167,9 +167,9 @@ public class ProjectTest {
     System.out.println("------------------------------------------------------------------");
     System.out.println("Return a list of junctions sorted by score\n");
 
-    Junction junction1 = new Junction("J1", 10.0);
-    Junction junction2 = new Junction("J2", 73.0);
-    Junction junction3 = new Junction("J3", 48.0);
+    Junction junction1 = new Junction("J1", null,10.0);
+    Junction junction2 = new Junction("J2", null, 73.0);
+    Junction junction3 = new Junction("J3", null, 48.0);
     
     ArrayList<Junction> expectedList = new ArrayList<Junction>();
     expectedList.add(junction1);

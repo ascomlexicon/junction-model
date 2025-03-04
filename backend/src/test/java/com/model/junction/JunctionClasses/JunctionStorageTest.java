@@ -12,15 +12,15 @@ public class JunctionStorageTest {
   @BeforeEach
   public void testInit() {
     store = new JunctionStorage();
-    store.storeJunction(new Junction("Junction 1"));
-    store.storeJunction(new Junction("Junction 2"));
-    store.storeJunction(new Junction("Junction 3"));
+    store.storeJunction(new Junction("Junction 1", null));
+    store.storeJunction(new Junction("Junction 2", null));
+    store.storeJunction(new Junction("Junction 3", null));
   }
   
   @Test
   @DisplayName("Reject junctions with duplicate names.")
   public void rejectDuplicateJunctions() {
-    boolean didStore = store.storeJunction(new Junction("Junction 1"));
+    boolean didStore = store.storeJunction(new Junction("Junction 1", null));
 
     Assertions.assertEquals(false, didStore, "The Junction storage should reject the request.");
   }
