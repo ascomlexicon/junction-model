@@ -18,6 +18,3 @@ public record JunctionQuarter(
     this(outboundDirection, hasLeftTurnLane, enteringLanes, exitingLanes, hasBusCycleLane, specialVPH, priority, hasCrossings, crossingRequestsPerHour, null);
   }
 }
-
-
-

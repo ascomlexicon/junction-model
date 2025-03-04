@@ -39,12 +39,12 @@ class JunctionSimulationLogic {
   private static final AtomicBoolean busCycleLane = new AtomicBoolean(false);
   /* Bus lane modification END */
 
-  private static Queue<Long>[] outboundCars;
+  private static ConcurrentLinkedQueue<Long>[] outboundCars;
   private static List<LaneType> laneTypes= Collections.synchronizedList(new ArrayList<>());
   
   public static void main(String[] args) {
     // "KEY"
-    int exitingForward = 200; // cars exiting straight forward
+    int exitingForward = 400; // cars exiting straight forward
     // "KEY"
     int exitingRight = 300; // cars exiting right
     // "KEY"
@@ -59,11 +59,18 @@ class JunctionSimulationLogic {
     // "KEY"
     // LEFT TURN LANE: If the left lane is enabled, the leftmost lane will be the left turn lane
     leftLane.set(false);
-
     
     // "KEY"
     // BUS LANE: If the bus lane is enabled, the leftmost lane will be the bus lane
     busCycleLane.set(true);
+
+    int busCyclesPerHour = 40; // Number of buses that cycle through the junction per hour
+
+    if (busCycleLane.get()){
+      exitingLeft = busCyclesPerHour;
+    }
+
+    final int exitingLeftFinal = exitingLeft;
 
     initializeLanes(numberOfLanes);
 
@@ -90,13 +97,49 @@ class JunctionSimulationLogic {
     // On top of that, the priority will determine the initial sequencing order for the traffic lights so for example if the current arrangement
     // of priorities is North 1, East 0, South 4, West 2, then the order will be South, West, North, East
 
-    // "KEY"
-    int directionIndex = 0; // index for the direction of the lane where North = 0, East = 1, South = 2, West = 3
-
     int greenLightOnTime = 0; // The time the green light is on for the lane in seconds
     
     // "KEY"
-    long lanePriorities[] = {0, 3, 4, 1}; // priority array for the lanes where indexes are North, East, South, West
+    /* {"North", "East", "South", "West"} */ 
+    // long lanePriorities[] = {0, 3, 4, 1}; // priority array for the lanes where indexes are North, East, South, West
+
+    // PRIORITISED TRAFFIC FLOW MODIFICATIONS
+    // "KEY"
+    String direction = "North"; // direction of the lane
+    int directionIndexTemp = 0; // index for the direction of the lane where North = 0, East = 1, South = 2, West = 3
+    
+    // "KEY"
+    boolean prioritiesEnabled = false; // whether the priorities are enabled
+
+    String[] directions = {"North", "East", "South", "West"};
+
+    for (int i = 0; i < 4; i ++){
+      if (directions[i].equals(direction)){
+        directionIndexTemp = i;
+      }
+    }
+
+    final int directionIndex = directionIndexTemp;
+
+    // "KEY"
+    String[] lanePrioritiesAsStrings = {"South", "East", "West", "North"}; // priority array for the lanes
+
+    if (!prioritiesEnabled){
+      for (int i = 0; i < 4; i ++){
+        lanePrioritiesAsStrings[i] = directions[i];
+      }
+    }
+
+    long lanePriorities[] = new long[4]; // priority array for the lanes where indexes are North, East, South, West
+
+    for (int i = 0; i < 4; i ++){
+      for (int j = 0; j < 4; j ++){
+        if (directions[i].equals(lanePrioritiesAsStrings[j])){
+          lanePriorities[i] = 4 - j;
+        }
+      }
+      System.out.println("Priority for direction " + directions[i] + " is " + lanePriorities[i]);
+    }
 
     long initialDelay = 0; // initial delay for the cars to start entering the junction
     int priority = (int) lanePriorities[directionIndex]; // priority for the lane
@@ -107,20 +150,17 @@ class JunctionSimulationLogic {
     long leftLaneDelay = 0; // delay for the left lane
 
     switch ((int) lanePriorities[directionIndex]) {
-      case 0:
-        greenLightOnTime = 5;
-        break;
       case 1:
-        greenLightOnTime = 10;
+        greenLightOnTime = prioritiesEnabled ? 10 : 30;
         break;
       case 2:
-        greenLightOnTime = 20;
+        greenLightOnTime = prioritiesEnabled ? 20 : 30;
         break;
       case 3:
         greenLightOnTime = 30;
         break;
       case 4:
-        greenLightOnTime = 45;
+        greenLightOnTime = prioritiesEnabled ? 45 : 30;
         break;
     }
 
@@ -130,20 +170,17 @@ class JunctionSimulationLogic {
     for (int i = 0; i < lanePriorities.length; i++) {
       int currentPriority = (int) lanePriorities[i];
       switch (currentPriority) {
-        case 0:
-          lanePriorities[i] = convertToSimulationTime(5);
-          break;
         case 1:
-          lanePriorities[i] = convertToSimulationTime(10);
+          lanePriorities[i] = convertToSimulationTime(prioritiesEnabled ? 10 : 30);
           break;
         case 2:
-          lanePriorities[i] = convertToSimulationTime(20);
+          lanePriorities[i] = convertToSimulationTime(prioritiesEnabled ? 20 : 30);
           break;
         case 3:
           lanePriorities[i] = convertToSimulationTime(30);
           break;
         case 4:
-          lanePriorities[i] = convertToSimulationTime(45);
+          lanePriorities[i] = convertToSimulationTime(prioritiesEnabled ? 45 : 30);
           break;
       }
 
@@ -196,7 +233,7 @@ class JunctionSimulationLogic {
         // Generate Poisson-distributed number of cars for each lane
         int carsRight = generatePoisson((int) exitingRight / 60.0);
         int carsForward = generatePoisson((int) exitingForward / 60.0);
-        int carsLeft = generatePoisson((int) exitingLeft / 60.0);
+        int carsLeft = generatePoisson((int) exitingLeftFinal / 60.0);
         
         // Compute the total generated cars for this round
         int totalCars = carsRight + carsForward + carsLeft;
