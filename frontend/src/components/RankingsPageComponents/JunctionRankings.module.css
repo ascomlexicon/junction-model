@@ -85,6 +85,7 @@
   align-items: center;
   padding: 10px;
 }
+
 .backButton {
   grid-area: head3;
   width: 100%;
@@ -106,20 +107,21 @@
 .criteriaTable td,
 .trafficFlow th,
 .trafficFlow td {
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.2);
   padding: 10px;
   text-align: left;
 }
 
 .criteriaTable th,
 .trafficFlow th {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(31, 24, 24, 0.1);
 }
 
 .weightings {
   margin: 20px 0;
 }
 
+/* TODO: Currently no formulas are displayed */
 .formulaBox {
   background-color: white;
   height: 40px;
@@ -128,6 +130,18 @@
 }
 
 .overallScore {
-  font-size: 18px;
+  font-size: 22px;
   margin: 20px 0;
+  font-weight: bolder;
+  text-align: center;
+  text-decoration: underline;
+}
+
+.configHeading {
+  font-size: 30px;
+}
+
+.scoreBreakdownTitle {
+  font-size: 36px;
+  margin: 10px 0;
 }
