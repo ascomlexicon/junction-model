@@ -3,8 +3,6 @@ package com.model.junction.JunctionClasses;
 import java.text.DecimalFormat;
 
 public class JunctionScoring {
-
-
   double quarterScores[] = new double[4]; // quarter Score array, indexes are North, East, South, West
 
   /* calculate a score for a quarter, the score is effected by cars remaining after the simulation time */
@@ -28,11 +26,6 @@ public class JunctionScoring {
 
   /* Harmonic mean approach, penalize very small quarter scores */
   public double junctionScore() {
-
     return 4/((1/quarterScores[0])+(1/quarterScores[1])+(1/quarterScores[2])+(1/quarterScores[3]));
-
   }
-
-
-
 }

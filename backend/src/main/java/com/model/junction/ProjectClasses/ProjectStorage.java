@@ -23,6 +23,16 @@ public class ProjectStorage {
   public Project getProject(String title) {
     return projects.get(title);
   }
+
+  // Getter for project usingn VPH data
+  public Project getProjectByVPH(HashMap<Direction, HashMap<Direction, Integer>> vphData) {
+    for (Project project : projects.values()) {
+      if (project.getVehiclePerHourData().equals(vphData)) {
+        return project;
+      }
+    }
+    return null; // Return null if no project matches the VPH data
+  }
   
   // Project Operations
   public void createNewProject(HashMap<Direction, HashMap<Direction, Integer>> vphData) {
