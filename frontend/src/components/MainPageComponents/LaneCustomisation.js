@@ -451,7 +451,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
   const handleSpecialLaneChange = (type, direction) => {
     // Check if there's left-turning traffic in this direction
     if (leftTurningTraffic[direction]) {
-      setWarningMessage(`Cannot add a ${type === 'busLane' ? 'bus' : 'cycle'} lane for ${direction} direction. There is already traffic turning left in the Traffic Flow settings. Please remove the left turn traffic first.`);
+      setWarningMessage(`Cannot add a ${type === 'busLane' ? 'bus' : 'cycle'} lane for ${direction} direction. There is already traffic turning left in the Traffic Flow settings. Please remove the left turning traffic first.`);
       setShowWarning(true);
       return;
     }
@@ -679,7 +679,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
                   type="checkbox"
                   checked={laneData.leftTurn[direction]}
                   onChange={() => handleLeftTurnChange(direction)}
-                  disabled={!leftTurningTraffic[direction] || !hasMinimumLanes}
+                  // disabled={!leftTurningTraffic[direction] || !hasMinimumLanes}
                 />
                 {direction.charAt(0).toUpperCase() + direction.slice(1)}
                 {!leftTurningTraffic[direction] && (
@@ -722,11 +722,11 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
                     type="checkbox"
                     checked={laneData.busLane[direction]}
                     onChange={() => handleSpecialLaneChange('busLane', direction)}
-                    disabled={leftTurningTraffic[direction]}
+                    // disabled={leftTurningTraffic[direction]}
                   />
                   {direction.charAt(0).toUpperCase() + direction.slice(1)}
                   {leftTurningTraffic[direction] && (
-                    <span className="disabled-label"> (Left-turning traffic exists. Cannot have a special lane when left turning traffic exists)</span>
+                    <span className="disabled-label"> (Left-turning traffic exists.)</span>
                   )}
                 </label>
               </div>
@@ -741,11 +741,11 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
                     type="checkbox"
                     checked={laneData.cycleLane[direction]}
                     onChange={() => handleSpecialLaneChange('cycleLane', direction)}
-                    disabled={leftTurningTraffic[direction]}
+                    // disabled={leftTurningTraffic[direction]}
                   />
                   {direction.charAt(0).toUpperCase() + direction.slice(1)}
                   {leftTurningTraffic[direction] && (
-                    <span className="disabled-label"> (Left-turning traffic exists. Cannot have a special lane when left turning traffic exists)</span>
+                    <span className="disabled-label"> (Left-turning traffic exists.)</span>
                   )}
                 </label>
               </div>
