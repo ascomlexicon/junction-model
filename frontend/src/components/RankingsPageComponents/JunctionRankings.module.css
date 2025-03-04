@@ -1,139 +1,143 @@
 .container {
-  background-color: #001F3F;
-    display: grid;
-    grid-template-columns:.7fr 1.7fr 2fr;
-    grid-template-rows: auto 1fr;
-    height: 100vh;
-    font-family: Arial, sans-serif;
-    grid-template-areas: 
-        'head1 head2 head3'
-        'side leaderboard breakdown';
-  }
-  
-  .header{
-    grid-area: head2;
-    grid-column-end: 1 span 3;
-    background-color: #001F3F;
-    color: white;
-    justify-self: center;
-  }
-
-  .side {
-    grid-area: side;
-    background-color: #2C0052;
-    color: rgb(0, 0, 0);
-    overflow-y: auto; /* Allow vertical scrolling if needed */
-    overflow-x: hidden; /* Prevent horizontal scrolling */
-    scrollbar-color: white #001F3F ; /* Scrollbar color */
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Centers content horizontally */
-    justify-content: start; /* Aligns content to the top */
-    width: 100%;
-    max-width: 100%; /* Prevents content from overflowing */
-    box-sizing: border-box; /* Ensures padding doesn't cause overflow */
+  background-color: #ffffff;
+  display: grid;
+  grid-template-columns:.7fr 1.7fr 2fr;
+  grid-template-rows: auto 1fr;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+  grid-template-areas: 
+      'head1 head2 head3'
+      'side leaderboard breakdown';
 }
 
-  .leftPanel {
-    grid-area: leaderboard;
-    /* width: 400px; */
+.header{
+  grid-area: head2;
+  grid-column-end: 1 span 3;
+  color: black;
+  justify-self: center;
+}
 
-    background-color: #001F3F;
-    padding: 20px;
-    color: white;
-  }
-  
-  .rightPanel {
-    grid-area: breakdown;
-    background-color: #2C0052;
-    padding: 20px;
-    color: white;
-    overflow-y: scroll;
-    scrollbar-color: black transparent;
-  }
-  
-  .title {
-    font-size: 24px;
-    margin-bottom: 5px;
-  }
-  
-  .subtitle {
-    font-size: 14px;
-    color: #ccc;
-    margin-bottom: 20px;
-  }
-  
-  .junctionList {
-    margin-bottom: 20px;
-  }
-  
-  .junctionRow {
-    display: flex;
-    justify-content: space-between;
-    padding: 15px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-  
-  .highlighted {
-    background-color: #00BFFF;
-    color: #001F3F;
-  }
-  
-  .score {
-    font-weight: bold;
-  }
-  .backButtonContainer {
-    grid-area: head3;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    padding: 10px;
-  }
-  .backButton {
-    grid-area: head3;
-    width: 100%;
-    background-color: #DC3545;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    align-self: right;
-  }
-  
-  .criteriaTable, .trafficFlow {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-  }
-  
-  .criteriaTable th,
-  .criteriaTable td,
-  .trafficFlow th,
-  .trafficFlow td {
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 10px;
-    text-align: left;
-  }
-  
-  .criteriaTable th,
-  .trafficFlow th {
-    background-color: rgba(255, 255, 255, 0.1);
-  }
-  
-  .weightings {
-    margin: 20px 0;
-  }
-  
-  .formulaBox {
-    background-color: white;
-    height: 40px;
-    border-radius: 4px;
-    margin: 10px 0;
-  }
-  
-  .overallScore {
-    font-size: 18px;
-    margin: 20px 0;
-  }
+.side {
+  grid-area: side;
+  color: rgb(0, 0, 0);
+  /* overflow-y: auto; Allow vertical scrolling if needed
+  overflow-x: hidden; Prevent horizontal scrolling
+  scrollbar-color: white #001F3F ; Scrollbar color */
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; Centers content horizontally */
+  /* justify-content: start; Aligns content to the top */
+  /* width: 100%; */
+  max-width: 100%; /* Prevents content from overflowing */
+  box-sizing: border-box; /* Ensures padding doesn't cause overflow */
+  border: 2px solid rgb(2, 2, 2);
+  margin-left: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-right: 5px;
+}
+
+.leftPanel {
+  grid-area: leaderboard;
+  padding: 20px;
+  color: black;
+  border: 2px solid rgb(2, 2, 2);
+  margin: 10px;
+}
+
+.rightPanel {
+  grid-area: breakdown;
+  padding: 20px;
+  color: black;
+  overflow-y: scroll;
+  scrollbar-color: black transparent;
+  border: 2px solid rgb(2, 2, 2);
+  margin: 10px;
+}
+
+.title {
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: black;
+  margin-bottom: 20px;
+}
+
+.junctionList {
+  margin-bottom: 20px;
+}
+
+.junctionRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.highlighted {
+  background-color: #00a6fb;
+  color: #001F3F;
+}
+
+.score {
+  font-weight: bold;
+}
+
+.backButtonContainer {
+  grid-area: head3;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 10px;
+}
+.backButton {
+  grid-area: head3;
+  width: 100%;
+  background-color: #DC3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  align-self: right;
+}
+
+.criteriaTable, .trafficFlow {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+.criteriaTable th,
+.criteriaTable td,
+.trafficFlow th,
+.trafficFlow td {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 10px;
+  text-align: left;
+}
+
+.criteriaTable th,
+.trafficFlow th {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.weightings {
+  margin: 20px 0;
+}
+
+.formulaBox {
+  background-color: white;
+  height: 40px;
+  border-radius: 4px;
+  margin: 10px 0;
+}
+
+.overallScore {
+  font-size: 18px;
+  margin: 20px 0;
+}

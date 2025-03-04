@@ -33,8 +33,6 @@ const JunctionRankings = () => {
           <h1>Named Junction!</h1>
         </div>
         <div className={styles.backButtonContainer}>
-                    {/* TODO: Change this; not advised to have Link tag within button (I think) */}
-
         <button className={styles.backButton}>
               <Link to="/MainPage">Back to Junction Configuration Menu</Link>
             </button>
@@ -62,7 +60,6 @@ const JunctionRankings = () => {
           {selectedJunction && (
             <>
               <ScoreBreakdown junctionName={selectedJunction.name} score={selectedJunction.score} />
-              
             </>
           )}
         </div>
