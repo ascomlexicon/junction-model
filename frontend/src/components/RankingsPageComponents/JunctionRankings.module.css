@@ -71,6 +71,14 @@
   transition: background-color 0.2s;
 }
 
+.junctionRow:hover {
+  background-color: #e0f6ff;
+}
+
+.highlighted:hover {
+  background-color: #00a6fb;
+}
+
 .highlighted {
   background-color: #00a6fb;
   color: #001F3F;

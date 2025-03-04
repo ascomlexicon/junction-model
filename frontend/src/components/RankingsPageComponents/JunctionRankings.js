@@ -5,6 +5,8 @@ import ScoreBreakdown from './ScoreBreakdown';
 import { Link } from "react-router-dom";
 import VPHDisplayForm from './VPHDisplayForm';
 
+// TODO: When user hovers over junction, add a change in colour, as we have done on the projects page
+
 const JunctionRankings = () => {
     // Keep track of both selected junction and junctions state
     const [selectedJunction, setSelectedJunction] = useState(null);
