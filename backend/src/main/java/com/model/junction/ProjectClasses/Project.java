@@ -78,6 +78,10 @@ public class Project {
     HashMap<Direction, HashMap<Direction, Integer>> thisHashMap = getVehiclePerHourData();
     HashMap<Direction, HashMap<Direction, Integer>> otherHashMap = other.getVehiclePerHourData();
 
+    if (vehiclePerHourData == null) {
+      return other.getVehiclePerHourData() == null;
+    }
+
     for (Direction direction : Direction.values()) {
       HashMap<Direction, Integer> thisEntry = thisHashMap.get(direction);
       HashMap<Direction, Integer> otherEntry = otherHashMap.get(direction);

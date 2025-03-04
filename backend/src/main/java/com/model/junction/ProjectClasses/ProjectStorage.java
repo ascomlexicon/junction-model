@@ -1,8 +1,11 @@
 package com.model.junction.ProjectClasses;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
 import com.model.junction.Attributes.Direction;
+
+import jakarta.annotation.PostConstruct;
 
 import org.springframework.stereotype.Repository;
 
@@ -13,6 +16,14 @@ public class ProjectStorage {
   // Constructors
   public ProjectStorage() {
     this.projects = new HashMap<String, Project>();
+  }
+  
+  @PostConstruct
+  public void init() {
+    createNewProject(null);
+    createNewProject(null);
+    
+    System.out.println(projects);
   }
   
   // Accessors and Mutators
@@ -29,6 +40,14 @@ public class ProjectStorage {
     Project projectToCreate = new Project("Project " + (projects.size() + 1));
     projectToCreate.setVehiclePerHourData(vphData);
 
+    HashSet<Project> projectSet = new HashSet<>(projects.values());
+    
+    for (Project project : projectSet) {
+      if (project.equalVPHData(projectToCreate)) {
+        return ;
+      }
+    }
+    
     projects.put(projectToCreate.getProjectTitle(), projectToCreate);
   }
 
