@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './SideBar.css';
 
 const Sidebar = ({ setActiveStep, activeStep }) => {
-  // Define menu items with their labels and corresponding step numbers
+  const [hoveredStep, setHoveredStep] = useState(null);
+
   const menuItems = [
     { label: 'Traffic Flow', step: 0 },
     { label: 'Lane Customisation', step: 1 },
     { label: 'Pedestrian Crossing', step: 2 },
     { label: 'Direction Prioritisation', step: 3 },
-    { label: 'Summary', step: 4 }
+    { label: 'Summary', step: 4 },
   ];
 
   return (
@@ -17,17 +18,31 @@ const Sidebar = ({ setActiveStep, activeStep }) => {
         {menuItems.map((item) => (
           <li
             key={item.step}
-            className={`sidebar-item ${activeStep === item.step ? 'active' : ''} ${
-              (item.step > activeStep && item.step !== 0) ? 'disabled' : ''
-            }`}
+            data-number={`0${item.step + 1}`}
+            className={`
+              sidebar-item 
+              ${activeStep === item.step ? 'active' : ''} 
+              ${item.step > activeStep && item.step !== 0 ? 'disabled' : ''}
+            `}
             onClick={() => {
-                // We only want to be able to click back to previous sections or stay on current
-                if (item.step <= activeStep || item.step === 0) {
-                  setActiveStep(item.step);
-                }
+              if (item.step <= activeStep || item.step === 0) {
+                setActiveStep(item.step);
+              }
             }}
+            onMouseEnter={() => {
+              if (item.step > activeStep && item.step !== 0) {
+                setHoveredStep(item.step);
+              }
+            }}
+            onMouseLeave={() => setHoveredStep(null)}
           >
-            {item.label}
+            <span>{item.label}</span>
+            
+            {hoveredStep === item.step && (
+              <div className="tooltip">
+                <p className = "hover-message">Locked.</p>
+              </div>
+            )}
           </li>
         ))}
       </ul>
@@ -36,4 +51,3 @@ const Sidebar = ({ setActiveStep, activeStep }) => {
 };
 
 export default Sidebar;
-
