@@ -11,7 +11,7 @@ const DirectionDataSection = ({ title, data }) => {
         // Format the key for display (e.g., "exitEast" becomes "Exit east")
         const formattedKey = key === "entering" 
           ? "Entering" 
-          : key.replace("exit", "Exit ").toLowerCase();
+          : key.replace("exit", "Exit ");
         
         return (
           <div key={key} className={styles.dataField}>
@@ -46,7 +46,7 @@ const VPHDataDisplay = ({ projectData }) => {
       </div>
       
       <button className={styles.configuredNote}>
-        <Link to = '/RankingsPage'>See configured junctions for {projectData.name}</Link>
+        <Link to = '/RankingsPage' className={styles.configuredBtn}>See configured junctions for {projectData.name}</Link>
       </button>
     </div>
   );
