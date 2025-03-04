@@ -13,10 +13,6 @@ import com.model.junction.Attributes.Direction;
  * parameters such as priority, bus lanes, cycle lanes, left-turn lanes, and pedestrian crossing.
  */
 public class JunctionQuarter {
-
-  /** Traffic light object, defaulted to null */
-  //private TrafficLight light;
-
   /** Stores the direction of the junction */
   private Direction junctionDirection;
 
@@ -24,30 +20,14 @@ public class JunctionQuarter {
   private int exitingLeft;
   private int exitingRight;
 
-  /** Stores the lanes exiting the junction, defaulted to 1, 2, and 3 */
-  //private ArrayList<Integer> exitingLanes = new ArrayList<>(Arrays.asList(1, 2, 3));
-
-  /** Stores the lanes entering the junction, defaulted to 4 and 5 */
-  //private ArrayList<Integer> enteringLanes = new ArrayList<>(Arrays.asList(4, 5));
-
-  /**
-   * The attributes below are the configurable parameters. They all have default values
-   * of either an empty array, 0, or null because the user can choose to leave them empty
-   * without affecting the program.
-   */
-
   /** Stores the priority level of the junction, defaulted to 0 */
-  private int priorityLevel = 0;
+  private String[] quarterPriorities = {"South", "West", "North", "East"};
 
   /** Stores the lanes that are bus lanes */
   // private ArrayList<Integer> busLaneDirection = new ArrayList<>();
   private boolean busCycleLane = false;
+  private int busCyclesPerHour = 0;
 
-  /** Stores the lanes that are cycle lanes */
-  // private ArrayList<Integer> cycleLaneDirection = new ArrayList<>();
-
-  /** Stores the lanes that are left turn lanes */
-  // private ArrayList<Integer> leftTurnLanes = new ArrayList<>();
   private boolean leftTurnLane = false;
 
   /** Stores the number of lanes in the junction, defaulted to 5 */
@@ -77,16 +57,6 @@ public class JunctionQuarter {
       this.crossingDuration = crossingDuration;
     }
   }
-
-  // Getters and Setters
-
-  /*public TrafficLight getLight() {
-    return light;
-  }
-
-  public void setLight(TrafficLight light) {
-    this.light = light;
-  }*/
 
   public int getOutbound(){
     return exitingForward + exitingLeft + exitingRight;
@@ -129,30 +99,15 @@ public class JunctionQuarter {
   public void setJunctionDirection(Direction junctionDirection) {
     this.junctionDirection = junctionDirection;
   }
-
-  /*public ArrayList<Integer> getEnteringLanes() {
-    return enteringLanes;
+  public String[] getPriorities() {
+    return quarterPriorities;
   }
 
-  public void setEnteringLanes(ArrayList<Integer> enteringLanes) {
-    this.enteringLanes = enteringLanes;
-  }
-
-  public ArrayList<Integer> getExitingLanes() {
-    return exitingLanes;
-  }
-
-  public void setExitingLanes(ArrayList<Integer> exitingLanes) {
-    this.exitingLanes = exitingLanes;
-  }*/
-
-  public int getPriorityLevel() {
-    return priorityLevel;
-  }
-
-  public void setPriorityLevel(int priorityLevel) {
-    this.priorityLevel = priorityLevel;
-  }
+  public void setPriorities(String[] newValue) {
+    for (int i = 0; i < newValue.length; i++) {
+        this.quarterPriorities[i] = newValue[i];
+      }
+    }
 
   // MODIFIED
   public boolean getBusCycleLane() {
@@ -187,30 +142,6 @@ public class JunctionQuarter {
   public void setPedestrianCrossing(boolean pedestrianCrossing) {
     this.pedestrianCrossing = pedestrianCrossing;
   }
-
-  /**
-   * Dummy function for now. It needs to add lane logic but will check that the outbound
-   * and inbound lanes are numbered properly. Lanes are numbered 1 to n where n does not exceed 5.
-   *
-   * To make storing and verifying junction configurations easier, the JSON object passed from
-   * the frontend will ONLY be passed if it is a valid junction.
-   */
-  public boolean verifyLanes() {
-    return true;
-  }
-
-  /**
-   * According to the requirements, the junction can only have either a bus or a cycle lane.
-   * This method checks if this constraint is satisfied. Additionally, it validates that the lanes
-   * specified are valid, i.e., they are either in entering or exiting lanes.
-   */
-  /*public boolean verifyBusAndCycleLanes() {
-    if (busLaneDirection.size() == 0 || cycleLaneDirection.size() == 0) {
-      return true;
-    } else {
-      return false;
-    }
-  }*/
 }
 
 

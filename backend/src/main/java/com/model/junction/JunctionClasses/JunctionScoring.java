@@ -21,7 +21,6 @@ public class JunctionScoring {
     remainingCarsRate =Double.valueOf(df.format(remainingCarsRate*100));
 
     quarterScores[directionIndex]= score-remainingCarsRate;
-
   }
 
   /* Harmonic mean approach, penalize very small quarter scores */
