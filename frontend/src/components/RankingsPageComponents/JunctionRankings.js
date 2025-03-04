@@ -33,9 +33,9 @@ const JunctionRankings = () => {
           <h1>Named Junction!</h1>
         </div>
         <div className={styles.backButtonContainer}>
-        <button className={styles.backButton}>
-              <Link to="/MainPage">Back to Junction Configuration Menu</Link>
-            </button>
+          <button className={styles.backButton} >
+            <Link to="/MainPage" style={{ color: 'white' }}>Back to Junction Configuration Menu</Link>
+          </button>
         </div>  
         <div className={styles.side}>
         <VPHDisplayForm 
@@ -52,7 +52,7 @@ const JunctionRankings = () => {
           />
           
             <button className = {styles.backButton}>
-            <Link to="/Leaderboard">See other Projects</Link>
+            <Link to="/Leaderboard" style={{ color: 'white' }}>See other Projects</Link>
           </button>
         </div>
         

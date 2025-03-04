@@ -14,7 +14,9 @@
   grid-area: head2;
   grid-column-end: 1 span 3;
   color: black;
+  display: flex;
   justify-self: center;
+  align-items: center;
 }
 
 .side {
