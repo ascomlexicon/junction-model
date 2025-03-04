@@ -186,12 +186,12 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
         
         // Get how many lanes from this entry turn toward our exit direction
         // We need to map the relationship (e.g., traffic from west turning "north")
-        if (direction == "north") {
+        if (direction === "north") {
           // Calculates number of cars going FROM entryDirection TO North
           lanesFromThisEntry = calculateLanesTurningNorth(entryDirection)
-        } else if (direction == "south") {
+        } else if (direction === "south") {
           lanesFromThisEntry = calculateLanesTurningSouth(entryDirection)
-        } else if (direction == "east") {
+        } else if (direction === "east") {
           lanesFromThisEntry = calculateLanesTurningEast(entryDirection)
         } else {
           lanesFromThisEntry = calculateLanesTurningWest(entryDirection)
