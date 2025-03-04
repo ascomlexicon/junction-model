@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './StaticJunctionDisplay.module.css'; 
 
-function StaticJunctionDisplay({ incomingDirection, outgoingDirection1, outgoingDirection2, outgoingDirection3, values }) {
+function StaticJunctionDisplay({ outgoingDirection1, outgoingDirection2, outgoingDirection3, values }) {
   const generateRandomTraffic = () => Math.floor(Math.random() * 151) + 50;
 
   const displayValues = values || {
@@ -13,7 +13,7 @@ function StaticJunctionDisplay({ incomingDirection, outgoingDirection1, outgoing
   const totalTraffic = Object.values(displayValues).reduce((sum, value) => sum + value, 0);
 
   return (
-    <div className={styles.junctionDisplay}> {/* ✅ Apply CSS Module */}
+    <div className={styles.junctionDisplay}>
       <div className={styles.incomingSection}>
         <h3 className={styles.directionHeading}>Entering</h3>
         <div className={styles.staticDisplay}>{totalTraffic} vehicles</div>

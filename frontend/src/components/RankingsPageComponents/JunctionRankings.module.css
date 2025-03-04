@@ -20,21 +20,11 @@
 .side {
   grid-area: side;
   color: rgb(0, 0, 0);
-  /* overflow-y: auto; Allow vertical scrolling if needed
-  overflow-x: hidden; Prevent horizontal scrolling
-  scrollbar-color: white #001F3F ; Scrollbar color */
-  display: flex;
-  flex-direction: column;
-  /* align-items: center; Centers content horizontally */
-  /* justify-content: start; Aligns content to the top */
-  /* width: 100%; */
-  max-width: 100%; /* Prevents content from overflowing */
+  overflow-y: auto; 
+  scrollbar-color: white #001F3F ; 
   box-sizing: border-box; /* Ensures padding doesn't cause overflow */
   border: 2px solid rgb(2, 2, 2);
-  margin-left: 10px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  margin-right: 5px;
+  margin: 10px;
 }
 
 .leftPanel {

@@ -36,7 +36,7 @@ const JunctionRankings = () => {
         <button className={styles.backButton}>
               <Link to="/MainPage">Back to Junction Configuration Menu</Link>
             </button>
-        </div>
+        </div>  
         <div className={styles.side}>
         <VPHDisplayForm 
           />

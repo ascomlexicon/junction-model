@@ -1,35 +1,19 @@
-.junctionDisplayContainer {
-    flex-direction: column;
-    align-items: flex-start;
-    box-sizing: border-box;
-    position: relative;
-}
-
-.infoSection {
-    margin-bottom: 20px;
-    align-self: flex-start;
-    width: 280px;
-}
-
 .formsGrid {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    width: 280px;
-    align-self: flex-start;
+    height: 100vh;
 }
 
 .formCell {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
-    /* border-radius: 8px; */
+    border-radius: 8px;
     border: 2px solid rgb(2, 2, 2);
     box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
     padding: 10px;
     margin: 10px;
-    box-sizing: border-box;
+    flex: 1;
 }
 
 .formCell h1 {
@@ -40,4 +24,9 @@
     margin-top: 0;
     margin-bottom: 10px;
     color: black;
+}
+
+h2 {
+    padding-bottom: 10px;
+    margin: 10px;
 }
