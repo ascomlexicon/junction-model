@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 const DirectionDataSection = ({ title, data }) => {
   return (
     <div className={styles.directionSection}>
-      <h3>{title}</h3>
+      <h3 className={styles.direction}>{title}</h3>
       {Object.entries(data).map(([key, value]) => {
         // Format the key for display (e.g., "exitEast" becomes "Exit east")
         const formattedKey = key === "entering" 

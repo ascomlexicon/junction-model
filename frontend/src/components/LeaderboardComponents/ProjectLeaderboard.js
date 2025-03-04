@@ -93,7 +93,6 @@ const ProjectLeaderboard = () => {
         </div>
         
         <div className={styles.rightPanel}>
-          {/* Use the reusable VPH data component */}
           <VPHDataDisplay projectData={selectedProject} />
         </div>
       </div>
