@@ -17,10 +17,15 @@ public class Junction {
   // Constructors
   public Junction(String junctionName) {
     this.junctionName = junctionName;
+
+    this.east = new JunctionQuarter();
+    this.west = new JunctionQuarter();
+    this.south = new JunctionQuarter();
+    this.north = new JunctionQuarter();
   }
 
   public Junction(String junctionName, Double junctionScore) {
-    this.junctionName = junctionName;
+    this(junctionName);
     this.score = junctionScore;
   }
 

@@ -8,6 +8,7 @@ import com.model.junction.JunctionClasses.Junction;
 import com.model.junction.JunctionClasses.JunctionStorage;
 
 public class Project {
+  // Note that directions are outbound directions (aka the SOUTH-bound junction arm is the physically north arm)
   private HashMap<Direction, HashMap<Direction, Integer>> vehiclePerHourData;
   private JunctionStorage junctions; 
   private String projectTitle;

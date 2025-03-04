@@ -78,16 +78,6 @@ public class JunctionQuarter {
     }
   }
 
-  // Getters and Setters
-
-  /*public TrafficLight getLight() {
-    return light;
-  }
-
-  public void setLight(TrafficLight light) {
-    this.light = light;
-  }*/
-
   public int getOutbound(){
     return exitingForward + exitingLeft + exitingRight;
   }
@@ -198,19 +188,6 @@ public class JunctionQuarter {
   public boolean verifyLanes() {
     return true;
   }
-
-  /**
-   * According to the requirements, the junction can only have either a bus or a cycle lane.
-   * This method checks if this constraint is satisfied. Additionally, it validates that the lanes
-   * specified are valid, i.e., they are either in entering or exiting lanes.
-   */
-  /*public boolean verifyBusAndCycleLanes() {
-    if (busLaneDirection.size() == 0 || cycleLaneDirection.size() == 0) {
-      return true;
-    } else {
-      return false;
-    }
-  }*/
 }
 
 
