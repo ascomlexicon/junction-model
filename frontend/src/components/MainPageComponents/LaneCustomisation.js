@@ -455,6 +455,14 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
       setShowWarning(true);
       return;
     }
+
+     // New constraint: Check if there are at least 2 entry lanes
+    const entryLanes = parseInt(laneData.entering[direction]) || 0;
+    if (entryLanes < 2) {
+      setWarningMessage(`Cannot add a ${type === 'busLane' ? 'bus' : 'cycle'} lane for ${direction} direction. At least 2 entry lanes are required for a special lane.`);
+      setShowWarning(true);
+      return;
+    }
     
     setLaneData((prev) => {
       let newBusLane = { ...prev.busLane };
@@ -715,45 +723,70 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
         <div className="special-lanes-grid">
           <div className="special-lanes-column">
             <h4>Bus Lanes</h4>
-            {Object.keys(laneData.busLane).map((direction) => (
-              <div key={`bus-${direction}`} className="checkbox-group">
-                <label className={leftTurningTraffic[direction] ? 'disabled-option' : ''}>
-                  <input
-                    type="checkbox"
-                    checked={laneData.busLane[direction]}
-                    onChange={() => handleSpecialLaneChange('busLane', direction)}
-                    // disabled={leftTurningTraffic[direction]}
-                  />
-                  {direction.charAt(0).toUpperCase() + direction.slice(1)}
-                  {leftTurningTraffic[direction] && (
-                    <span className="disabled-label"> (Left-turning traffic exists.)</span>
-                  )}
-                </label>
-              </div>
-            ))}
+            {Object.keys(laneData.busLane).map((direction) => {
+              const entryLanes = parseInt(laneData.entering[direction]) || 0;
+              const hasMinimumLanes = entryLanes >= 2;
+              
+              return (
+                <div key={`bus-${direction}`} className="checkbox-group">
+                  <label 
+                    className={
+                      (leftTurningTraffic[direction] || !hasMinimumLanes) 
+                      ? 'disabled-option' 
+                      : ''
+                    }
+                  >
+                    <input
+                      type="checkbox"
+                      checked={laneData.busLane[direction]}
+                      onChange={() => handleSpecialLaneChange('busLane', direction)}
+                    />
+                    {direction.charAt(0).toUpperCase() + direction.slice(1)}
+                    {leftTurningTraffic[direction] && (
+                      <span className="disabled-label"> (Left-turning traffic exists.)</span>
+                    )}
+                    {!leftTurningTraffic[direction] && !hasMinimumLanes && (
+                      <span className="disabled-label"> (Requires at least 2 entry lanes)</span>
+                    )}
+                  </label>
+                </div>
+              );
+            })}
           </div>
           <div className="special-lanes-column">
             <h4>Cycle Lanes</h4>
-            {Object.keys(laneData.cycleLane).map((direction) => (
-              <div key={`cycle-${direction}`} className="checkbox-group">
-                <label className={leftTurningTraffic[direction] ? 'disabled-option' : ''}>
-                  <input
-                    type="checkbox"
-                    checked={laneData.cycleLane[direction]}
-                    onChange={() => handleSpecialLaneChange('cycleLane', direction)}
-                    // disabled={leftTurningTraffic[direction]}
-                  />
-                  {direction.charAt(0).toUpperCase() + direction.slice(1)}
-                  {leftTurningTraffic[direction] && (
-                    <span className="disabled-label"> (Left-turning traffic exists.)</span>
-                  )}
-                </label>
-              </div>
-            ))}
+            {Object.keys(laneData.cycleLane).map((direction) => {
+              const entryLanes = parseInt(laneData.entering[direction]) || 0;
+              const hasMinimumLanes = entryLanes >= 2;
+              
+              return (
+                <div key={`cycle-${direction}`} className="checkbox-group">
+                  <label 
+                    className={
+                      (leftTurningTraffic[direction] || !hasMinimumLanes) 
+                      ? 'disabled-option' 
+                      : ''
+                    }
+                  >
+                    <input
+                      type="checkbox"
+                      checked={laneData.cycleLane[direction]}
+                      onChange={() => handleSpecialLaneChange('cycleLane', direction)}
+                    />
+                    {direction.charAt(0).toUpperCase() + direction.slice(1)}
+                    {leftTurningTraffic[direction] && (
+                      <span className="disabled-label"> (Left-turning traffic exists.)</span>
+                    )}
+                    {!leftTurningTraffic[direction] && !hasMinimumLanes && (
+                      <span className="disabled-label"> (Requires at least 2 entry lanes)</span>
+                    )}
+                  </label>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
-
       {/* Junction Input Section */}
       <div className={`junction-form-container ${!hasSpecialLane ? 'disabled' : ''}`}>
         {!hasSpecialLane ? (
