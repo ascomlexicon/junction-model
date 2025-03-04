@@ -49,6 +49,8 @@
     grid-area: pic;
     background-color: #f0f0f0;
     margin-left: 10px;
+    display: flex;
+    justify-content: center;
 }
 
 /* Adjust header to prevent it from affecting layout */

@@ -3,59 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 const JunctionCanvas = ({ config }) => {
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
-  const resizeTimeoutRef = useRef(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
-  
-  // Function to handle resize with debounce
-  // TODO: Check, new
-  const handleResize = () => {
-    // Clear any existing timeout
-    if (resizeTimeoutRef.current) {
-      clearTimeout(resizeTimeoutRef.current);
-    }
-    
-    // Set a new timeout
-    resizeTimeoutRef.current = setTimeout(() => {
-      if (containerRef.current) {
-        // Get the container dimensions
-        const containerWidth = containerRef.current.clientWidth;
-        const containerHeight = containerRef.current.clientHeight || window.innerHeight * 0.7;
-        
-        // Set canvas dimensions based on container
-        setDimensions({
-          width: containerWidth,
-          height: containerHeight
-        });
-      }
-    }, 250); // 250ms delay for debounce
-  };
-  
-  // Initialize dimensions and set up resize listener
-  // TODO: Check, new
-  useEffect(() => {
-    // Initial sizing
-    if (containerRef.current) {
-      const containerWidth = containerRef.current.clientWidth;
-      const containerHeight = containerRef.current.clientHeight || window.innerHeight * 0.7;
-      
-      setDimensions({
-        width: containerWidth,
-        height: containerHeight
-      });
-    }
-    
-    window.addEventListener('resize', handleResize);
-
-    // Cleanup function
-    return () => {
-      window.removeEventListener('resize', handleResize);
-
-      // Clear any existing timeout on unmount
-      if (resizeTimeoutRef.current) {
-        clearTimeout(resizeTimeoutRef.current);
-      }
-    };
-  }, []);
   
   // Effect to redraw the canvas whenever the config or dimensions change
   useEffect(() => {
@@ -589,28 +537,16 @@ const JunctionCanvas = ({ config }) => {
   };
   
   return (
-    <div 
-      ref={containerRef} 
+    <canvas 
+      ref={canvasRef} 
+      width={dimensions.width} 
+      height={dimensions.height} 
       style={{ 
-        width: '100%', 
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center'
+        maxWidth: '100%',
+        maxHeight: '100%',
+        objectFit: 'contain',
       }}
-    >
-      <canvas 
-        ref={canvasRef} 
-        width={dimensions.width} 
-        height={dimensions.height} 
-        style={{ 
-          // border: '1px solid #000', 
-          // backgroundColor: '#f0f0f0',
-          maxWidth: '100%',
-          maxHeight: '100%'
-        }}
-      />
-    </div>
+    />
   );
 };
 
