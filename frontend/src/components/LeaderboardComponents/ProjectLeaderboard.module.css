@@ -1,12 +1,10 @@
-/* Updated styles */
-
 .pageContainer {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    font-family: Arial, sans-serif;
-    background-color: white;
-  }
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+  background-color: white;
+}
   
 .projectName{
     color: white;
@@ -17,7 +15,6 @@
   justify-content: space-between;
   align-items: center;
   padding: 15px 30px;
-  /* background-color: #1A1A2E; */
   border-bottom: 1px solid #333;
 }
 
@@ -46,6 +43,7 @@
 .container {
   display: flex;
   flex: 1;
+  min-height: 0;
 }
 
 .leftPanel {
@@ -54,6 +52,8 @@
   color: black;
   border: 2px solid rgb(2, 2, 2);
   margin: 10px;
+  overflow-y: auto; /* Allow scrolling if content is too long */
+  max-height: 100%;
 }
 
 .rightPanel {
@@ -61,6 +61,7 @@
   color: black;
   border: 2px solid rgb(2, 2, 2);
   margin: 10px;
+  overflow-y: scroll;
 }
 
 .title {

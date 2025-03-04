@@ -35,7 +35,7 @@ const VPHDataDisplay = ({ projectData }) => {
   }
 
   return (
-    <div>
+    <>
       <h2 className={styles.projectName}>{projectData.name} VPH Data</h2>
       
       <div className={styles.vphDataGrid}>
@@ -48,7 +48,7 @@ const VPHDataDisplay = ({ projectData }) => {
       <button className={styles.configuredNote}>
         <Link to = '/RankingsPage' className={styles.configuredBtn}>See configured junctions for {projectData.name}</Link>
       </button>
-    </div>
+    </>
   );
 };
 
