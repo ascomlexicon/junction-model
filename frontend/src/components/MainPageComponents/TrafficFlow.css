@@ -9,7 +9,7 @@
   position: relative; /* Added for absolute positioning of reset all button */
 }
 
-/* Reset All button positioning */
+/* Reset all button positioning */
 .button-container .reset-all-button {
   position: absolute;
   top: 10px;
@@ -81,7 +81,7 @@
   order: 3; /* Right side */
 }
 
-/* Optional: Add some spacing between buttons */
+/* Add some spacing between buttons */
 .button-container > * {
   margin: 0 5px;
 }
@@ -93,4 +93,16 @@
   background: white;
   border-radius: 6px;
   text-align: center;
+}
+
+.junction-forms-container {
+  padding: 20px;
+  max-width: 100%;
+  margin: 0 auto;
+  position: relative;
+}
+
+.instructions {
+  padding-bottom: 10px;
+  width: 100%;
 }
