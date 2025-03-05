@@ -1,7 +1,9 @@
 .sidebar {
     width: 100px;
-    background-color: #ffffff;
     padding: 10px 15px;
+    border-right: 1px solid black;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .sidebar-menu {
@@ -42,7 +44,7 @@
 
 /* Text styling */
 .sidebar-item span {
-    font-size: 0.7rem;
+    font-size: 1rem;
     color: #333;
     word-wrap: break-word;
     max-width: 100%;
@@ -77,32 +79,33 @@
     background-color: #5f5a5a;
 }
 
-/* Enhanced Tooltip Styling */
 .sidebar-item .tooltip {
-    top: 100%;
+    position: absolute;
     left: 50%;
-    transform: translateX(-50%);
-    background-color: #000000;
+    margin-left: -60px;
+    background-color: rgb(229, 20, 20, 1);
     color: #fff;
     border-radius: 4px;
     white-space: nowrap;
-    z-index: 1000;
-    opacity: 1;
+    z-index: 10;
+    opacity: 0;
     visibility: hidden;
     transition: opacity 0.7s ease, visibility 0.3s;
     margin-top: 5px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    padding: 0%;
-    width: fit-content;
-    
+    width: max-content;
+    overflow: visible;
+    max-width: 100px;
+    max-height: max-content;
+    pointer-events: none
 }
 
-.sidebar-item.disabled:hover .tooltip {
+/* .sidebar-item.disabled:hover .tooltip {
     opacity: 1;
     visibility: visible;
-}
+} */
 
-.hover-message {
+.tooltip {
     font-size: 0.7rem;
     margin: 0;
     color: #ffffff;

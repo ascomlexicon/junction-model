@@ -33,12 +33,14 @@ const JunctionRankings = () => {
           <h1>Named Junction!</h1>
         </div>
         <div className={styles.backButtonContainer}>
-                    {/* TODO: Change this; not advised to have Link tag within button (I think) */}
-
-        <button className={styles.backButton}>
-              <Link to="/MainPage">Back to Junction Configuration Menu</Link>
-            </button>
-        </div>
+          <button className={styles.backButton} >
+            <Link to="/MainPage" style={{ 
+              display: 'block', 
+              width: '100%', 
+              height: '100%' 
+            }}>Back to Junction Configuration Menu</Link>
+          </button>
+        </div>  
         <div className={styles.side}>
         <VPHDisplayForm 
           />
@@ -53,8 +55,12 @@ const JunctionRankings = () => {
             onSelect={handleSelect}
           />
           
-            <button className = {styles.backButton}>
-            <Link to="/Leaderboard">See other Projects</Link>
+          <button className = {styles.backButton}>
+            <Link to="/Leaderboard" style={{ 
+              display: 'block', 
+              width: '100%', 
+              height: '100%' 
+            }}>See other Projects</Link>
           </button>
         </div>
         
@@ -62,7 +68,6 @@ const JunctionRankings = () => {
           {selectedJunction && (
             <>
               <ScoreBreakdown junctionName={selectedJunction.name} score={selectedJunction.score} />
-              
             </>
           )}
         </div>

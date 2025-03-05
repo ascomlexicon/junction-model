@@ -58,27 +58,17 @@
   width: 80%;
 }
 
-/* Button container styling */
-.button-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  max-width: 280px;
-  
-}
-
 /* Individual button positioning */
 .button-container BackButton {
-  order: 1; /* Left side */
+  order: 1;
 }
 
 .button-container SaveNextButton {
-  order: 2; /* Middle */
+  order: 2;
 }
 
 .button-container ResetVPHButton {
-  order: 3; /* Right side */
+  order: 3;
 }
 
 /* Add some spacing between buttons */

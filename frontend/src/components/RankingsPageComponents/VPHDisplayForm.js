@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import styles from './VPHDisplayForm.module.css'; // ✅ Import correctly
+import styles from './VPHDisplayForm.module.css';
 import StaticJunctionDisplay from './StaticJunctionDisplay';
 
 function VPHDisplayForm() {
@@ -32,24 +32,23 @@ function VPHDisplayForm() {
   }, []);
 
   return (
-    <div className={styles.junctionDisplayContainer}> 
-      <div className={styles.formsGrid}>
-        <div className={styles.formCell}>
-          <h1>North</h1>
-          <StaticJunctionDisplay incomingDirection="North" outgoingDirection1="South" outgoingDirection2="East" outgoingDirection3="West" values={trafficData.north} />
-        </div>
-        <div className={styles.formCell}>
-          <h1>South</h1>
-          <StaticJunctionDisplay incomingDirection="South" outgoingDirection1="North" outgoingDirection2="East" outgoingDirection3="West" values={trafficData.south} />
-        </div>
-        <div className={styles.formCell}>
-          <h1>East</h1>
-          <StaticJunctionDisplay incomingDirection="East" outgoingDirection1="North" outgoingDirection2="South" outgoingDirection3="West" values={trafficData.east} />
-        </div>
-        <div className={styles.formCell}>
-          <h1>West</h1>
-          <StaticJunctionDisplay incomingDirection="West" outgoingDirection1="North" outgoingDirection2="South" outgoingDirection3="East" values={trafficData.west} />
-        </div>
+    <div className={styles.formsGrid}>
+      <h2>VPH Data for this Project</h2>
+      <div className={styles.formCell}>
+        <h1>North</h1>
+        <StaticJunctionDisplay outgoingDirection1="South" outgoingDirection2="East" outgoingDirection3="West" values={trafficData.north} />
+      </div>
+      <div className={styles.formCell}>
+        <h1>South</h1>
+        <StaticJunctionDisplay outgoingDirection1="North" outgoingDirection2="East" outgoingDirection3="West" values={trafficData.south} />
+      </div>
+      <div className={styles.formCell}>
+        <h1>East</h1>
+        <StaticJunctionDisplay outgoingDirection1="North" outgoingDirection2="South" outgoingDirection3="West" values={trafficData.east} />
+      </div>
+      <div className={styles.formCell}>
+        <h1>West</h1>
+        <StaticJunctionDisplay outgoingDirection1="North" outgoingDirection2="South" outgoingDirection3="East" values={trafficData.west} />
       </div>
     </div>
   );
