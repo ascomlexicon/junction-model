@@ -580,7 +580,6 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
 
   return (
     <div className="lane-customisation">
-      {/* TODO: Add instructions area as with other components for consistency */}
       <h2>Lane Customisation</h2>
 
       {/* Warning Popup */}
@@ -598,6 +597,15 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
           </div>
         </div>
       )}
+
+      <div className="info-box">
+        <h3>Info:</h3>
+        <ul>
+          <li>Customise the number and type of lanes for each junction quarter</li>
+          <li>Left turns can only be configured when there exists left turning traffic</li>
+          <li>For any given junction quarter, there can be only one special lane (left turn, bus or cycle)</li>
+        </ul>
+      </div>
 
       {/* Lanes Entering Section */}
       <section className="lanes-section">
