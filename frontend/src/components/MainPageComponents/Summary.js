@@ -22,26 +22,26 @@ function Summary({ formData, setActiveStep }) {
     // Attach image to the current configuration of the junction
     formData.junctionImage = junctionImage;
 
-    // FIXME: POST JSON object to the backend for processing
-    // axios
-    //   .post("___", finalJunctionConfig)
-    //   .then((response) => {
-    //     console.log(response.status);
+    // POST 1: Send JSON object to the backend for processing
+    axios
+      .post("/api/model", formData)
+      .then((response) => {
+        console.log(response.data);
           // pass the JSON object for the configured junction to the rankings page
-    //     navigate('/RankingsPage', { state: formData });
-    //   })
-    //   .catch((error) => {
-    //     if (error.response) {
-    //       console.log(error.response);
-    //       console.log("server responded");
-    //     } else if (error.request) {
-    //       console.log("network error");
-    //     } else {
-    //       console.log(error);
-    //     }
-    //   });
+        navigate('/RankingsPage', { state: formData });
+      })
+      .catch((error) => {
+        if (error.response) {
+          console.log(error.response);
+          console.log("server responded");
+        } else if (error.request) {
+          console.log("network error");
+        } else {
+          console.log(error);
+        }
+      });
 
-    navigate('/RankingsPage', { state: formData });
+    // navigate('/RankingsPage', { state: formData });
   };
   
   const handleBack = () => {
