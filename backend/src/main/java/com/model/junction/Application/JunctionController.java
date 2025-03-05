@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.model.junction.Attributes.Direction;
 import com.model.junction.JunctionClasses.Junction;
 import com.model.junction.JunctionClasses.JunctionQuarter;
+import com.model.junction.JunctionClasses.JunctionScoring;
 import com.model.junction.JunctionClasses.JunctionSimulationLogic;
 import com.model.junction.ProjectClasses.Project;
 import com.model.junction.ProjectClasses.ProjectStorage;
@@ -133,8 +134,12 @@ public class JunctionController {
         directionPriorityOrder[i] = Direction.valueOf(jsonNode.get("directionPrioritisation").get(i).asText().toUpperCase());
       }
       
+      int counter = 0;
+      JunctionScoring scoring = new JunctionScoring();
+
       for (Direction direction : Direction.values()) {
         Direction enteringDirection = direction.getOpposite();
+        Integer outboundVPH = currentProject.getTotalOutboundVPHData().get(direction);
 
         boolean hasLeftTurnLane = jsonNode.get("leftTurnLanes").get(enteringDirection.toString().toLowerCase()).asBoolean();
         int lanesEntering = jsonNode.get("lanesEntering").get(enteringDirection.toString().toLowerCase()).asInt();
@@ -145,7 +150,7 @@ public class JunctionController {
         int crossingDuration = jsonNode.get("crossingDuration").asInt();
         int crossingRequestsPerHour = jsonNode.get("crossingRequestsPerHour").asInt();
 
-        double[] score = JunctionSimulationLogic.runSimulation(
+        double[] parameters = JunctionSimulationLogic.runSimulation(
           currentProject.getVehiclePerHourData().get(direction).get(direction).intValue(),
           currentProject.getVehiclePerHourData().get(direction).get(direction.getRight()).intValue(),
           currentProject.getVehiclePerHourData().get(direction).get(direction.getLeft()).intValue(),
@@ -161,9 +166,23 @@ public class JunctionController {
           Arrays.stream(directionPriorityOrder).map(Enum::name).map((String s) -> StringUtils.capitalize(s.toLowerCase())).toArray(String[]::new)
         );
 
-        JunctionQuarter quarter = new JunctionQuarter(direction, hasLeftTurnLane, lanesEntering, lanesExiting, hasBusOrCycleLane, specialVPH, hasPriorities, directionPriorityOrder, hasCrossings, crossingDuration, crossingRequestsPerHour, score);
+        JunctionQuarter quarter = new JunctionQuarter(direction, hasLeftTurnLane, lanesEntering, lanesExiting, hasBusOrCycleLane, specialVPH, hasPriorities, directionPriorityOrder, hasCrossings, crossingDuration, crossingRequestsPerHour, parameters);
+        scoring.quarterScore(
+          counter,
+          outboundVPH.doubleValue(),
+          15, 
+          (long) quarter.simulationResults()[0],
+          (long) quarter.simulationResults()[2], 
+          (long) quarter.simulationResults()[1], 
+          0.3,
+          0.3,
+          0.4
+        );
+
         junction.setQuarter(direction, quarter);
       }
+      
+      junction.setOverallScore(scoring.junctionScore());
 
       return ResponseEntity.ok(new SimulationDTO(currentProject, junction));
     } catch (Exception e) {
