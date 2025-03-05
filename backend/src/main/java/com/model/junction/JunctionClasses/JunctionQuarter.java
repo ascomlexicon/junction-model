@@ -14,7 +14,7 @@ public record JunctionQuarter(
   boolean hasCrossings,
   int crossingDuration,
   int crossingRequestsPerHour,
-  Double score
+  Double[] score
 ) {
   public JunctionQuarter(
     Direction outboundDirection,

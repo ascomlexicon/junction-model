@@ -7,11 +7,9 @@ import com.model.junction.Attributes.Direction;
 public class Junction {
 
   // Attributes
-  private Double score;
   private String junctionName;
   private String junctionImage;
-
-  // Junction quarters in different directions
+  private double[] overallScore;
   private JunctionQuarter north;
   private JunctionQuarter east;
   private JunctionQuarter south;
@@ -49,6 +47,7 @@ public class Junction {
         this.west = quarter;
     }
   } 
+
   public String getName() {
     return this.junctionName;
   }
@@ -65,15 +64,12 @@ public class Junction {
     this.junctionImage = junctionImage;
   }
 
-  public Double getScore() {
-    return this.score;
+  public double[] getOverallScore() {
+    return this.overallScore;
   }
 
-  public void setScore(Double newScore) throws IllegalArgumentException {
-    if (newScore < 0 || newScore > 100) {
-      throw new IllegalArgumentException("The score must be between 0 and 100 inclusive.");
-    }
-    this.score = newScore;
+  public void setOverallScore(double[] overallScore) {
+    this.overallScore = overallScore;
   }
 
   // Comparison Methods
