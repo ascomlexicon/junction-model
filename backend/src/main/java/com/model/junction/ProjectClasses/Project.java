@@ -57,7 +57,7 @@ public class Project {
   public ArrayList<Junction> getScoreSortedJunctions() {
     ArrayList<Junction> junctionList = junctions.getAllJunctions();
     junctionList.sort( 
-        (junction1, junction2) -> { return junction1.getScore().compareTo(junction2.getScore()); } 
+        (Junction junction1, Junction junction2) -> { return junction1.getOverallScore().compareTo(junction2.getOverallScore()); } 
     );
     return junctionList;
   }
