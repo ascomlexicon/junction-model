@@ -17,7 +17,6 @@ public class Junction {
   private String junctionName;
 
   // Constructors
-
   public Junction(String junctionName) {
     this.name = junctionName;
   }
@@ -28,7 +27,6 @@ public class Junction {
   }
 
   // Accessors and Mutators
-
   public String getName() {
     return name;
   }
@@ -49,14 +47,12 @@ public class Junction {
   }
 
   // Conversions
-
   @Override
   public String toString() {
     return "[Junction(name=" + name + ", score=" + score + ")]";
   }
 
   // Comparison Methods
-
   @Override
   public boolean equals(Object other) {
     if (this == other) {
