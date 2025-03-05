@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Slab } from 'react-loading-indicators';
-import React, { useState, useEffect } from 'react';
-import { Slab } from 'react-loading-indicators';
 import styles from './JunctionRankings.module.css';
 import JunctionList from './JunctionList';
 import ScoreBreakdown from './ScoreBreakdown';

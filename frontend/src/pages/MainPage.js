@@ -120,7 +120,7 @@ function MainPage() {
         // Update direction prioritisation field
         Object.assign(newJSON, {
           enablePrioritisation,
-          lanePrioritisation
+          directionPrioritisation
         });
       }
       

@@ -16,7 +16,7 @@ function StaticJunctionDisplay({ outgoingDirection1, outgoingDirection2, outgoin
   return (
     <div className={styles.junctionDisplay}>
       <div className={styles.incomingSection}>
-        <h3 className={styles.directionHeading}>Entering from the {incomingDirection}</h3>
+        <h3 className={styles.directionHeading}>Entering</h3>
         <div className={styles.staticDisplay}>{totalTraffic} vehicles</div>
       </div>
 
