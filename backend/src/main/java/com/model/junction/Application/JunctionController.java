@@ -3,8 +3,10 @@ package com.model.junction.Application;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +31,52 @@ public class JunctionController {
   }
   
   // Get Mappings
+  @GetMapping("/junctions")
+  public ResponseEntity<?> getProjectJunctions(@RequestBody String body) {
+    try {
+      ObjectMapper objectMapper = new ObjectMapper();
+      JsonNode jsonNode = objectMapper.readTree(body);
+
+      String[] vphDirections = {"vphNorth", "vphEast", "vphSouth", "vphWest"}; // Entering directions
+      HashMap<Direction, HashMap<Direction, Integer>> vehiclePerHourData = new HashMap<Direction, HashMap<Direction, Integer>>();
+      
+      for (String vphDirection : vphDirections) {
+        Direction key = Direction.valueOf(vphDirection.substring(3).toUpperCase()).getOpposite();
+        HashMap<Direction, Integer> exitDirectionsVPH = new HashMap<Direction, Integer>();
+        
+        for (Direction direction : Direction.values()) {
+          if (direction.equals(key.getOpposite())) {
+            continue;
+          }
+
+          switch (direction) {
+            case NORTH:
+              exitDirectionsVPH.put(direction, jsonNode.get(vphDirection).get("exitNorth").asInt());
+              break;
+            case EAST:
+              exitDirectionsVPH.put(direction, jsonNode.get(vphDirection).get("exitEast").asInt());
+              break;
+            case SOUTH:
+              exitDirectionsVPH.put(direction, jsonNode.get(vphDirection).get("exitSouth").asInt());
+              break;
+            default:
+              exitDirectionsVPH.put(direction, jsonNode.get(vphDirection).get("exitWest").asInt());
+              break;
+          }
+        }
+        vehiclePerHourData.put(key, exitDirectionsVPH);
+      }
+      Project currentProject = projectStorage.getProjectByVPH(vehiclePerHourData);
+      
+      if (currentProject == null) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The following VPH data does not exist:\n" + vehiclePerHourData);
+      }
+
+      return ResponseEntity.ok(currentProject.getScoreSortedJunctions());
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body("Failed to parse JSON: " + e.getMessage());
+    }
+  }
 
   // Post Mappings
   @PostMapping("/model")
