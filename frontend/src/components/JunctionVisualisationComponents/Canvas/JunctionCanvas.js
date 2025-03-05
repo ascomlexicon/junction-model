@@ -539,6 +539,7 @@ const JunctionCanvas = ({ config }) => {
   return (
     <canvas 
       ref={canvasRef} 
+      className='junction-graphic'
       width={dimensions.width} 
       height={dimensions.height} 
       style={{ 
