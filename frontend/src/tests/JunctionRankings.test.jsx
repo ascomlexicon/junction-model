@@ -28,7 +28,8 @@ describe('JunctionRankings', () => {
     expect(subtitleElement).toBeInTheDocument();
     
     // Check if the Back to Junction Configuration Menu button is rendered
-    const backButtonElement = screen.getByRole('button');
+    const backButtonElement = screen.getByRole('button', { name: /Back to Junction Configuration Menu/i });
     expect(backButtonElement).toBeInTheDocument();
+    
   });
 });
