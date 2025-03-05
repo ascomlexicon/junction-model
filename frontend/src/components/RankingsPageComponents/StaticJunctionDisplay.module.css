@@ -19,7 +19,7 @@
     font-size: 14px;
     font-weight: 500;
     margin-bottom: 4px;
-    color: white;
+    color: black;
 }
 
 .outgoingSection {
@@ -38,7 +38,7 @@
 .labelText {
     font-size: 12px;
     font-weight: 500;
-    color: white;
+    color: black;
     flex: 1;
     text-align: left;
     margin-right: 8px;
@@ -58,11 +58,10 @@
 
 .directionDisplay .staticDisplay {
     font-weight: 500;
-    color: #2c5282;
+    color: black;
 }
 
 .incomingSection .staticDisplay {
     font-weight: 600;
-    color: #2d3748;
-    background-color: #e6f0fd;
+    color: black;
 }

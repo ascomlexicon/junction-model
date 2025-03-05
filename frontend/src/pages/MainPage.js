@@ -4,7 +4,7 @@ import Sidebar from '../components/MainPageComponents/SideBar';
 import TrafficFlow from '../components/MainPageComponents/TrafficFlow';
 import LaneCustomisation from '../components/MainPageComponents/LaneCustomisation';
 import PedestrianCrossing from '../components/MainPageComponents/PedestrianCrossing';
-import LanePrioritisation from '../components/MainPageComponents/LanePrioritisation';
+import DirectionPrioritisation from '../components/MainPageComponents/DirectionPrioritisation';
 import Summary from '../components/MainPageComponents/Summary';
 import JSONViewer from './JSONViewer';
 import JunctionCanvas from '../components/JunctionVisualisationComponents/Canvas/JunctionCanvas';
@@ -19,7 +19,7 @@ const InstructionsPage = () => {
       <ol>
         <li>Use the sidebar to navigate through different configuration steps</li>
         <li>Start with Traffic Flow settings to configure junction types and traffic patterns</li>
-        <li>Customize lane configurations in the Lane Customisation section</li>
+        <li>Customise lane configurations in the Lane Customisation section</li>
         <li>View your completed junction in the visual display area above</li>
       </ol>
       <p>Click any option in the sidebar to begin designing your junction.</p>
@@ -44,7 +44,7 @@ function MainPage() {
         "vphSpecialWest": 0
       },
       enablePrioritisation: false,
-      lanePrioritisation: [],
+      directionPrioritisation: [],
       isCrossings: false,
       crossingDuration: 0,
       crossingRequestsPerHour: 0,
@@ -59,7 +59,7 @@ function MainPage() {
       trafficFlow: {},
       laneCustomisation: {},
       pedestrianCrossing: {},
-      lanePrioritisation: {}
+      directionPrioritisation: {}
     });
     
     // Update JSON whenever form data changes
@@ -110,16 +110,16 @@ function MainPage() {
         });
       }
 
-      if (Object.keys(formData.lanePrioritisation).length > 0) {
+      if (Object.keys(formData.directionPrioritisation).length > 0) {
         const {
             enablePrioritisation,
-            lanePrioritisation,
-        } = formData.lanePrioritisation;
+            directionPrioritisation,
+        } = formData.directionPrioritisation;
 
-        // Update lane prioritisation field
+        // Update direction prioritisation field
         Object.assign(newJSON, {
           enablePrioritisation,
-          lanePrioritisation
+          directionPrioritisation
         });
       }
       
@@ -165,9 +165,9 @@ function MainPage() {
           newJSON.crossingDuration = 0;
           newJSON.crossingRequestsPerHour = 0;
           break;
-        case 'lanePrioritisation':
+        case 'directionPrioritisation':
           newJSON.enablePrioritisation = false;
-          newJSON.lanePrioritisation = [];
+          newJSON.directionPrioritisation = [];
           break;
         default:
           break;
@@ -195,7 +195,7 @@ function MainPage() {
           "vphSpecialEast": 0,
           "vphSpecialWest": 0
         },
-        lanePrioritisation: [],
+        directionPrioritisation: [],
         isCrossings: false,
         crossingDuration: 0,
         crossingRequestsPerHour: 0,
@@ -209,7 +209,7 @@ function MainPage() {
         trafficFlow: {},
         laneCustomisation: {},
         pedestrianCrossing: {},
-        lanePrioritisation: {}
+        directionPrioritisation: {}
       });
       // Optionally navigate back to first step
       setActiveStep(0);
@@ -251,7 +251,7 @@ function MainPage() {
                 );
             case 3:
                 return (
-                  <LanePrioritisation 
+                  <DirectionPrioritisation 
                     setActiveStep={setActiveStep}
                     saveFormData={saveFormData}
                     resetForm={resetForm}
@@ -273,13 +273,9 @@ function MainPage() {
 
     return(
         <div className="container">
-            <h1 className='main-title'>Junction Simulator</h1>
+            <h1 className='main-title'>The Junction Simulator</h1>
             <div className="junction-visual">
-                {/* Add canvas */}
                 <JunctionCanvas config={completeJSON} />
-
-                {/* <div className='image'>Junction graphicIMAGE</div>
-                <div className='Leaderboard'>See junction Leaderboard</div> */}
             </div>
             <div className='menu'>
                 <Sidebar setActiveStep={setActiveStep} activeStep={activeStep} />

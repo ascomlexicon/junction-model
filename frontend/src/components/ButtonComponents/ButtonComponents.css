@@ -1,119 +1,77 @@
-/* ButtonComponents.css */
 button {
-    padding: 10px 16px;
-    border-radius: 4px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 120px;
-    font-size: 14px;
-  }
-  
-  /* Reset Button */
-  /* .reset-button {
-    background-color: #f1f1f1;
-    color: #333;
-    border: 1px solid #ddd;
-  }
-  
-  .reset-button:hover {
-    background-color: #e5e5e5;
-  } */
-  
-  /* Reset button variants */
-  .reset-button {
-    background-color: #fff1f0;
-    color: #d32f2f;
-    border: 1px solid #ffcdd2;
-  }
-  
-  .reset-button:hover {
-    background-color: #ffe6e6;
-  }
-  
-  /* .reset-button.lane {
-    background-color: #fff1f0;
-    color: #d32f2f;
-    border: 1px solid #ffcdd2;
-  }
-  
-  .reset-button.lane:hover {
-    background-color: #ffe6e6;
-  }
+  padding: 10px 16px;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
+  font-size: 14px;
+}
 
-  .reset-button.prioritisation {
-    background-color: #fff1f0;
-    color: #d32f2f;
-    border: 1px solid #ffcdd2;
-  }
-  
-  .reset-button.prioritisation:hover {
-    background-color: #ffe6e6;
-  }
+/* Reset button variants */
+.reset-button {
+  background-color: #fff1f0;
+  color: #d32f2f;
+  border: 1px solid #ffcdd2;
+}
 
-  .reset-button.crossings {
-    background-color: #fff1f0;
-    color: #d32f2f;
-    border: 1px solid #ffcdd2;
-  }
-  
-  .reset-button.crossings:hover {
-    background-color: #ffe6e6;
-  } */
-  
-  /* Save and Next Button */
-  .save-next-button {
-    background-color: #673ab7;
-    color: white;
-    border: none;
-    gap: 8px;
-  }
-  
-  .save-next-button:hover {
-    background-color: #5e35b1;
-  }
-  
-  .save-next-button:disabled {
-    background-color: #b39ddb;
-    cursor: not-allowed;
-  }
-  
-  /* Reset All Button */
-  .reset-all-button {
-    background-color: #f44336;
-    color: white;
-    border: none;
-  }
-  
-  .reset-all-button:hover {
-    background-color: #e53935;
-  }
-  
-  /* Back Button */
-  .back-button {
-    background-color: #f5f5f5;
-    color: #616161;
-    border: 1px solid #e0e0e0;
-    gap: 8px;
-  }
-  
-  .back-button:hover {
-    background-color: #eeeeee;
-    color: #424242;
-  }
-  
-  /* Icon styles */
-  .arrow-icon {
-    font-size: 16px;
-    font-weight: bold;
-  }
-  
-  /* Button container for form navigation */
-  .form-nav-buttons {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 30px;
-  }
+.reset-button:hover {
+  background-color: #ffe6e6;
+}
+
+/* Save and Next Button */
+.save-next-button {
+  background-color: rgb(0, 206, 0);
+  color: white;
+  border: none;
+  gap: 8px;
+}
+
+.save-next-button:hover {
+  background-color: green;
+}
+
+.save-next-button:disabled {
+  background-color: #a8e6a8;
+  cursor: not-allowed;
+}
+
+/* Reset All Button */
+.reset-all-button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+}
+
+.reset-all-button:hover {
+  background-color: #e53935;
+}
+
+/* Back Button */
+.back-button {
+  background-color: #f5f5f5;
+  color: #616161;
+  border: 1px solid #e0e0e0;
+  gap: 8px;
+}
+
+.back-button:hover {
+  background-color: #eeeeee;
+  color: #424242;
+}
+
+/* Icon styles */
+.arrow-icon {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* Button container for form navigation */
+.form-nav-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}

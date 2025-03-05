@@ -47,7 +47,7 @@
   ],
   // If no prioritisation, then empty array
   // Here, east is priority 1, and west is priority 4
-  "lanePrioritisation": ["east", "south", "north", "west"],
+  "directionPrioritisation": ["east", "south", "north", "west"],
   // Pedestrian crossings
   "isCrossings": true,
   "crossingDuration": 1,
@@ -91,7 +91,7 @@
 1. store vph for each direction
 7. duration of crossing
 8. number of crossings per hour
-9. lane prioritisation order
+9. direction prioritisation order
 6. bus/cycle lane duration AND directions
 5. bus/cycle lanes
 2. lanes entering the junction

@@ -6,12 +6,12 @@ import { Link } from "react-router-dom";
 const DirectionDataSection = ({ title, data }) => {
   return (
     <div className={styles.directionSection}>
-      <h3>{title}</h3>
+      <h3 className={styles.direction}>{title}</h3>
       {Object.entries(data).map(([key, value]) => {
         // Format the key for display (e.g., "exitEast" becomes "Exit east")
         const formattedKey = key === "entering" 
           ? "Entering" 
-          : key.replace("exit", "Exit ").toLowerCase();
+          : key.replace("exit", "Exit ");
         
         return (
           <div key={key} className={styles.dataField}>
@@ -35,7 +35,7 @@ const VPHDataDisplay = ({ projectData }) => {
   }
 
   return (
-    <div>
+    <>
       <h2 className={styles.projectName}>{projectData.name} VPH Data</h2>
       
       <div className={styles.vphDataGrid}>
@@ -46,9 +46,14 @@ const VPHDataDisplay = ({ projectData }) => {
       </div>
       
       <button className={styles.configuredNote}>
-        <Link to = '/RankingsPage'>See configured junctions for {projectData.name}</Link>
+        <Link to = '/RankingsPage' className={styles.configuredBtn} style={{ 
+            display: 'block', 
+            width: '100%', 
+            height: '100%' 
+          }}>See configured junctions for {projectData.name}
+        </Link>
       </button>
-    </div>
+    </>
   );
 };
 

@@ -1,96 +1,92 @@
 body {
-    background-color: #faf6ed;
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
+  background-color: #faf6ed;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
 }
 
 .container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    transform: translateX(-20%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  transform: translateX(-20%);
 }
 
 .Title {
-    text-align: center;
-    margin-bottom: 40px;
+  text-align: center;
+  margin-bottom: 40px;
 }
 
 .Title h1 {
-    font-size: 2.5rem;
-    color: #000;
-    text-decoration: underline;
-    margin: 0;
-    padding: 20px 0;
+  font-size: 2.5rem;
+  color: #000;
+  text-decoration: underline;
+  margin: 0;
+  padding: 20px 0;
 }
 
 .Form {
-    width: 100%;
-    max-width: 400px;
-    padding: 20px;
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
 }
 
 .Form form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .input {
-    display: flex;
-    align-items: center;
-    white-space: nowrap;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
 }
 
 .input label {
-    width: 100px; /* Fixed width for labels */
-    font-size: 1.2rem;
-    margin-right: 10px; /* Space between label and input */
-    text-align: left;
+  width: 100px; /* Fixed width for labels */
+  font-size: 1.2rem;
+  margin-right: 10px; /* Space between label and input */
+  text-align: left;
 }
 
 .input input {
-    flex: 1;
-    min-width: 200px; /* Minimum width for inputs */
-    padding: 8px;
-    font-size: 1.2rem;
-    background: transparent;
-    border: 2px solid #000;
-    border-radius: 0;
-    outline: none;
-    box-sizing: border-box;
+  flex: 1;
+  min-width: 200px; /* Minimum width for inputs */
+  padding: 8px;
+  font-size: 1.2rem;
+  background: transparent;
+  border: 2px solid #000;
+  border-radius: 0;
+  outline: none;
+  box-sizing: border-box;
 }
 
 .input input::placeholder {
-    color: #666;
+  color: #666;
 }
 
 button {
-    width: 100px;
-    margin: 20px auto;
-    padding: 8px 20px;
-    font-size: 1.2rem;
-    background: transparent;
-    border: 2px solid #040404;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-button:hover {
-    background-color: rgba(0, 0, 0, 0.1);
+  width: 100px;
+  margin: 20px auto;
+  padding: 8px 20px;
+  font-size: 1.2rem;
+  background: transparent;
+  border: 2px solid #040404;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 button a {
-    text-decoration: none;
-    color: #000;
+  text-decoration: none;
+  color: #000;
 }
 
 .buttonContainer {
-    margin-left: 0;
-    justify-content: center;
+  margin-left: 0;
+  justify-content: center;
 }
 
 

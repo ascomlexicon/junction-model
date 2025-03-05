@@ -1,96 +1,98 @@
 /* Container for junction forms */
 .junction-forms-container {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #ffffff;
-    box-sizing: border-box;
-    position: relative; /* Added for absolute positioning of reset all button */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  position: relative; /* Added for absolute positioning of reset all button */
 }
 
-/* Reset All button positioning */
+/* Reset all button positioning */
 .button-container .reset-all-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }
 
 /* Title styling */
 .junction-title {
-    color: rgb(0, 0, 0);
-    font-size: 1rem;
-    font-weight: bold;
-    margin-bottom: 1rem;
-    text-align: left;
-    display: flex;
-    justify-content: space-between;
+  color: rgb(0, 0, 0);
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
 }
 
 /* Grid for form layout */
 .forms-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    width: 100%;
-    max-width: 280px;
-    margin: 0;
-    justify-content: center;
-    margin-bottom: 20px; /* Added space for buttons */
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  width: 100%;
+  max-width: 280px;
+  margin: 0;
+  justify-content: center;
+  margin-bottom: 20px; /* Added space for buttons */
 }
 
 /* Individual form cell */
 .form-cell {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 8px;
-    border: 2px solid rgb(2, 2, 2);
-    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 8px;
+  border: 2px solid rgb(2, 2, 2);
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 .form-cell h1 {
-    font-size: 1rem;
-    border-bottom: 2px solid #333;
-    text-align: center;
-    width: 80%;
-}
-
-/* Button container styling */
-.button-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    max-width: 280px;
-    
+  font-size: 1rem;
+  border-bottom: 2px solid #333;
+  text-align: center;
+  width: 80%;
 }
 
 /* Individual button positioning */
 .button-container BackButton {
-    order: 1; /* Left side */
+  order: 1;
 }
 
 .button-container SaveNextButton {
-    order: 2; /* Middle */
+  order: 2;
 }
 
 .button-container ResetVPHButton {
-    order: 3; /* Right side */
+  order: 3;
 }
 
-/* Optional: Add some spacing between buttons */
+/* Add some spacing between buttons */
 .button-container > * {
-    margin: 0 5px;
+  margin: 0 5px;
 }
 
 /* Junction form styling */
 .junction-form {
-    width: 100%;
-    max-width: 200px;
-    background: white;
-    border-radius: 6px;
-    text-align: center;
+  width: 100%;
+  max-width: 200px;
+  background: white;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.junction-forms-container {
+  padding: 20px;
+  max-width: 100%;
+  margin: 0 auto;
+  position: relative;
+}
+
+.instructions {
+  padding-bottom: 10px;
+  width: 100%;
 }

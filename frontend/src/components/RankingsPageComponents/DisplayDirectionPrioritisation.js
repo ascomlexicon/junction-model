@@ -1,10 +1,10 @@
 import React from 'react';
-import styles from './DisplayLanePrioritisation.module.css';
+import styles from './DisplayDirectionPrioritisation.module.css';
 
-function DisplayLanePrioritisation({ formData = {} }) {
-  // Default prioritization data
+function DisplayDirectionPrioritisation({ formData = {} }) {
+  // Default prioritisation data
   const defaultData = {
-    enablePrioritization: true,
+    enablePrioritisation: true,
     directions: [
       { id: 'north', content: 'North' },
       { id: 'south', content: 'South' },
@@ -17,10 +17,10 @@ function DisplayLanePrioritisation({ formData = {} }) {
   const prioritisationData = { ...defaultData, ...formData };
 
   return (
-    <div className={styles.lanePrioritisationContainer}>
-      <h2>Lane Prioritization</h2>
+    <div className={styles.directionPrioritisationContainer}>
+      <h2>Direction Prioritisation</h2>
 
-      {prioritisationData.enablePrioritization ? (
+      {prioritisationData.enablePrioritisation ? (
         <div className={styles.staticData}>
           <h3>Priority Order</h3>
           <ul className={styles.directionsList}>
@@ -33,10 +33,10 @@ function DisplayLanePrioritisation({ formData = {} }) {
           <p className={styles.subjectToChange}>Priority is subject to change based on traffic conditions.</p>
         </div>
       ) : (
-        <p className={styles.noPrioritisation}>No lane prioritization.</p>
+        <p className={styles.noPrioritisation}>No direction prioritisation.</p>
       )}
     </div>
   );
 }
 
-export default DisplayLanePrioritisation;
+export default DisplayDirectionPrioritisation;

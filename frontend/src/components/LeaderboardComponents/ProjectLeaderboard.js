@@ -69,7 +69,7 @@ const ProjectLeaderboard = () => {
       {/* Page Header with Title and Back Button */}
       <div className={styles.pageHeader}>
         <h1 className={styles.pageTitle}>Current Projects</h1>
-        <Link to="/MainPage" className={styles.backButton}>
+        <Link to="/MainPage" className={styles.backButton} >
           Back to Junction Configuration Menu
         </Link>
       </div>
@@ -93,7 +93,6 @@ const ProjectLeaderboard = () => {
         </div>
         
         <div className={styles.rightPanel}>
-          {/* Use the reusable VPH data component */}
           <VPHDataDisplay projectData={selectedProject} />
         </div>
       </div>
