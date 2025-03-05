@@ -1,6 +1,7 @@
 package com.model.junction.ProjectClasses;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
 import com.model.junction.Attributes.Direction;
 
@@ -35,11 +36,18 @@ public class ProjectStorage {
   }
   
   // Project Operations
-  public void createNewProject(HashMap<Direction, HashMap<Direction, Integer>> vphData) {
+  public Project createNewProject(HashMap<Direction, HashMap<Direction, Integer>> vphData) {
     Project projectToCreate = new Project("Project " + (projects.size() + 1));
     projectToCreate.setVehiclePerHourData(vphData);
 
-    projects.put(projectToCreate.getProjectTitle(), projectToCreate);
+    HashSet<Project> projectSet = new HashSet<Project>(projects.values());
+    for (Project project : projectSet) {
+      if (project.equalVPHData(projectToCreate)) {
+        return project;
+      }
+    }
+    
+    return projects.put(projectToCreate.getProjectTitle(), projectToCreate);
   }
 
   public boolean renameProject(String oldName, String newName) {
