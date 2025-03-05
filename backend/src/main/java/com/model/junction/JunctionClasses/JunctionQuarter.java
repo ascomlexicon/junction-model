@@ -14,5 +14,5 @@ public record JunctionQuarter(
   boolean hasCrossings,
   int crossingDuration,
   int crossingRequestsPerHour,
-  double[] score
+  double[] simulationResults
 ) {}
