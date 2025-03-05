@@ -81,24 +81,25 @@
 
 .sidebar-item .tooltip {
     position: absolute;
-    top: 50%; 
-    left: calc(100% + 20px); 
-    transform: translateY(-50%); 
-    background-color: black;
+    left: 50%;
+    margin-left: -60px;
+    background-color: rgb(229, 20, 20, 1);
     color: #fff;
     border-radius: 4px;
-    z-index: 1;
+    z-index: 9;
+    opacity: 1;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     width: max-content;
     overflow: visible;
-    max-width: 200px;
+    max-width: 100px;
+    max-height: max-content;
     pointer-events: none
 }
 
-.sidebar-item.disabled:hover .tooltip {
+/* .sidebar-item.disabled:hover .tooltip {
     opacity: 1;
     visibility: visible;
-}
+} */
 
 .tooltip {
     font-size: 0.7rem;
