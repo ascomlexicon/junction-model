@@ -40,7 +40,8 @@ const Sidebar = ({ setActiveStep, activeStep }) => {
             
             {hoveredStep === item.step && (
               <div className="tooltip">
-                <p className = "hover-message">Locked.</p>
+                <strong>LOCKED: </strong>  
+                Please complete earlier sections to unlock {item.label}
               </div>
             )}
           </li>
