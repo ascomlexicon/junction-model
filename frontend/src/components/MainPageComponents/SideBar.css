@@ -86,12 +86,15 @@
     color: #fff;
     border-radius: 4px;
     white-space: nowrap;
-    z-index: 10;
-    opacity: 0;
+    z-index: 1000;
+    opacity: 1;
     visibility: hidden;
     transition: opacity 0.7s ease, visibility 0.3s;
     margin-top: 5px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    padding: 0%;
+    width: fit-content;
+    
 }
 
 .sidebar-item.disabled:hover .tooltip {
@@ -103,4 +106,8 @@
     font-size: 0.7rem;
     margin: 0;
     color: #ffffff;
+    background-color: #a73434;
+    opacity: 1;
+    z-index: 1000;
+    padding: 5px;
 }
