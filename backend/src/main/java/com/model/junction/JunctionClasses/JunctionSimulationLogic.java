@@ -3,7 +3,6 @@ package com.model.junction.JunctionClasses;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Queue;
 import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executors;
@@ -42,29 +41,33 @@ class JunctionSimulationLogic {
   private static ConcurrentLinkedQueue<Long>[] outboundCars;
   private static List<LaneType> laneTypes= Collections.synchronizedList(new ArrayList<>());
   
-  public static void main(String[] args) {
+  //public static void main(String[] args) {
+  public double[] runSimulation(int exitingForward, int exitingRight, int exitingLeft, int numberOfLanes, boolean leftLaneBool, boolean busCycleLaneBool, int busCyclesPerHour, boolean puffinCrossing, int puffinCrossingDuration, int puffinCrossingsPerHour, String direction, boolean prioritiesEnabled, String[] lanePrioritiesAsStrings) {
     // "KEY"
-    int exitingForward = 400; // cars exiting straight forward
+    //int exitingForward = 400; // cars exiting straight forward
     // "KEY"
-    int exitingRight = 300; // cars exiting right
+    //int exitingRight = 300; // cars exiting right
     // "KEY"
-    int exitingLeft = 50; // cars exiting left
+    //int exitingLeft = 50; // cars exiting left
 
     int outboundVph = exitingRight + exitingForward + exitingLeft; // total vehicles per hour
 
+    busCycleLane.set(busCycleLaneBool);
+    leftLane.set(leftLaneBool);
+
     // "KEY"
     // NUMBER OF LANES: The number of lanes can be set to 1, 2, 3, 4 or 5
-    int numberOfLanes = 3;
+    //int numberOfLanes = 3;
 
     // "KEY"
     // LEFT TURN LANE: If the left lane is enabled, the leftmost lane will be the left turn lane
-    leftLane.set(false);
+    //leftLane.set(false);
     
     // "KEY"
     // BUS LANE: If the bus lane is enabled, the leftmost lane will be the bus lane
-    busCycleLane.set(true);
+    //busCycleLane.set(true);
 
-    int busCyclesPerHour = 40; // Number of buses that cycle through the junction per hour
+    //int busCyclesPerHour = 40; // Number of buses that cycle through the junction per hour
 
     if (busCycleLane.get()){
       exitingLeft = busCyclesPerHour;
@@ -76,11 +79,11 @@ class JunctionSimulationLogic {
 
     // PUFFIN CROSSING:
     // "KEY"
-    boolean puffinCrossing = false; // Puffin crossing is enabled
+    //boolean puffinCrossing = false; // Puffin crossing is enabled
     // "KEY"
-    int puffinCrossingDuration = 100; // Puffin crossing time in seconds
+    //int puffinCrossingDuration = 100; // Puffin crossing time in seconds
     // "KEY"
-    int puffinCrossingsPerHour = 6; // Number of crossings per hour
+    //int puffinCrossingsPerHour = 6; // Number of crossings per hour
 
     final int crossingsPerHour = puffinCrossingsPerHour + 1; // Add 1 to crossings per hour to account for the first crossing
     final long crossingInterval = convertToSimulationTime(3600 / crossingsPerHour); // Time interval between crossings in nanoseconds
@@ -98,18 +101,14 @@ class JunctionSimulationLogic {
     // of priorities is North 1, East 0, South 4, West 2, then the order will be South, West, North, East
 
     int greenLightOnTime = 0; // The time the green light is on for the lane in seconds
-    
-    // "KEY"
-    /* {"North", "East", "South", "West"} */ 
-    // long lanePriorities[] = {0, 3, 4, 1}; // priority array for the lanes where indexes are North, East, South, West
 
     // PRIORITISED TRAFFIC FLOW MODIFICATIONS
     // "KEY"
-    String direction = "North"; // direction of the lane
+    //String direction = "North"; // direction of the lane
     int directionIndexTemp = 0; // index for the direction of the lane where North = 0, East = 1, South = 2, West = 3
     
     // "KEY"
-    boolean prioritiesEnabled = false; // whether the priorities are enabled
+    //boolean prioritiesEnabled = false; // whether the priorities are enabled
 
     String[] directions = {"North", "East", "South", "West"};
 
@@ -122,7 +121,7 @@ class JunctionSimulationLogic {
     final int directionIndex = directionIndexTemp;
 
     // "KEY"
-    String[] lanePrioritiesAsStrings = {"South", "East", "West", "North"}; // priority array for the lanes
+    //String[] lanePrioritiesAsStrings = {"South", "East", "West", "North"}; // priority array for the lanes
 
     if (!prioritiesEnabled){
       for (int i = 0; i < 4; i ++){
@@ -372,14 +371,14 @@ class JunctionSimulationLogic {
     carsEntering.schedule(
         () -> {
           System.out.println("Shutting down carsEntering. Total cars entered: " + carsEntered.get());
-          System.out.println(
+          /*System.out.println(
               "Average Wait Time = "
                   + averageWaitTime.get() / 1000000
                   + "ms, Maximum Queue Length = "
                   + maximumQueueLength.get()
                   + ", Maximum Wait Time = "
                   + maximumWaitingTime.get() / 1000000
-                  + "ms");
+                  + "ms");*/
           carsEntering.shutdown();
         },
         simulationTime * 15,
@@ -405,12 +404,33 @@ class JunctionSimulationLogic {
           simulationTime * 15,
           TimeUnit.SECONDS);
     }
+
+    try {
+      // Wait until simulation (15 seconds) is complete plus a small buffer
+      Thread.sleep(15 * 1000L + 1000);
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+    }
+
+    long avgWaitNano = averageWaitTime.get();
+    int maxQueue = maximumQueueLength.get();
+    long maxWaitNano = maximumWaitingTime.get();
+
+    // Convert nanoseconds to milliseconds before printing
+    System.out.println("Final Average Wait Time = " + avgWaitNano / 1_000_000 + " ms");
+    System.out.println("Final Maximum Queue Length = " + maxQueue);
+    System.out.println("Final Maximum Waiting Time = " + maxWaitNano / 1_000_000 + " ms");
+
+    double[] returnValue = {avgWaitNano / 1_000_000.0, maxQueue, maxWaitNano / 1_000_000.0};
+
+    // Return average wait time in milliseconds
+    return returnValue;
   }
 
   // updates our metrics when cars exit the queue
   public static void exitQueue(Long enterTime) {
     if (enterTime != null) {
-      totalCarsExited.incrementAndGet(); /* count car exiting */
+      totalCarsExited.incrementAndGet(); /* count cars exiting */
       long waitingTime = System.nanoTime() - enterTime;
       maximumWaitingTime.updateAndGet(currentMax -> Math.max(currentMax, waitingTime));
       int exitedCars = quarterCarsExited.incrementAndGet();
