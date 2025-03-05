@@ -9,7 +9,7 @@ public class Junction {
   // Attributes
   private String junctionName;
   private String junctionImage;
-  private double[] overallScore;
+  private Double overallScore;
   private JunctionQuarter north;
   private JunctionQuarter east;
   private JunctionQuarter south;
@@ -64,11 +64,11 @@ public class Junction {
     this.junctionImage = junctionImage;
   }
 
-  public double[] getOverallScore() {
+  public Double getOverallScore() {
     return this.overallScore;
   }
 
-  public void setOverallScore(double[] overallScore) {
+  public void setOverallScore(Double overallScore) {
     this.overallScore = overallScore;
   }
 
