@@ -3,6 +3,7 @@ package com.model.junction.Application;
 import java.util.HashMap;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.model.junction.Attributes.Direction;
+import com.model.junction.JunctionClasses.Junction;
+import com.model.junction.JunctionClasses.JunctionQuarter;
 import com.model.junction.ProjectClasses.Project;
 import com.model.junction.ProjectClasses.ProjectStorage;
 
@@ -65,6 +68,35 @@ public class JunctionController {
       Project currentProject = projectStorage.getProjectByVPH(vehiclePerHourData);
       if (currentProject == null) {
         currentProject = projectStorage.createNewProject(vehiclePerHourData);
+      }
+      
+      // Creating A Junction
+      Junction junction = new Junction(
+        "Junction " + (currentProject.getScoreSortedJunctions().size() + 1), 
+        jsonNode.get("junctionImage").asText()
+      );
+      
+      boolean hasPriorities = jsonNode.get("enablePrioritisation").asBoolean();
+      Direction[] directionPriorityOrder = new Direction[4];
+
+      for (int i = 0; i < 4; i++) {
+        directionPriorityOrder[i] = Direction.valueOf(jsonNode.get("directionPrioritisation").get(i).asText().toUpperCase());
+      }
+      
+      for (Direction direction : Direction.values()) {
+        Direction enteringDirection = direction.getOpposite();
+
+        boolean hasLeftTurnLane = jsonNode.get("leftTurnLanes").get(enteringDirection.toString().toLowerCase()).asBoolean();
+        int lanesEntering = jsonNode.get("lanesEntering").get(enteringDirection.toString().toLowerCase()).asInt();
+        int lanesExiting = jsonNode.get("lanesExiting").get(enteringDirection.toString().toLowerCase()).asInt();
+        String hasBusOrCycleLane = jsonNode.get("isBusOrCycle").asText(); 
+        int specialVPH = jsonNode.get("busCycleLaneDuration").get("vphSpecial" + StringUtils.capitalize(enteringDirection.toString().toLowerCase())).asInt();
+        boolean hasCrossings = jsonNode.get("isCrossings").asBoolean();
+        int crossingDuration = jsonNode.get("crossingDuration").asInt();
+        int crossingRequestsPerHour = jsonNode.get("crossingRequestsPerHour").asInt();
+
+        JunctionQuarter quarter = new JunctionQuarter(direction, hasLeftTurnLane, lanesEntering, lanesExiting, hasBusOrCycleLane, specialVPH, hasPriorities, directionPriorityOrder, hasCrossings, crossingDuration, crossingRequestsPerHour);
+        junction.setQuarter(direction, quarter);
       }
       
       return ResponseEntity.ok("Processed JSON successfully");
