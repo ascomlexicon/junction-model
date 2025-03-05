@@ -1,5 +1,6 @@
 package com.model.junction.Application;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.model.junction.Attributes.Direction;
 import com.model.junction.JunctionClasses.Junction;
 import com.model.junction.JunctionClasses.JunctionQuarter;
+import com.model.junction.JunctionClasses.JunctionSimulationLogic;
 import com.model.junction.ProjectClasses.Project;
 import com.model.junction.ProjectClasses.ProjectStorage;
 
@@ -95,10 +97,26 @@ public class JunctionController {
         int crossingDuration = jsonNode.get("crossingDuration").asInt();
         int crossingRequestsPerHour = jsonNode.get("crossingRequestsPerHour").asInt();
 
-        JunctionQuarter quarter = new JunctionQuarter(direction, hasLeftTurnLane, lanesEntering, lanesExiting, hasBusOrCycleLane, specialVPH, hasPriorities, directionPriorityOrder, hasCrossings, crossingDuration, crossingRequestsPerHour);
+        double[] score = JunctionSimulationLogic.runSimulation(
+          currentProject.getVehiclePerHourData().get(direction).get(direction).intValue(),
+          currentProject.getVehiclePerHourData().get(direction).get(direction.getRight()).intValue(),
+          currentProject.getVehiclePerHourData().get(direction).get(direction.getLeft()).intValue(),
+          lanesExiting,
+          hasLeftTurnLane,
+          (hasBusOrCycleLane == "none"),
+          specialVPH,
+          hasCrossings,
+          crossingDuration,
+          crossingRequestsPerHour,
+          StringUtils.capitalize(direction.toString().toLowerCase()),
+          hasPriorities,
+          Arrays.stream(directionPriorityOrder).map(Enum::name).map((String s) -> StringUtils.capitalize(s.toLowerCase())).toArray(String[]::new)
+        );
+
+        JunctionQuarter quarter = new JunctionQuarter(direction, hasLeftTurnLane, lanesEntering, lanesExiting, hasBusOrCycleLane, specialVPH, hasPriorities, directionPriorityOrder, hasCrossings, crossingDuration, crossingRequestsPerHour, score);
         junction.setQuarter(direction, quarter);
       }
-      
+
       return ResponseEntity.ok("Processed JSON successfully");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body("Failed to parse JSON: " + e.getMessage());
