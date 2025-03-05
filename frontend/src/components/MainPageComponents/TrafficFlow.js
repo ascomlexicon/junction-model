@@ -6,13 +6,9 @@ import SaveNextButton from '../ButtonComponents/SaveNextButton';
 import ResetAllButton from '../ButtonComponents/ResetAllButton';
 import BackButton from '../ButtonComponents/BackButton';
 
-// formData is now the JSON file containing information for the junction the user is configuring
 function TrafficFlow({ setActiveStep, saveFormData, resetForm, resetAllForms, formData = {} }) {
-    // Initialize state with passed formData or default values
     const [trafficData, setTrafficData] = useState(() => {
-        // Check if formData has the expected JSON structure
         if (formData.vphNorth && formData.vphSouth && formData.vphEast && formData.vphWest) {
-            // Transform JSON format into the component's internal format
             return {
                 north: {
                     enter: formData.vphNorth?.enter || 0, 
@@ -40,7 +36,6 @@ function TrafficFlow({ setActiveStep, saveFormData, resetForm, resetAllForms, fo
                 }
             };
         }
-        // Default empty state if no valid formData
         return {
             north: { enter: 0, south: 0, east: 0, west: 0 },
             south: { enter: 0, north: 0, east: 0, west: 0 },
@@ -49,31 +44,42 @@ function TrafficFlow({ setActiveStep, saveFormData, resetForm, resetAllForms, fo
         };
     });
 
-    // Validation state
     const [isValid, setIsValid] = useState(false);
 
-    // Validate the inputs whenever trafficData changes
     useEffect(() => {
         validateForm();
     }, [trafficData]);
 
-    // Validate that at least one direction has traffic flow
     const validateForm = () => {
-        let hasTraffic = false;
+        let isAllDataValid = true;
         
-        // Check if any direction has values greater than 0
-        Object.values(trafficData).forEach(direction => {
-            Object.values(direction).forEach(value => {
-                if (value > 0) {
-                    hasTraffic = true;
-                }
-            });
+        // Check each direction
+        const directions = ['north', 'south', 'east', 'west'];
+        
+        directions.forEach(direction => {
+            const directionData = trafficData[direction];
+            
+            // Check if entry is greater than 0
+            if (directionData.enter <= 0) {
+                isAllDataValid = false;
+                return;
+            }
+            
+            // Check if at least one exit has a value
+            const hasValidExit = 
+                directionData.north >= 0 || 
+                directionData.south >= 0 || 
+                directionData.east >= 0 || 
+                directionData.west >= 0;
+            
+            if (!hasValidExit) {
+                isAllDataValid = false;
+            }
         });
         
-        setIsValid(hasTraffic);
+        setIsValid(isAllDataValid);
     };
 
-    // Convert traffic data to required JSON format
     const formatTrafficDataToJSON = () => {
         const formatDirectionData = (direction, data) => {
             const exits = {
@@ -87,7 +93,6 @@ function TrafficFlow({ setActiveStep, saveFormData, resetForm, resetAllForms, fo
                 enter: parseInt(data.enter) || 0
             };
 
-            // Add all exits except for the entry direction
             Object.entries(exits).forEach(([exitDir, exitData]) => {
                 if (exitDir !== direction) {
                     entry[exitData.key] = exitData.value;
@@ -105,7 +110,6 @@ function TrafficFlow({ setActiveStep, saveFormData, resetForm, resetAllForms, fo
         };
     };
 
-    // Handle input updates from JunctionInput components
     const handleInputUpdate = (incomingDirection, data) => {
         setTrafficData(prevData => ({
             ...prevData,
@@ -113,7 +117,6 @@ function TrafficFlow({ setActiveStep, saveFormData, resetForm, resetAllForms, fo
         }));
     };
 
-    // Reset VPH data for all forms
     const handleResetVPH = () => {
         resetForm('trafficFlow');
         setTrafficData({
@@ -124,18 +127,16 @@ function TrafficFlow({ setActiveStep, saveFormData, resetForm, resetAllForms, fo
         });
     };
 
-    // Save and proceed to next form
     const handleSaveNext = () => {
         if (isValid) {
             const formattedData = formatTrafficDataToJSON();
             saveFormData('trafficFlow', formattedData);
-            setActiveStep(1); // Move to Lane Customisation
+            setActiveStep(1);
         }
     };
 
-    // Handle back button (going back to instructions)
     const handleBack = () => {
-        setActiveStep(-1); // Go back to InstructionsPage
+        setActiveStep(-1);
     };
 
     return(
@@ -145,7 +146,7 @@ function TrafficFlow({ setActiveStep, saveFormData, resetForm, resetAllForms, fo
                 <ul>
                     <li>Enter vehicle flow rates between junctions</li>
                     <li>Values must be greater than 0</li>
-                    <li>At least one direction must have traffic</li>
+                    <li>Each direction must have an entry and at least one exit</li>
                 </ul>
             </div>
             <div className="forms-grid">
