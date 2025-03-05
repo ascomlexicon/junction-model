@@ -52,25 +52,38 @@ function TrafficFlow({ setActiveStep, saveFormData, resetForm, resetAllForms, fo
 
     const validateForm = () => {
         let isAllDataValid = true;
-        
+    
         // Check each direction
         const directions = ['north', 'south', 'east', 'west'];
         
         directions.forEach(direction => {
             const directionData = trafficData[direction];
             
-            // Check if entry is greater than 0
-            if (directionData.enter <= 0) {
+            // Ensure entry is a positive number
+            if (!directionData.enter || directionData.enter <= 0) {
                 isAllDataValid = false;
                 return;
             }
             
-            // Check if at least one exit has a value
+            // Calculate total outgoing vehicles
+            const totalOutgoing = 
+                (directionData.north || 0) + 
+                (directionData.south || 0) + 
+                (directionData.east || 0) + 
+                (directionData.west || 0);
+            
+            // Ensure total outgoing vehicles exactly matches entering vehicles
+            if (totalOutgoing !== directionData.enter) {
+                isAllDataValid = false;
+                return;
+            }
+            
+            // Ensure each direction has at least one exit
             const hasValidExit = 
-                directionData.north >= 0 || 
-                directionData.south >= 0 || 
-                directionData.east >= 0 || 
-                directionData.west >= 0;
+                (directionData.north > 0) || 
+                (directionData.south > 0) || 
+                (directionData.east > 0) || 
+                (directionData.west > 0);
             
             if (!hasValidExit) {
                 isAllDataValid = false;
