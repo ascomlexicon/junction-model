@@ -117,7 +117,7 @@ public class JunctionController {
         junction.setQuarter(direction, quarter);
       }
 
-      return ResponseEntity.ok("Processed JSON successfully");
+      return ResponseEntity.ok(new SimulationDTO(currentProject, junction));
     } catch (Exception e) {
       return ResponseEntity.badRequest().body("Failed to parse JSON: " + e.getMessage());
     }
