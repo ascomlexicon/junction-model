@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 // THE VARIABLES THAT HAVE BEEN NOTED AS "KEY" ARE THE CONFIGURABLE PARAMETERS THAT THE USER CAN CHANGE
 
-class JunctionSimulationLogic {
+public class JunctionSimulationLogic {
   // all longs and integers have been replaced with AtomicInteger and AtomicLong because this allows us to update them in the threads
   // safely without race conditions being a thing because otherwise the variables might be overwritten
   private static final AtomicInteger carsEntered = new AtomicInteger(0); // Counts the number of cars that have entered a junction quarter
@@ -42,7 +42,7 @@ class JunctionSimulationLogic {
   private static List<LaneType> laneTypes= Collections.synchronizedList(new ArrayList<>());
   
   //public static void main(String[] args) {
-  public double[] runSimulation(int exitingForward, int exitingRight, int exitingLeft, int numberOfLanes, boolean leftLaneBool, boolean busCycleLaneBool, int busCyclesPerHour, boolean puffinCrossing, int puffinCrossingDuration, int puffinCrossingsPerHour, String direction, boolean prioritiesEnabled, String[] lanePrioritiesAsStrings) {
+  public static double[] runSimulation(int exitingForward, int exitingRight, int exitingLeft, int numberOfLanes, boolean leftLaneBool, boolean busCycleLaneBool, int busCyclesPerHour, boolean puffinCrossing, int puffinCrossingDuration, int puffinCrossingsPerHour, String direction, boolean prioritiesEnabled, String[] lanePrioritiesAsStrings) {
     // "KEY"
     //int exitingForward = 400; // cars exiting straight forward
     // "KEY"
