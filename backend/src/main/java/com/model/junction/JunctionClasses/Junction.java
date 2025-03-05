@@ -2,6 +2,8 @@ package com.model.junction.JunctionClasses;
 
 import java.util.Objects;
 
+import com.model.junction.Attributes.Direction;
+
 public class Junction {
 
   // Attributes
@@ -9,10 +11,10 @@ public class Junction {
   private Double score;
 
   // Junction quarters in different directions
-  private JunctionQuarter east;
-  private JunctionQuarter west;
-  private JunctionQuarter south;
   private JunctionQuarter north;
+  private JunctionQuarter east;
+  private JunctionQuarter south;
+  private JunctionQuarter west;
 
   private String junctionName;
 
@@ -27,6 +29,31 @@ public class Junction {
   }
 
   // Accessors and Mutators
+  public JunctionQuarter getQuarter(Direction direction) {
+    switch (direction) {
+      case NORTH:
+        return this.north;
+      case EAST:
+        return this.east;
+      case SOUTH:
+        return this.south;
+      default:
+        return this.west;
+    }
+  }
+
+  public void setQuarter(Direction direction, JunctionQuarter quarter) {
+    switch (direction) {
+      case NORTH:
+        this.north = quarter;
+      case EAST:
+        this.east = quarter;
+      case SOUTH:
+        this.south = quarter;
+      default:
+        this.west = quarter;
+    }
+  } 
   public String getName() {
     return name;
   }
