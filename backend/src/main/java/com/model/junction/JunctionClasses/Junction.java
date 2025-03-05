@@ -7,7 +7,7 @@ import com.model.junction.Attributes.Direction;
 public class Junction {
 
   // Attributes
-  private String name;
+  private String junctionName;
   private Double score;
 
   // Junction quarters in different directions
@@ -16,15 +16,13 @@ public class Junction {
   private JunctionQuarter south;
   private JunctionQuarter west;
 
-  private String junctionName;
-
   // Constructors
   public Junction(String junctionName) {
-    this.name = junctionName;
+    this.junctionName = junctionName;
   }
 
   public Junction(String junctionName, Double junctionScore) {
-    this.name = junctionName;
+    this.junctionName = junctionName;
     this.score = junctionScore;
   }
 
@@ -55,11 +53,11 @@ public class Junction {
     }
   } 
   public String getName() {
-    return name;
+    return this.junctionName;
   }
 
   public void setName(String name) {
-    this.name = name;
+    this.junctionName = name;
   }
 
   public Double getScore() {
@@ -73,12 +71,6 @@ public class Junction {
     this.score = newScore;
   }
 
-  // Conversions
-  @Override
-  public String toString() {
-    return "[Junction(name=" + name + ", score=" + score + ")]";
-  }
-
   // Comparison Methods
   @Override
   public boolean equals(Object other) {
@@ -90,11 +82,11 @@ public class Junction {
     }
 
     Junction junction = (Junction) other;
-    return Objects.equals(name, junction.name);
+    return Objects.equals(this.junctionName, junction.getName());
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name);
+    return Objects.hash(this.junctionName);
   }
 }
