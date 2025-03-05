@@ -7,8 +7,9 @@ import com.model.junction.Attributes.Direction;
 public class Junction {
 
   // Attributes
-  private String junctionName;
   private Double score;
+  private String junctionName;
+  private String junctionImage;
 
   // Junction quarters in different directions
   private JunctionQuarter north;
@@ -17,13 +18,9 @@ public class Junction {
   private JunctionQuarter west;
 
   // Constructors
-  public Junction(String junctionName) {
+  public Junction(String junctionName, String junctionImage) {
     this.junctionName = junctionName;
-  }
-
-  public Junction(String junctionName, Double junctionScore) {
-    this.junctionName = junctionName;
-    this.score = junctionScore;
+    this.junctionImage = junctionImage;
   }
 
   // Accessors and Mutators
@@ -60,8 +57,16 @@ public class Junction {
     this.junctionName = name;
   }
 
+  public String getJunctionImage() {
+    return this.junctionImage;
+  }
+
+  public void setJunctionImage(String junctionImage) {
+    this.junctionImage = junctionImage;
+  }
+
   public Double getScore() {
-    return score;
+    return this.score;
   }
 
   public void setScore(Double newScore) throws IllegalArgumentException {
