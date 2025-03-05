@@ -46,7 +46,12 @@ const VPHDataDisplay = ({ projectData }) => {
       </div>
       
       <button className={styles.configuredNote}>
-        <Link to = '/RankingsPage' className={styles.configuredBtn}>See configured junctions for {projectData.name}</Link>
+        <Link to = '/RankingsPage' className={styles.configuredBtn} style={{ 
+            display: 'block', 
+            width: '100%', 
+            height: '100%' 
+          }}>See configured junctions for {projectData.name}
+        </Link>
       </button>
     </>
   );

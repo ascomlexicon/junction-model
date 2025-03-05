@@ -34,7 +34,11 @@ const JunctionRankings = () => {
         </div>
         <div className={styles.backButtonContainer}>
           <button className={styles.backButton} >
-            <Link to="/MainPage">Back to Junction Configuration Menu</Link>
+            <Link to="/MainPage" style={{ 
+              display: 'block', 
+              width: '100%', 
+              height: '100%' 
+            }}>Back to Junction Configuration Menu</Link>
           </button>
         </div>  
         <div className={styles.side}>
@@ -52,7 +56,11 @@ const JunctionRankings = () => {
           />
           
           <button className = {styles.backButton}>
-            <Link to="/Leaderboard">See other Projects</Link>
+            <Link to="/Leaderboard" style={{ 
+              display: 'block', 
+              width: '100%', 
+              height: '100%' 
+            }}>See other Projects</Link>
           </button>
         </div>
         
