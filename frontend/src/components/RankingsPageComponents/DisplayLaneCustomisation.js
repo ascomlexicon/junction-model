@@ -3,13 +3,13 @@ import styles from './DisplayLaneCustomisation.module.css';
 
 const DisplayLaneCustomisation = ({ entering, exiting, leftTurn, busOrCycle, busCycleDurations }) => {
   // Dummy data for display
-  // const dummyData = {
-  //   entering: { north: '2', south: '3', east: '1', west: '2' },
-  //   exiting: { north: '2', south: '3', east: '1', west: '2' },
-  //   leftTurn: { north: true, south: false, east: true, west: false },
-  //   busLane: { north: true, south: false, east: true, west: false },
-  //   cycleLane: { north: false, south: false, east: false, west: false },
-  // };
+  const dummyData = {
+    entering: { north: '2', south: '3', east: '1', west: '2' },
+    exiting: { north: '2', south: '3', east: '1', west: '2' },
+    leftTurn: { north: true, south: false, east: true, west: false },
+    busLane: { north: true, south: false, east: true, west: false },
+    cycleLane: { north: false, south: false, east: false, west: false },
+  };
 
   return (
     <div className={styles.laneCustomisation}>
