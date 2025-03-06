@@ -22,9 +22,12 @@ function Summary({ formData, setActiveStep }) {
     // Attach image to the current configuration of the junction
     formData.junctionImage = junctionImage;
 
+    console.log(formData);
+
+    // FIXME: Issue with parsing the JSON, but fundamentally the backend is being reached and data is being sent (I think)
     // POST 1: Send JSON object to the backend for processing
     axios
-      .post("/api/model", formData)
+      .post("http://localhost:8080/api/model", formData)
       .then((response) => {
         console.log(response.data);
           // pass the JSON object for the configured junction to the rankings page
@@ -33,6 +36,7 @@ function Summary({ formData, setActiveStep }) {
       .catch((error) => {
         if (error.response) {
           console.log(error.response);
+          console.log(error.response.data);
           console.log("server responded");
         } else if (error.request) {
           console.log("network error");

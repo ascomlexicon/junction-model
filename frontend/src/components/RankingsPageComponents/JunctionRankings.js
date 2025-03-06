@@ -99,49 +99,45 @@ const JunctionRankings = ({ clickedJunction }) => {
   // TODO: Lookup how to do multiple GET requests at once (should be a tab in a tab group on Kians mac)
 
   // This code runs once when the component mounts
-  // useEffect(() => {
-  //   // FIXME: GET Request for the name of all junctions with the same vph data as clickedJunction
-  //     // Ie get all junctions from the same project as clickedJunction
-  //   axios.get('your_api_endpoint/junctions')
-  //     .then(function (response) {
-  //       // handle success
-  //   // TODO: Add all junctions to a list with their name alongside the rest of the data 
-  //   // (much easier to make one request that gets ALL of the data rather than multiple 
-  //   // requests every time a junction is clicked)
-  //       const allJunctions = [];
+  useEffect(() => {
+    // GET Request 1: Get all junctions with the same vph data as clickedJunction (ie from same project)
+    axios.get("http://localhost:8080/api/junctions")
+      .then((response) => {
+        // handle success
+        const allJunctions = [];
 
-  //       Response.data.array.forEach(element => {
-  //         // Assume for now the structure at the top of the page, ie junctions have a name that is generated in the backend
-  //         const junction = {
-  //           ...element,
-  //         };
-          // if (junction.name === clickedJunction.name) {
-          //   if we have found the data for the junction we initially clicked on, set this as the selected junction
-          //   setSelectedJunction(junction);
-          // };
-  //         allJunctions.push(junction);
-  //       });
-  //       setJunctions(allJunctions);
-  //       setIsLoading(false);
-  //     })
-  //     .catch(function (error) {
-  //       // handle error
-  //       console.log(error);
-  //       setError(error);
-  //       setIsLoading(false);
-  //     });
+        response.data.array.forEach(element => {
+          // Assume for now the structure at the top of the page, ie junctions have a name that is generated in the backend
+          const junction = {
+            ...element,
+          };
+          if (junction.name === clickedJunction.name) {
+            // if we have found the data for the junction we initially clicked on, set this as the selected junction
+            setSelectedJunction(junction);
+          };
+          allJunctions.push(junction);
+        });
+        setJunctions(allJunctions);
+        setIsLoading(false);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+        setError(error);
+        setIsLoading(false);
+      });
 
-    // FIXME: GET Request for the project that clickedJunction is from
-    // axios.get('___')
-    //   .then(function (response) {
-    //     // handle success (assume response.data gives us the JSON object of the project, might change to be the name)
-    //     setCurrentProject({response.data.name});
-    //   })
-    //   .catch(function (error) {
-    //     // handle error
-    //     console.log(error);
-    //   });
-  // }, []);
+    // GET Request 2: Get the project that clickedJunction is from
+    axios.get("http://localhost:8080/api/name")
+      .then((response) => {
+        // handle success (assume response.data gives us the JSON object of the project, might change to be the name)
+        setCurrentProject(response.data.name);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      });
+  }, []);
 
   const handleSelect = (selectedJunction) => {
     setSelectedJunction(selectedJunction);
