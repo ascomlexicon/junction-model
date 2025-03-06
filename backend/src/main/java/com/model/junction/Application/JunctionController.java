@@ -117,32 +117,32 @@ public class JunctionController {
   @PostMapping("/model")
   public ResponseEntity<?> runSimulation(@RequestBody String body) {
     try {
-      System.out.println("Starting simulation...");
+      // System.out.println("Starting simulation...");
       ObjectMapper objectMapper = new ObjectMapper();
       JsonNode jsonNode = objectMapper.readTree(body);
       
       // Retrieving/creating a project
       HashMap<Direction, HashMap<Direction, Integer>> vehiclePerHourData = createVPHDataFromJSON(jsonNode);
-      System.out.println("Created VPH data: " + vehiclePerHourData);
+      // System.out.println("Created VPH data: " + vehiclePerHourData);
       
       Project currentProject = null;
       Junction junction = null;
       // Creating A Junction
       if (projectStorage.getProjectByVPH(vehiclePerHourData) == null) {
-        System.out.println("Creating new project as no existing project found");
+        // System.out.println("Creating new project as no existing project found");
         currentProject = projectStorage.createNewProject(vehiclePerHourData);
-        System.out.println(currentProject);
+        // System.out.println(currentProject);
         junction = new Junction("Junction 1", jsonNode.get("junctionImage").asText());
       } else {
         currentProject = projectStorage.getProjectByVPH(vehiclePerHourData);
-        System.out.println("Found existing project: " + currentProject.getProjectTitle());
+        // System.out.println("Found existing project: " + currentProject.getProjectTitle());
         junction = new Junction(
           "Junction " + (currentProject.getScoreSortedJunctions().size() + 1), 
           jsonNode.get("junctionImage").asText()
         );
       }
       
-      System.out.println("Created new junction: " + junction.getName());
+      // System.out.println("Created new junction: " + junction.getName());
       
       boolean hasPriorities = jsonNode.get("enablePrioritisation").asBoolean();
       Direction[] directionPriorityOrder = new Direction[4];
@@ -217,10 +217,15 @@ public class JunctionController {
           0.4
         );
 
+        // Move to the next quarter
+        counter += 1;
+
         junction.setQuarter(direction, quarter);
       }
       
       junction.setOverallScore(scoring.junctionScore());
+
+      // System.out.println("Junction score: " + junction.getOverallScore());
 
       return ResponseEntity.ok(junction);
     } catch (Exception e) {

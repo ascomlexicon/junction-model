@@ -13,7 +13,7 @@ public class JunctionScoring {
     double worstAverageWaitingTime = simulationTime * 15 * 1000;
     double worstMaximumQueueLength = outboundVph;
 
-    double score = weightingMWT * (1 - averageWaitTimeInMS / worstAverageWaitingTime) + weightingMWT * (1 - maximumWaitingTimeInMS / worstMaximumWaitingTime) + weightingMQL * (1 - maximumQueueLength / worstMaximumQueueLength);
+    double score = weightingAWT * (1 - averageWaitTimeInMS / worstAverageWaitingTime) + weightingMWT * (1 - maximumWaitingTimeInMS / worstMaximumWaitingTime) + weightingMQL * (1 - maximumQueueLength / worstMaximumQueueLength);
     DecimalFormat df = new DecimalFormat("#.##");      
     score = Double.valueOf(df.format(score*100));
 
@@ -22,6 +22,7 @@ public class JunctionScoring {
 
   /* Harmonic mean approach, penalize very small quarter scores */
   public double junctionScore() {
+    System.out.println("Quarter scores are : " + quarterScores[0] + " " + quarterScores[1] + " " + quarterScores[2] + " " + quarterScores[3]);
     return 4/((1/quarterScores[0])+(1/quarterScores[1])+(1/quarterScores[2])+(1/quarterScores[3]));
   }
 }
