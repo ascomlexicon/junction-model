@@ -619,8 +619,11 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
         </div>
         {Object.keys(laneData.entering).map(direction => (
           <div key={`entering-${direction}`} className="input-group">
-            <label>From {direction.charAt(0).toUpperCase() + direction.slice(1)}:</label>
+            <label htmlFor={`entering-${direction}`}>
+              From {direction.charAt(0).toUpperCase() + direction.slice(1)}:
+            </label>
             <input
+              id={`entering-${direction}`}
               type="number"
               value={laneData.entering[direction]}
               onChange={(e) => handleInputChange('entering', direction, e.target.value)}
@@ -628,7 +631,8 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
               min="0"
               max="5"
             />
-          </div>
+        </div>
+        
         ))}
       </section>
 
@@ -653,8 +657,11 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
         </div>
         {Object.keys(laneData.exiting).map(direction => (
           <div key={`exiting-${direction}`} className="input-group">
-            <label>To {direction.charAt(0).toUpperCase() + direction.slice(1)}:</label>
+            <label htmlFor={`exiting-${direction}`}>
+              To {direction.charAt(0).toUpperCase() + direction.slice(1)}:
+            </label>
             <input
+              id={`exiting-${direction}`}
               type="number"
               value={laneData.exiting[direction]}
               onChange={(e) => handleInputChange('exiting', direction, e.target.value)}
