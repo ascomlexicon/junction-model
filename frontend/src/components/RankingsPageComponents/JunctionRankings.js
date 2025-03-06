@@ -82,7 +82,7 @@ import axios from 'axios';
   // See VPHDisplayData
 const JunctionRankings = ({ clickedJunction }) => {
   // Used whilst the data is being retrieved from the backend
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   
   const [error, setError] = useState(null);
 

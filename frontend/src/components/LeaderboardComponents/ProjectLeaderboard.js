@@ -19,30 +19,29 @@ const ProjectLeaderboard = () => {
   const [selectedProject, setSelectedProject] = useState(null);
 
   // FIXME: GET Request for all projects stored in the backend
-  // useEffect(() => {
-    // This code runs once when the component mounts
-    // axios.get('your_api_endpoint/projects')
-    //   .then(function (response) {
-    //     // handle success
+  useEffect(() => {
+    axios.get('your_api_endpoint/projects')
+      .then(function (response) {
+        // handle success
       // TODO: Target is to iterate through each object in the returned GET request, need to check the format of the response
-      // const allProjects = [];
-      // Response.data.array.forEach(element => {
-      //   // Convert each response to the below format
-      //   const project = {
-      //     name: element.name,
-      //     // TODO: Ask Josh about the need/use of ID
-      //     id: element.name,
-      //     vphData: {
-      //       north: { entering: element.vphNorth.enter, exitEast: element.vphNorth.exitEast, exitSouth: element.vphNorth.exitSouth, exitWest: element.vphNorth.exitWest },
-      //       south: { entering: element.vphSouth.entering, exitNorth: element.vphSouth.exitNorth, exitEast: element.vphSouth.exitEast, exitWest: element.vphSouth.exitWest },
-      //       east: { entering: element.vphEast.entering, exitNorth: element.vphEast.exitNorth, exitSouth: element.vphEast.exitSouth, exitWest: element.vphEast.exitWest },
-      //       west: { entering: element.vphWest.entering, exitNorth: element.vphWest.exitNorth, exitEast: element.vphWest.exitEast, exitSouth: element.vphWest.exitSouth }
-      //     }
-      //   };
-      //   allProjects.push(project);
-      // });
-      // setProjects(allProjects);
-      // setIsLoading(false);
+      const allProjects = [];
+      Response.data.array.forEach(element => {
+        // Convert each response to the below format
+        const project = {
+          name: element.name,
+          // TODO: Ask Josh about the need/use of ID
+          id: element.name,
+          vphData: {
+            north: { entering: element.vphNorth.enter, exitEast: element.vphNorth.exitEast, exitSouth: element.vphNorth.exitSouth, exitWest: element.vphNorth.exitWest },
+            south: { entering: element.vphSouth.entering, exitNorth: element.vphSouth.exitNorth, exitEast: element.vphSouth.exitEast, exitWest: element.vphSouth.exitWest },
+            east: { entering: element.vphEast.entering, exitNorth: element.vphEast.exitNorth, exitSouth: element.vphEast.exitSouth, exitWest: element.vphEast.exitWest },
+            west: { entering: element.vphWest.entering, exitNorth: element.vphWest.exitNorth, exitEast: element.vphWest.exitEast, exitSouth: element.vphWest.exitSouth }
+          }
+        };
+        allProjects.push(project);
+      });
+      setProjects(allProjects);
+      setIsLoading(false);
 
       // This should be the structure of allProjects from above:
       // const allProjects = [{ 
@@ -65,14 +64,14 @@ const ProjectLeaderboard = () => {
       //     west: { entering: "820", exitNorth: "310", exitEast: "230", exitSouth: "280" }
       //   }
       // }];
-    //   })
-    //   .catch(function (error) {
-    //     // handle error
-    //     console.log(error);
-    //     setError(error);
-    //     setIsLoading(false);
-    //   });
-  // }, []);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+        setError(error);
+        setIsLoading(false);
+      });
+  }, []);
 
   const handleSelectProject = (project) => {
     setSelectedProject(project);
