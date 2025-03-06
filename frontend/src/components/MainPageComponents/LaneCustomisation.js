@@ -992,7 +992,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
       <div className="button-container">
         <BackButton onClick={handleBack} label="Back to Traffic Flow" />
         <ResetLaneChangesButton onClick={handleResetLaneChanges} />
-        <ResetAllButton onClick={resetAllForms} />
+        <ResetAllButton onConfirm={resetAllForms} />
         <SaveNextButton onClick={handleSaveNext} disabled={!isValid} />
       </div>
     </div>
@@ -1000,3 +1000,4 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
 };
 
 export default LaneCustomisation;
+
