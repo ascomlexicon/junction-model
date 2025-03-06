@@ -1,9 +1,13 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
 import JunctionRankings from "../components/RankingsPageComponents/JunctionRankings";
 
-function RankingsPage({junctionData}){
+function RankingsPage(){
+    const location = useLocation();
+    const junctionData = location.state;
+
     return(
-        <JunctionRankings firstConfiguredJunction={junctionData}/>
+        <JunctionRankings clickedJunction={junctionData}/>
     )
 }
 

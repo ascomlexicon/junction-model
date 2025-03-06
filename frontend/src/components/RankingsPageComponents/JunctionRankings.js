@@ -80,9 +80,9 @@ import axios from 'axios';
 
 // TODO: Need to think about the case when we render this component from the projects page
   // See VPHDisplayData
-const JunctionRankings = ({ clickedJunction }) => {
+const JunctionRankings = ({ clickedJunction = {} }) => {
   // Used whilst the data is being retrieved from the backend
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   
   const [error, setError] = useState(null);
 
@@ -103,93 +103,116 @@ const JunctionRankings = ({ clickedJunction }) => {
     // FIXME: Issue with parsing the JSON, but fundamentally the backend is being reached and data is being sent (I think)
     // Run the simulation when this page renders, at first it will be a loading screen
     // POST 1: Send JSON object to the backend for processing
-    axios
-      .post("http://localhost:8080/api/model", clickedJunction)
-      .then((response) => {
-        console.log(response.data);
-
-        // Exit the loading screen when simulation complete
-        // TODO: Will need to chain 3 requests together and only set is loading to false when all 3 are complete
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        if (error.response) {
-          console.log(error.response);
-          console.log(error.response.data);
-          console.log("server responded");
-        } else if (error.request) {
-          console.log("network error");
-        } else {
-          console.log(error);
-        }
-      });
-
-    // GET Request 1: Get all junctions with the same vph data as clickedJunction (ie from same project)
-    axios.get("http://localhost:8080/api/junctions")
-      .then((response) => {
-        // handle success
-        const allJunctions = [];
-
-        response.data.array.forEach(element => {
-          // Assume for now the structure at the top of the page, ie junctions have a name that is generated in the backend
-          const junction = {
-            ...element,
-          };
-          if (junction.name === clickedJunction.name) {
-            // if we have found the data for the junction we initially clicked on, set this as the selected junction
-            setSelectedJunction(junction);
-          };
-          allJunctions.push(junction);
-        });
-        setJunctions(allJunctions);
-        setIsLoading(false);
-      })
-      .catch(function (error) {
-        // handle error
-        console.log(error);
-        setError(error);
-        setIsLoading(false);
-      });
-
-    // GET Request 2: Get the project that clickedJunction is from
-    // Extract VPH data from clickedJunction to send as query parameters
-    const vphData = {
-      vphNorth: {
-        'enter': 100,
-        'exitSouth': 50,
-        'exitEast': 25,
-        'exitWest': 25
-      },
-      vphSouth: {
-        'enter': 100,
-        'exitNorth': 40,
-        'exitEast': 50,
-        'exitWest': 10
-      },
-      vphEast: {
-        'enter': 100,
-        'exitSouth': 40,
-        'exitNorth': 40,
-        'exitWest': 20
-      },
-      vphWest: {
-        'enter': 100,
-        'exitSouth': 25,
-        'exitEast': 20,
-        'exitNorth': 55
-      }
-    };
-
-    // Make the request with the VPH data
-    // axios.get("http://localhost:8080/api/name", {params: vphData})
+    // axios
+    //   .post("http://localhost:8080/api/model", clickedJunction)
     //   .then((response) => {
-    //     // handle success (assume response.data gives us the JSON object of the project, might change to be the name)
-    //     setCurrentProject(response.data.name);
+    //     console.log(response.data);
+    //     // Exit the loading screen when simulation complete
+    //     // TODO: Will need to chain 3 requests together and only set is loading to false when all 3 are complete
+    //     console.log("SIMULATION COMPLETE");
+    //     setIsLoading(false);
+    //   })
+    //   .catch((error) => {
+    //     console.log("ERROR SIMULATING JUNCTION");
+    //     if (error.response) {
+    //       console.log(error.response);
+    //       console.log("server responded");
+    //     } else if (error.request) {
+    //       console.log("network error");
+    //     } else {
+    //       console.log(error);
+    //     }
+    //   });
+
+    // // GET Request 1: Get all junctions with the same vph data as clickedJunction (ie from same project)
+    // axios.get("http://localhost:8080/api/junctions")
+    //   .then((response) => {
+    //     // handle success
+    //     const allJunctions = [];
+
+    //     response.data.array.forEach(element => {
+    //       // Assume for now the structure at the top of the page, ie junctions have a name that is generated in the backend
+    //       const junction = {
+    //         ...element,
+    //       };
+    //       if (junction.name === clickedJunction.name) {
+    //         // if we have found the data for the junction we initially clicked on, set this as the selected junction
+    //         setSelectedJunction(junction);
+    //       };
+    //       allJunctions.push(junction);
+    //     });
+    //     setJunctions(allJunctions);
+    //     setIsLoading(false);
     //   })
     //   .catch(function (error) {
     //     // handle error
     //     console.log(error);
+    //     console.log("ERROR GETTING ALL JUNCTIONS");
+    //     setError(error);
+    //     setIsLoading(false);
     //   });
+
+    console.log(clickedJunction);
+
+    const vphData = {
+      vphNorth: clickedJunction.vphNorth,
+      vphSouth: clickedJunction.vphSouth,
+      vphEast: clickedJunction.vphEast,
+      vphWest: clickedJunction.vphWest
+    };
+
+    // axios
+    //   .post("http://localhost:8080/api/model", clickedJunction)
+    //   .then((response) => {
+    //     console.log(response.data);
+    //     console.log("SIMULATION COMPLETE");
+
+    //     // Now trigger the GET request after the POST completes
+
+    //     return axios.get("http://localhost:8080/api/junctions", {params: vphData});
+    //   }) 
+    //   .then((response) => {
+    //     // handle success
+    //     const allJunctions = [];
+
+    //     response.data.array.forEach((element) => {
+    //       const junction = { ...element };
+    //       if (junction.name === clickedJunction.name) {
+    //         setSelectedJunction(junction);
+    //       }
+    //       allJunctions.push(junction);
+    //     });
+
+    //     setJunctions(allJunctions);
+    //   })
+    //   .catch((error) => {
+    //     console.log("ERROR SIMULATING JUNCTION");
+    //     if (error.response) {
+    //       console.log(error.response);
+    //       console.log("server responded");
+    //     } else if (error.request) {
+    //       console.log("network error");
+    //     } else {
+    //       console.log(error);
+    //     }
+
+    //     setError(error);
+    //   })
+    //   .finally(() => {
+    //     setIsLoading(false); // Set loading to false at the end of both requests
+    //   });
+
+    // GET Request 2: Get the project that clickedJunction is from
+    // Make the request with the VPH data
+    axios.get("http://localhost:8080/api/name", {params: vphData})
+      .then((response) => {
+        // handle success (assume response.data gives us the JSON object of the project, might change to be the name)
+        setCurrentProject(response.data);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      });
   }, []);
 
   const handleSelect = (selectedJunction) => {
@@ -212,9 +235,8 @@ const JunctionRankings = ({ clickedJunction }) => {
   return (
     <div className={styles.container}>
       <div className = {styles.header}>
-        {/* TODO: This needs to be the project that we are working with */}
-          <h1>Named Junction!</h1>
-        {/* <h1>{currentProject}</h1> */}
+          {/* <h1>Named Junction!</h1> */}
+        <h1>{currentProject}</h1>
         </div>
         <div className={styles.backButtonContainer}>
           <button className={styles.backButton} >
@@ -229,6 +251,7 @@ const JunctionRankings = ({ clickedJunction }) => {
         <VPHDisplayForm />
       </div>
 
+      {/* TODO: Handle errors more elegantly than this */}
       {error && <p>Error: {error.message}</p>}
       {!isLoading && !error && (
         <>

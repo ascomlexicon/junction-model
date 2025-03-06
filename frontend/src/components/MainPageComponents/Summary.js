@@ -2,8 +2,6 @@ import React from 'react';
 import './Summary.css';
 import BackButton from '../ButtonComponents/BackButton';
 import { useNavigate } from 'react-router-dom';
-import ImageRenderer from '../../pages/ImageRenderer.js'
-import axios from 'axios';
 
 function Summary({ formData, setActiveStep }) {
   const navigate = useNavigate();
@@ -21,6 +19,8 @@ function Summary({ formData, setActiveStep }) {
 
     // Attach image to the current configuration of the junction
     formData.junctionImage = junctionImage;
+
+    console.log(formData);
 
     navigate('/RankingsPage', { state: formData });
   };
@@ -162,14 +162,6 @@ function Summary({ formData, setActiveStep }) {
       <div className="button-container summary-screen">
         <BackButton onClick={handleBack} label="Back to Direction Prioritisation" />
         <button className="simulate-button" onClick={handleClick}>Run Simulation</button>
-      </div>
-
-      {/* TODO: DELETE THIS, WAS FOR TESTING PURPOSES */}
-      <div className="summary-section">
-        <h3>Junction Visualization Preview</h3>
-        <div className="summary-content">
-          <ImageRenderer imageData={formData.junctionImage} />
-        </div>
       </div>
     </div>
   );
