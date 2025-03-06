@@ -105,6 +105,11 @@ public class JunctionController {
       return ResponseEntity.badRequest().body("Failed to parse JSON: " + e.getMessage());
     }
   }
+  
+  @GetMapping("/projects")
+  public ResponseEntity<?> getAllProjects() {
+    return ResponseEntity.ok(projectStorage.getAllProjects());
+  }
 
   // Post Mappings
   @PostMapping("/model")
