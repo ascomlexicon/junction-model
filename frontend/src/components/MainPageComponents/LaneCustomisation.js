@@ -779,7 +779,9 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
             {showEnteringTooltip && (
               <div className="tooltip">
                 Maximum of 5 lanes per direction.
-                Total number of lanes entering and exiting must be equal
+                Number of lanes exiting equal to or greater than number of lanes entering.
+                Number of lanes entering includes any special lanes that are added.
+
               </div>
             )}
           </div>
@@ -816,7 +818,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
             {showExitingTooltip && (
               <div className="tooltip">
                 Maximum of 5 lanes per direction.
-                Total number of lanes entering and exiting must be equal.
+                Number of lanes exiting equal to or greater than number of lanes entering.
                 Number of lanes entering includes any special lanes that are added.
               </div>
             )}
@@ -842,7 +844,6 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
 
       {/* Left Turn Section */}
       <section className="left-turn-section">
-        {/* TODO add info icon */}
         <h3>Left Turn Lanes</h3>
         {Object.keys(laneData.leftTurn).map((direction) => {
           const entryLanes = parseInt(laneData.entering[direction]) || 0;
@@ -887,7 +888,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
           >
             <Info size={20} />
             {showTooltip && (
-              <div className="tooltip">
+              <div className="special-lanes-tooltip">
                 Only one type of special lane (bus or cycle) can be selected per direction.
                 Cannot be added where left-turning traffic exists.
               </div>
@@ -991,7 +992,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
       <div className="button-container">
         <BackButton onClick={handleBack} label="Back to Traffic Flow" />
         <ResetLaneChangesButton onClick={handleResetLaneChanges} />
-        <ResetAllButton onClick={resetAllForms} />
+        <ResetAllButton onConfirm={resetAllForms} />
         <SaveNextButton onClick={handleSaveNext} disabled={!isValid} />
       </div>
     </div>
@@ -999,3 +1000,4 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
 };
 
 export default LaneCustomisation;
+

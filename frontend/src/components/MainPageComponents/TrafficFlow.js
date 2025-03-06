@@ -223,7 +223,7 @@ function TrafficFlow({ setActiveStep, saveFormData, resetForm, resetAllForms, fo
             <div className="button-container">
                 <BackButton onClick={handleBack} label="Back to Instructions" />
                 <ResetVPHButton onClick={handleResetVPH} />
-                <ResetAllButton onClick={resetAllForms} />
+                <ResetAllButton onConfirm={resetAllForms} />
                 <SaveNextButton onClick={handleSaveNext} disabled={!isValid} />
             </div>
         </div>

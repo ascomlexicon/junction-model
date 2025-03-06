@@ -174,7 +174,7 @@ function DirectionPrioritisation({ setActiveStep, saveFormData, resetForm, reset
       <div className="button-container">
         <BackButton onClick={handleBack} label="Back to Pedestrian Crossings" />
         <ResetPrioritisationButton onClick={handleResetChanges} />
-        <ResetAllButton onClick={resetAllForms} />
+        <ResetAllButton onConfirm={resetAllForms} />
         <SaveNextButton onClick={handleSaveNext} disabled={!isValid} />
       </div>
     </div>
