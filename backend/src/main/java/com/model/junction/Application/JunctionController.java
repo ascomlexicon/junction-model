@@ -27,8 +27,44 @@ import com.model.junction.ProjectClasses.ProjectStorage;
 public class JunctionController {
   private final ProjectStorage projectStorage;
   
+  // Constructor
   public JunctionController(ProjectStorage projectStore) {
     this.projectStorage = projectStore; 
+  }
+  
+  // Helper Functions
+  private HashMap<Direction, HashMap<Direction, Integer>> createVPHDataFromJSON(JsonNode node) {
+    String[] vphDirections = {"vphNorth", "vphEast", "vphSouth", "vphWest"}; // Entering directions
+    HashMap<Direction, HashMap<Direction, Integer>> vehiclePerHourData = new HashMap<Direction, HashMap<Direction, Integer>>();
+      
+    for (String vphDirection : vphDirections) {
+      Direction key = Direction.valueOf(vphDirection.substring(3).toUpperCase()).getOpposite();
+      HashMap<Direction, Integer> exitDirectionsVPH = new HashMap<Direction, Integer>();
+      
+      for (Direction direction : Direction.values()) {
+        if (direction.equals(key.getOpposite())) {
+          continue;
+        }
+
+        switch (direction) {
+          case NORTH:
+            exitDirectionsVPH.put(direction, node.get(vphDirection).get("exitNorth").asInt());
+            break;
+          case EAST:
+            exitDirectionsVPH.put(direction, node.get(vphDirection).get("exitEast").asInt());
+            break;
+          case SOUTH:
+            exitDirectionsVPH.put(direction, node.get(vphDirection).get("exitSouth").asInt());
+            break;
+          default:
+            exitDirectionsVPH.put(direction, node.get(vphDirection).get("exitWest").asInt());
+            break;
+        }
+      }
+      vehiclePerHourData.put(key, exitDirectionsVPH);
+    }
+    
+    return vehiclePerHourData;
   }
   
   // Get Mappings
@@ -38,35 +74,7 @@ public class JunctionController {
       ObjectMapper objectMapper = new ObjectMapper();
       JsonNode jsonNode = objectMapper.readTree(body);
 
-      String[] vphDirections = {"vphNorth", "vphEast", "vphSouth", "vphWest"}; // Entering directions
-      HashMap<Direction, HashMap<Direction, Integer>> vehiclePerHourData = new HashMap<Direction, HashMap<Direction, Integer>>();
-      
-      for (String vphDirection : vphDirections) {
-        Direction key = Direction.valueOf(vphDirection.substring(3).toUpperCase()).getOpposite();
-        HashMap<Direction, Integer> exitDirectionsVPH = new HashMap<Direction, Integer>();
-        
-        for (Direction direction : Direction.values()) {
-          if (direction.equals(key.getOpposite())) {
-            continue;
-          }
-
-          switch (direction) {
-            case NORTH:
-              exitDirectionsVPH.put(direction, jsonNode.get(vphDirection).get("exitNorth").asInt());
-              break;
-            case EAST:
-              exitDirectionsVPH.put(direction, jsonNode.get(vphDirection).get("exitEast").asInt());
-              break;
-            case SOUTH:
-              exitDirectionsVPH.put(direction, jsonNode.get(vphDirection).get("exitSouth").asInt());
-              break;
-            default:
-              exitDirectionsVPH.put(direction, jsonNode.get(vphDirection).get("exitWest").asInt());
-              break;
-          }
-        }
-        vehiclePerHourData.put(key, exitDirectionsVPH);
-      }
+      HashMap<Direction, HashMap<Direction, Integer>> vehiclePerHourData = createVPHDataFromJSON(jsonNode);
       Project currentProject = projectStorage.getProjectByVPH(vehiclePerHourData);
       
       if (currentProject == null) {
@@ -87,35 +95,8 @@ public class JunctionController {
       JsonNode jsonNode = objectMapper.readTree(body);
       
       // Retrieving/creating a project
-      String[] vphDirections = {"vphNorth", "vphEast", "vphSouth", "vphWest"}; // Entering directions
-      HashMap<Direction, HashMap<Direction, Integer>> vehiclePerHourData = new HashMap<Direction, HashMap<Direction, Integer>>();
+      HashMap<Direction, HashMap<Direction, Integer>> vehiclePerHourData = createVPHDataFromJSON(jsonNode);
       
-      for (String vphDirection : vphDirections) {
-        Direction key = Direction.valueOf(vphDirection.substring(3).toUpperCase()).getOpposite();
-        HashMap<Direction, Integer> exitDirectionsVPH = new HashMap<Direction, Integer>();
-        
-        for (Direction direction : Direction.values()) {
-          if (direction.equals(key.getOpposite())) {
-            continue;
-          }
-
-          switch (direction) {
-            case NORTH:
-              exitDirectionsVPH.put(direction, jsonNode.get(vphDirection).get("exitNorth").asInt());
-              break;
-            case EAST:
-              exitDirectionsVPH.put(direction, jsonNode.get(vphDirection).get("exitEast").asInt());
-              break;
-            case SOUTH:
-              exitDirectionsVPH.put(direction, jsonNode.get(vphDirection).get("exitSouth").asInt());
-              break;
-            default:
-              exitDirectionsVPH.put(direction, jsonNode.get(vphDirection).get("exitWest").asInt());
-              break;
-          }
-        }
-        vehiclePerHourData.put(key, exitDirectionsVPH);
-      }
       Project currentProject = projectStorage.getProjectByVPH(vehiclePerHourData);
       if (currentProject == null) {
         currentProject = projectStorage.createNewProject(vehiclePerHourData);
