@@ -82,7 +82,7 @@ import axios from 'axios';
   // See VPHDisplayData
 const JunctionRankings = ({ clickedJunction }) => {
   // Used whilst the data is being retrieved from the backend
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   
   const [error, setError] = useState(null);
 
@@ -100,6 +100,30 @@ const JunctionRankings = ({ clickedJunction }) => {
 
   // This code runs once when the component mounts
   useEffect(() => {
+    // FIXME: Issue with parsing the JSON, but fundamentally the backend is being reached and data is being sent (I think)
+    // Run the simulation when this page renders, at first it will be a loading screen
+    // POST 1: Send JSON object to the backend for processing
+    axios
+      .post("http://localhost:8080/api/model", clickedJunction)
+      .then((response) => {
+        console.log(response.data);
+
+        // Exit the loading screen when simulation complete
+        // TODO: Will need to chain 3 requests together and only set is loading to false when all 3 are complete
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        if (error.response) {
+          console.log(error.response);
+          console.log(error.response.data);
+          console.log("server responded");
+        } else if (error.request) {
+          console.log("network error");
+        } else {
+          console.log(error);
+        }
+      });
+
     // GET Request 1: Get all junctions with the same vph data as clickedJunction (ie from same project)
     axios.get("http://localhost:8080/api/junctions")
       .then((response) => {
@@ -128,15 +152,44 @@ const JunctionRankings = ({ clickedJunction }) => {
       });
 
     // GET Request 2: Get the project that clickedJunction is from
-    axios.get("http://localhost:8080/api/name")
-      .then((response) => {
-        // handle success (assume response.data gives us the JSON object of the project, might change to be the name)
-        setCurrentProject(response.data.name);
-      })
-      .catch(function (error) {
-        // handle error
-        console.log(error);
-      });
+    // Extract VPH data from clickedJunction to send as query parameters
+    const vphData = {
+      vphNorth: {
+        'enter': 100,
+        'exitSouth': 50,
+        'exitEast': 25,
+        'exitWest': 25
+      },
+      vphSouth: {
+        'enter': 100,
+        'exitNorth': 40,
+        'exitEast': 50,
+        'exitWest': 10
+      },
+      vphEast: {
+        'enter': 100,
+        'exitSouth': 40,
+        'exitNorth': 40,
+        'exitWest': 20
+      },
+      vphWest: {
+        'enter': 100,
+        'exitSouth': 25,
+        'exitEast': 20,
+        'exitNorth': 55
+      }
+    };
+
+    // Make the request with the VPH data
+    // axios.get("http://localhost:8080/api/name", {params: vphData})
+    //   .then((response) => {
+    //     // handle success (assume response.data gives us the JSON object of the project, might change to be the name)
+    //     setCurrentProject(response.data.name);
+    //   })
+    //   .catch(function (error) {
+    //     // handle error
+    //     console.log(error);
+    //   });
   }, []);
 
   const handleSelect = (selectedJunction) => {
