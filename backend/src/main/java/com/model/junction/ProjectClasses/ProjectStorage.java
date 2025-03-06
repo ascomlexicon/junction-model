@@ -47,7 +47,9 @@ public class ProjectStorage {
       }
     }
     
-    return projects.put(projectToCreate.getProjectTitle(), projectToCreate);
+    // Put the project into storage, return the project that was put in storage
+    projects.put(projectToCreate.getProjectTitle(), projectToCreate);
+    return projectToCreate;
   }
 
   public boolean renameProject(String oldName, String newName) {
