@@ -9,6 +9,7 @@ import com.model.junction.JunctionClasses.JunctionStorage;
 
 public class Project {
   private HashMap<Direction, HashMap<Direction, Integer>> vehiclePerHourData;
+  private HashMap<Direction, Integer> outboundTotalVPHData;
   private JunctionStorage junctions; 
   private String projectTitle;
 
@@ -42,6 +43,18 @@ public class Project {
   }
   
   public HashMap<Direction, Integer> getTotalOutboundVPHData() {
+    if (this.outboundTotalVPHData != null || !this.outboundTotalVPHData.isEmpty()) {
+      return this.outboundTotalVPHData;
+    } else if (this.vehiclePerHourData == null) {
+      HashMap<Direction, Integer> defaultOutBound = new HashMap<Direction, Integer>();
+      defaultOutBound.put(Direction.NORTH, 0);
+      defaultOutBound.put(Direction.EAST, 0);
+      defaultOutBound.put(Direction.SOUTH, 0);
+      defaultOutBound.put(Direction.WEST, 0);
+      
+      return defaultOutBound;
+    }
+
     HashMap<Direction, Integer> outboundVPHData = new HashMap<Direction, Integer>();
     
     for (Direction direction : Direction.values()) {
@@ -51,6 +64,7 @@ public class Project {
       outboundVPHData.put(direction, outboundTotal);
     }
     
+    this.outboundTotalVPHData = outboundVPHData; 
     return outboundVPHData;
   }
   
