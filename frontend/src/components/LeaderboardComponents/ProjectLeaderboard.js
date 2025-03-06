@@ -46,7 +46,7 @@ const ProjectLeaderboard = () => {
       .then((response) => {
       // TODO: Target is to iterate through each object in the returned GET request, need to check the format of the response
         const allProjects = [];
-        Response.data.array.forEach(element => {
+        response.data.array.forEach(element => {
           // Convert each response to the below format
           const project = {
             name: element.name,
