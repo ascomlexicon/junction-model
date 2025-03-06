@@ -205,28 +205,60 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
     return Math.max(...lanesFlowingTo, 1); // Use 0 as fallback if array is empty
   }
 
-  // Helper function example for one direction
   function calculateLanesTurningNorth(fromDirection) {
     // Get number of entry lanes in the fromDirection
-    const entryLanes = laneData.entering[fromDirection]
+    const entryLanes = laneData.entering[fromDirection];
     
     // Get the traffic distribution for this entry
-    const trafficFlow = formData[`vph${fromDirection.charAt(0).toUpperCase() + fromDirection.slice(1)}`];
-
-    // If no traffic exits north, then no lanes are needed for this fromDirection, so return 0
-    if (!trafficFlow.exitNorth) {
+    const trafficKey = `vph${fromDirection.charAt(0).toUpperCase() + fromDirection.slice(1)}`;
+    const trafficData = formData[trafficKey];
+    
+    // Guard against undefined data
+    if (!trafficData) {
       return 0;
-    };
-
+    }
+    
+    // Check if traffic going north exists based on data structure
+    let hasTrafficNorth = false;
+    
+    // Handle array format (like in the test data)
+    if (Array.isArray(trafficData)) {
+      hasTrafficNorth = trafficData.some(flow => flow.exitNorth && flow.exitNorth > 0);
+    } 
+    // Handle direct object format
+    else if (typeof trafficData === 'object') {
+      hasTrafficNorth = trafficData.exitNorth && trafficData.exitNorth > 0;
+    }
+    
+    // If no traffic exits north, then no lanes are needed for this fromDirection
+    if (!hasTrafficNorth) {
+      return 0;
+    }
+    
+    // Get traffic flows to other directions similarly
+    let hasTrafficEast = false;
+    let hasTrafficSouth = false;
+    let hasTrafficWest = false;
+    
+    if (Array.isArray(trafficData)) {
+      hasTrafficEast = trafficData.some(flow => flow.exitEast && flow.exitEast > 0);
+      hasTrafficSouth = trafficData.some(flow => flow.exitSouth && flow.exitSouth > 0);
+      hasTrafficWest = trafficData.some(flow => flow.exitWest && flow.exitWest > 0);
+    } else if (typeof trafficData === 'object') {
+      hasTrafficEast = trafficData.exitEast && trafficData.exitEast > 0;
+      hasTrafficSouth = trafficData.exitSouth && trafficData.exitSouth > 0;
+      hasTrafficWest = trafficData.exitWest && trafficData.exitWest > 0;
+    }
+  
     switch (fromDirection) {
       case 'south':
         // If we go from south to north, all lanes are utilised as straight
         return entryLanes;
       case 'west':
-        if (trafficFlow.exitEast) {
+        if (hasTrafficEast) {
           // Traffic flows to east (straight), hence only 1 northbound lane
           return 1;
-        } else if (!trafficFlow.exitSouth) {
+        } else if (!hasTrafficSouth) {
           // Traffic flows only to the north
           return entryLanes;
         } else {
@@ -238,10 +270,10 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
           }
         }
       case 'east':
-        if (trafficFlow.exitWest) {
+        if (hasTrafficWest) {
           // Traffic flows to west (straight), hence only 1 northbound lane
           return 1;
-        } else if (!trafficFlow.exitSouth) {
+        } else if (!hasTrafficSouth) {
           // Traffic flows only to the north
           return entryLanes;
         } else {
@@ -253,30 +285,70 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
           }
         }
       default:
-        break;
+        return 0;
     }
-  };
-
+  }
+  
+  // Similarly for the other direction calculation functions 
   function calculateLanesTurningSouth(fromDirection) {
     // Get number of entry lanes in the fromDirection
-    const entryLanes = laneData.entering[fromDirection]
+    const entryLanes = laneData.entering[fromDirection];
     
     // Get the traffic distribution for this entry
-    const trafficFlow = formData[`vph${fromDirection.charAt(0).toUpperCase() + fromDirection.slice(1)}`];
-
-    if (!trafficFlow.exitSouth) {
+    const trafficKey = `vph${fromDirection.charAt(0).toUpperCase() + fromDirection.slice(1)}`;
+    const trafficData = formData[trafficKey];
+    
+    // Guard against undefined data
+    if (!trafficData) {
       return 0;
-    };
-
+    }
+    
+    // Check if traffic going south exists based on data structure
+    let hasTrafficSouth = false;
+    
+    // Handle array format (like in the test data)
+    if (Array.isArray(trafficData)) {
+      hasTrafficSouth = trafficData.some(flow => flow.exitSouth && flow.exitSouth > 0);
+    } 
+    // Handle direct object format
+    else if (typeof trafficData === 'object') {
+      hasTrafficSouth = trafficData.exitSouth && trafficData.exitSouth > 0;
+    }
+    
+    // If no traffic exits south, then no lanes are needed for this fromDirection
+    if (!hasTrafficSouth) {
+      return 0;
+    }
+    
+    // Get traffic flows to other directions similarly
+    let hasTrafficEast = false;
+    let hasTrafficNorth = false;
+    let hasTrafficWest = false;
+    
+    if (Array.isArray(trafficData)) {
+      hasTrafficEast = trafficData.some(flow => flow.exitEast && flow.exitEast > 0);
+      hasTrafficNorth = trafficData.some(flow => flow.exitNorth && flow.exitNorth > 0);
+      hasTrafficWest = trafficData.some(flow => flow.exitWest && flow.exitWest > 0);
+    } else if (typeof trafficData === 'object') {
+      hasTrafficEast = trafficData.exitEast && trafficData.exitEast > 0;
+      hasTrafficNorth = trafficData.exitNorth && trafficData.exitNorth > 0;
+      hasTrafficWest = trafficData.exitWest && trafficData.exitWest > 0;
+    }
+  
+    // Logic for south-bound traffic similar to northbound
     switch (fromDirection) {
       case 'north':
+        // If we go from north to south, all lanes are utilised as straight
         return entryLanes;
       case 'east':
-        if (trafficFlow.exitWest) {
+        if (hasTrafficWest) {
+          // Traffic flows to west (straight), hence only 1 southbound lane
           return 1;
-        } else if (!trafficFlow.exitNorth) {
+        } else if (!hasTrafficNorth) {
+          // Traffic flows only to the south
           return entryLanes;
         } else {
+          // Traffic flows south and north only
           if (entryLanes <= 2) {
             return 1;
           } else {
@@ -284,11 +356,14 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
           }
         }
       case 'west':
-        if (trafficFlow.exitEast) {
+        if (hasTrafficEast) {
+          // Traffic flows to east (straight), hence only 1 southbound lane
           return 1;
-        } else if (!trafficFlow.exitNorth) {
+        } else if (!hasTrafficNorth) {
+          // Traffic flows only to the south
           return entryLanes;
         } else {
+          // Traffic flows south and north only
           if (entryLanes <= 3) {
             return 1;
           } else {
@@ -296,30 +371,69 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
           }
         }
       default:
-        break;
+        return 0;
     }
-  };
-
+  }
+  
   function calculateLanesTurningEast(fromDirection) {
     // Get number of entry lanes in the fromDirection
-    const entryLanes = laneData.entering[fromDirection]
+    const entryLanes = laneData.entering[fromDirection];
     
     // Get the traffic distribution for this entry
-    const trafficFlow = formData[`vph${fromDirection.charAt(0).toUpperCase() + fromDirection.slice(1)}`];
-
-    if (!trafficFlow.exitEast) {
+    const trafficKey = `vph${fromDirection.charAt(0).toUpperCase() + fromDirection.slice(1)}`;
+    const trafficData = formData[trafficKey];
+    
+    // Guard against undefined data
+    if (!trafficData) {
       return 0;
-    };
-
+    }
+    
+    // Check if traffic going east exists based on data structure
+    let hasTrafficEast = false;
+    
+    // Handle array format (like in the test data)
+    if (Array.isArray(trafficData)) {
+      hasTrafficEast = trafficData.some(flow => flow.exitEast && flow.exitEast > 0);
+    } 
+    // Handle direct object format
+    else if (typeof trafficData === 'object') {
+      hasTrafficEast = trafficData.exitEast && trafficData.exitEast > 0;
+    }
+    
+    // If no traffic exits east, then no lanes are needed for this fromDirection
+    if (!hasTrafficEast) {
+      return 0;
+    }
+    
+    // Get traffic flows to other directions similarly
+    let hasTrafficSouth = false;
+    let hasTrafficNorth = false;
+    let hasTrafficWest = false;
+    
+    if (Array.isArray(trafficData)) {
+      hasTrafficSouth = trafficData.some(flow => flow.exitSouth && flow.exitSouth > 0);
+      hasTrafficNorth = trafficData.some(flow => flow.exitNorth && flow.exitNorth > 0);
+      hasTrafficWest = trafficData.some(flow => flow.exitWest && flow.exitWest > 0);
+    } else if (typeof trafficData === 'object') {
+      hasTrafficSouth = trafficData.exitSouth && trafficData.exitSouth > 0;
+      hasTrafficNorth = trafficData.exitNorth && trafficData.exitNorth > 0;
+      hasTrafficWest = trafficData.exitWest && trafficData.exitWest > 0;
+    }
+  
+    // Logic for east-bound traffic
     switch (fromDirection) {
       case 'west':
+        // If we go from west to east, all lanes are utilised as straight
         return entryLanes;
       case 'north':
-        if (trafficFlow.exitSouth) {
+        if (hasTrafficSouth) {
+          // Traffic flows to south (straight), hence only 1 eastbound lane
           return 1;
-        } else if (!trafficFlow.exitWest) {
+        } else if (!hasTrafficWest) {
+          // Traffic flows only to the east
           return entryLanes;
         } else {
+          // Traffic flows east and west only
           if (entryLanes <= 2) {
             return 1;
           } else {
@@ -327,11 +441,14 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
           }
         }
       case 'south':
-        if (trafficFlow.exitNorth) {
+        if (hasTrafficNorth) {
+          // Traffic flows to north (straight), hence only 1 eastbound lane
           return 1;
-        } else if (!trafficFlow.exitWest) {
+        } else if (!hasTrafficWest) {
+          // Traffic flows only to the east
           return entryLanes;
         } else {
+          // Traffic flows east and west only
           if (entryLanes <= 3) {
             return 1;
           } else {
@@ -339,42 +456,84 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
           }
         }
       default:
-        break;
+        return 0;
     }
-  };
-
+  }
+  
   function calculateLanesTurningWest(fromDirection) {
     // Get number of entry lanes in the fromDirection
-    const entryLanes = laneData.entering[fromDirection]
+    const entryLanes = laneData.entering[fromDirection];
     
     // Get the traffic distribution for this entry
-    const trafficFlow = formData[`vph${fromDirection.charAt(0).toUpperCase() + fromDirection.slice(1)}`];
-
-    if (!trafficFlow.exitWest) {
+    const trafficKey = `vph${fromDirection.charAt(0).toUpperCase() + fromDirection.slice(1)}`;
+    const trafficData = formData[trafficKey];
+    
+    // Guard against undefined data
+    if (!trafficData) {
       return 0;
-    };
-
+    }
+    
+    // Check if traffic going west exists based on data structure
+    let hasTrafficWest = false;
+    
+    // Handle array format (like in the test data)
+    if (Array.isArray(trafficData)) {
+      hasTrafficWest = trafficData.some(flow => flow.exitWest && flow.exitWest > 0);
+    } 
+    // Handle direct object format
+    else if (typeof trafficData === 'object') {
+      hasTrafficWest = trafficData.exitWest && trafficData.exitWest > 0;
+    }
+    
+    // If no traffic exits west, then no lanes are needed for this fromDirection
+    if (!hasTrafficWest) {
+      return 0;
+    }
+    
+    // Get traffic flows to other directions similarly
+    let hasTrafficSouth = false;
+    let hasTrafficNorth = false;
+    let hasTrafficEast = false;
+    
+    if (Array.isArray(trafficData)) {
+      hasTrafficSouth = trafficData.some(flow => flow.exitSouth && flow.exitSouth > 0);
+      hasTrafficNorth = trafficData.some(flow => flow.exitNorth && flow.exitNorth > 0);
+      hasTrafficEast = trafficData.some(flow => flow.exitEast && flow.exitEast > 0);
+    } else if (typeof trafficData === 'object') {
+      hasTrafficSouth = trafficData.exitSouth && trafficData.exitSouth > 0;
+      hasTrafficNorth = trafficData.exitNorth && trafficData.exitNorth > 0;
+      hasTrafficEast = trafficData.exitEast && trafficData.exitEast > 0;
+    }
+  
+    // Logic for west-bound traffic
     switch (fromDirection) {
       case 'east':
+        // If we go from east to west, all lanes are utilised as straight
         return entryLanes;
-      case 'south':
-        if (trafficFlow.exitNorth) {
+      case 'north':
+        if (hasTrafficSouth) {
+          // Traffic flows to south (straight), hence only 1 westbound lane
           return 1;
-        } else if (!trafficFlow.exitEast) {
+        } else if (!hasTrafficEast) {
+          // Traffic flows only to the west
           return entryLanes;
         } else {
+          // Traffic flows west and east only
           if (entryLanes <= 2) {
             return 1;
           } else {
             return 2;
           }
         }
-      case 'north':
-        if (trafficFlow.exitSouth) {
+      case 'south':
+        if (hasTrafficNorth) {
+          // Traffic flows to north (straight), hence only 1 westbound lane
           return 1;
-        } else if (!trafficFlow.exitEast) {
+        } else if (!hasTrafficEast) {
+          // Traffic flows only to the west
           return entryLanes;
         } else {
+          // Traffic flows west and east only
           if (entryLanes <= 3) {
             return 1;
           } else {
@@ -382,9 +541,9 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
           }
         }
       default:
-        break;
+        return 0;
     }
-  };
+  }
 
   const validateLanes = () => {
     let flag = true;
@@ -627,8 +786,11 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
         </div>
         {Object.keys(laneData.entering).map(direction => (
           <div key={`entering-${direction}`} className="input-group">
-            <label>From {direction.charAt(0).toUpperCase() + direction.slice(1)}:</label>
+            <label htmlFor={`entering-${direction}`}>
+              From {direction.charAt(0).toUpperCase() + direction.slice(1)}:
+            </label>
             <input
+              id={`entering-${direction}`}
               type="number"
               value={laneData.entering[direction]}
               onChange={(e) => handleInputChange('entering', direction, e.target.value)}
@@ -636,7 +798,8 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
               min="0"
               max="5"
             />
-          </div>
+        </div>
+        
         ))}
       </section>
 
@@ -661,8 +824,11 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
         </div>
         {Object.keys(laneData.exiting).map(direction => (
           <div key={`exiting-${direction}`} className="input-group">
-            <label>To {direction.charAt(0).toUpperCase() + direction.slice(1)}:</label>
+            <label htmlFor={`exiting-${direction}`}>
+              To {direction.charAt(0).toUpperCase() + direction.slice(1)}:
+            </label>
             <input
+              id={`exiting-${direction}`}
               type="number"
               value={laneData.exiting[direction]}
               onChange={(e) => handleInputChange('exiting', direction, e.target.value)}
