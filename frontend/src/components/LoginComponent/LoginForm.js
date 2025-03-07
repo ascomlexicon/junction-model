@@ -7,8 +7,6 @@ function LoginForm() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // TODO: For now this just ensures form is not-empty
-            // More formal validation can be added later
         navigate('/MainPage');
     };
 

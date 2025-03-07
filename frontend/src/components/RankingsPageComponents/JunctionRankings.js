@@ -7,79 +7,10 @@ import { Link } from "react-router-dom";
 import VPHDisplayForm from './VPHDisplayForm';
 import axios from 'axios';
 
-// Structure of clickedJunction
-// TODO: Think we should add a name attribute to the junction
-// clickedJunction = {
-//   "name": "Junction 1",
-//   "score": 0,
-//   "leftTurnLanes": {},
-//   "lanesEntering": {},
-//   "lanesExiting": {},
-//   "isBusOrCycle": "",
-//   "busCycleLaneDuration": [
-//     {
-//       "vphSpecialNorth": [
-//         {
-//           "enter": 200,
-//           "exitSouth": 100,
-//           "exitEast": 50,
-//           "exitWest": 50
-//         }
-//       ],
-//       "vphSpecialSouth": [
-//         {
-//           "enter": 200,
-//           "exitNorth": 100,
-//           "exitEast": 50,
-//           "exitWest": 50
-//         }
-//       ],
-//       // Left empty if there is no bus lane coming from that direction
-//       "vphSpecialEast": [],
-//       "vphSpecialWest": [],
-//     }
-//   ],
-//   "lanePrioritisation": ["east", "south", "north", "west"],
-//   "isCrossings": true,
-//   "crossingDuration": 0,
-//   "crossingRequestsPerHour": 0,
-//   "vphNorth": [
-//     {
-//       "enter": 200,
-//       "exitSouth": 100,
-//       "exitEast": 50,
-//       "exitWest": 50
-//     }
-//   ],
-//   "vphSouth": [
-//     {
-//       "enter": 200,
-//       "exitNorth": 100,
-//       "exitEast": 50,
-//       "exitWest": 50
-//     }
-//   ],
-//   "vphEast": [
-//     {
-//       "enter": 200,
-//       "exitSouth": 100,
-//       "exitNorth": 50,
-//       "exitWest": 50
-//     }
-//   ],
-//   "vphWest": [
-//     {
-//       "enter": 200,
-//       "exitSouth": 100,
-//       "exitEast": 50,
-//       "exitNorth": 50
-//     }
-//   ],
-//   junctionImage: null
-// }
-
 // TODO: Need to think about the case when we render this component from the projects page
   // See VPHDisplayData
+
+// TODO: Need to have an img tag with the junctionCanvas
 const JunctionRankings = ({ clickedJunction = {} }) => {
   // Used whilst the data is being retrieved from the backend
   const [isLoading, setIsLoading] = useState(true);

@@ -46,6 +46,16 @@ const ScoreBreakdown = ({ junctionData }) => {
               </tbody>
           </table>
           
+          <div className={styles.junctionImageContainer}>
+              <h3>Junction Image</h3>
+              {junctionData.junctionImage && (
+                  <img 
+                      src={junctionData.junctionImage} 
+                      alt={`Image of ${junctionData.name} junction`} 
+                      className={styles.junctionImage}
+                  />
+              )}
+          </div>
 
           <div className={styles.configurableParameters}>
               <h2 className={styles.configHeading}>Configurable Parameters</h2>

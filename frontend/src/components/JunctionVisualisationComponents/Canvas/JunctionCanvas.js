@@ -200,8 +200,6 @@ const JunctionCanvas = ({ config }) => {
         if (needStraight) {
           laneConfiguration.push('straightLeft');
         } else {
-          // TODO: Might get rid of this, as this is a left-only lane, which is special
-          // However, are we saying that "left-only lane" as an option clicked by the user is different to just routing traffic left??
           laneConfiguration.push('left');
         }
       } else if (needRight && !needStraight) {

@@ -39,12 +39,10 @@ const ProjectLeaderboard = () => {
   // Project clicked on by the user, initially set to null
   const [selectedProject, setSelectedProject] = useState(null);
 
-  // FIXME: Status code = 500, most probably due to no projects being stored in the backend
   // GET Request 3: Get all projects stored in the backend
   useEffect(() => {
     axios.get('http://localhost:8080/api/projects')
       .then((response) => {
-      // TODO: Target is to iterate through each object in the returned GET request, need to check the format of the response
         const allProjects = [];
         response.data.array.forEach(element => {
           // Convert each response to the below format
@@ -76,12 +74,12 @@ const ProjectLeaderboard = () => {
   };
   
   // Loading screen whilst GET request is being processed
-  // TODO: Change colour scheme
   if (isLoading) {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <Slab color="#32cd32" size="medium" text="Loading Projects..." textColor="" />
+        <Slab color="#00a6fb" size="medium" text="Loading Projects..." textColor="" />
         <Link to="/MainPage" className={styles.backButton} style={{ marginTop: '20px' }}>
+          {/* TODO: CHANGE STYLE OF THIS BUTTON */}
           Back to Junction Configuration Menu
         </Link>
       </div>

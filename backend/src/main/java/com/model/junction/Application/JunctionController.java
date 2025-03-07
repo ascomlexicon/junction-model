@@ -96,7 +96,6 @@ public class JunctionController {
         junctionData.put("junctionImage", junction.getJunctionImage());
         
         // Left turn, enter and exit lanes
-        // TODO: As this is optional, we might struggle with the case of it not being enabled
         HashMap<String, Boolean> leftTurnLaneMap = new HashMap<>();
         leftTurnLaneMap.put("north", junction.getQuarter(Direction.SOUTH).hasLeftTurnLane());
         leftTurnLaneMap.put("south", junction.getQuarter(Direction.NORTH).hasLeftTurnLane());
@@ -192,6 +191,11 @@ public class JunctionController {
   
   @GetMapping("/projects")
   public ResponseEntity<?> getAllProjects() {
+    // TODO:
+      // 1. Change the format of project so it is in JSON that the FE can interpret
+      // 2. Also pass an arbitrary junction to the FE which can be passed as clickedJunction when the user goes to the ranking screen
+      // 3. When the user goes back to the rankings screen, the scoring algorithm will run again, however 
+      // we don't want this; maybe have a flag determining where we've come from (I LIKE THIS, TRUE FROM SUMMARYSCREEN, FALSE FROM PROJECTSLEADERBOARD)
     return ResponseEntity.ok(projectStorage.getAllProjects());
   }
 
