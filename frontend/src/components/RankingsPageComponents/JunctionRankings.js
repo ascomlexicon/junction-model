@@ -27,8 +27,14 @@ const JunctionRankings = ({ clickedJunction = {} }) => {
   // Current project that all of the junctions displayed are from
   const [currentProject, setCurrentProject] = useState(null);
 
+  // Using ref to track if effect has already run (prevents simulations running indefinitely)
+  const hasRun = React.useRef(false);
+
   // This code runs once when the component mounts
   useEffect(() => {
+    if (hasRun.current) return;
+    hasRun.current = true;
+    
     const vphData = {
       vphNorth: clickedJunction.vphNorth,
       vphSouth: clickedJunction.vphSouth,
@@ -62,13 +68,11 @@ const JunctionRankings = ({ clickedJunction = {} }) => {
           allJunctions.push(junction);
         });
 
-        // console.log("Selected Junction: ", selectedJunction);
         setJunctions(allJunctions);
 
         return axios.post("http://localhost:8080/api/name", vphData);
       })
       .then((response) => {
-        // handle success (assume response.data gives us the JSON object of the project, might change to be the name)
         // GET Request 2: Get the project that clickedJunction is from
         setCurrentProject(response.data);
       })
