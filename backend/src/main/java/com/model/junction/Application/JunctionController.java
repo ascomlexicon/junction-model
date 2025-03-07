@@ -160,6 +160,33 @@ public class JunctionController {
         //   }
         // }
 
+
+        // Hashmap for each quarter (compromise in performance for readability; this 
+        // method just retrieve data, no calculations done, so still quick)
+        HashMap<String, Double> northQuarterMetrics = new HashMap<>();
+        northQuarterMetrics.put("avgWaitTime", junction.getQuarter(Direction.SOUTH).simulationResults()[0]);
+        northQuarterMetrics.put("maxQueueLength", junction.getQuarter(Direction.SOUTH).simulationResults()[1]);
+        northQuarterMetrics.put("maxWaitTime", junction.getQuarter(Direction.SOUTH).simulationResults()[2]);
+        junctionData.put("northMetrics", northQuarterMetrics);
+
+        HashMap<String, Double> southQuarterMetrics = new HashMap<>();
+        southQuarterMetrics.put("avgWaitTime", junction.getQuarter(Direction.NORTH).simulationResults()[0]);
+        southQuarterMetrics.put("maxQueueLength", junction.getQuarter(Direction.NORTH).simulationResults()[1]);
+        southQuarterMetrics.put("maxWaitTime", junction.getQuarter(Direction.NORTH).simulationResults()[2]);
+        junctionData.put("southMetrics", southQuarterMetrics);
+
+        HashMap<String, Double> eastQuarterMetrics = new HashMap<>();
+        eastQuarterMetrics.put("avgWaitTime", junction.getQuarter(Direction.WEST).simulationResults()[0]);
+        eastQuarterMetrics.put("maxQueueLength", junction.getQuarter(Direction.WEST).simulationResults()[1]);
+        eastQuarterMetrics.put("maxWaitTime", junction.getQuarter(Direction.WEST).simulationResults()[2]);
+        junctionData.put("eastMetrics", eastQuarterMetrics);
+
+        HashMap<String, Double> westQuarterMetrics = new HashMap<>();
+        westQuarterMetrics.put("avgWaitTime", junction.getQuarter(Direction.EAST).simulationResults()[0]);
+        westQuarterMetrics.put("maxQueueLength", junction.getQuarter(Direction.EAST).simulationResults()[1]);
+        westQuarterMetrics.put("maxWaitTime", junction.getQuarter(Direction.EAST).simulationResults()[2]);
+        junctionData.put("westMetrics", westQuarterMetrics);
+
         junctionList.add(junctionData);
       }
 
