@@ -136,9 +136,7 @@ const JunctionRankings = ({ clickedJunction = {} }) => {
                 .map(junction => (
                 <div 
                   key={junction.name}
-                  // TODO: This needs to be fixed
-                  // className={`${styles.junctionRow} ${junction.name === selectedJunction.name ? styles.highlighted : ''}`}
-                  className={`${styles.junctionRow}`}
+                  className={`${styles.junctionRow} ${selectedJunction && junction.name === selectedJunction.name ? styles.highlighted : ''}`}
                   onClick={() => handleSelect(junction)}
                 >
                   <span className={styles.junctionName}>{junction.name}</span>
