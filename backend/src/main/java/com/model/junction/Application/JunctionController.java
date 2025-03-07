@@ -305,7 +305,9 @@ public class JunctionController {
         int crossingDuration = hasCrossings ? jsonNode.get("crossingDuration").asInt() : 0;
         int crossingRequestsPerHour = hasCrossings ? jsonNode.get("crossingRequestsPerHour").asInt() : 0;
         
-        double[] parameters = JunctionSimulationLogic.runSimulation(
+        JunctionSimulationLogic simulateDirection = new JunctionSimulationLogic();
+
+        double[] parameters = simulateDirection.runSimulation(
           currentProject.getVehiclePerHourData().get(direction).get(direction).intValue(),
           currentProject.getVehiclePerHourData().get(direction).get(direction.getRight()).intValue(),
           currentProject.getVehiclePerHourData().get(direction).get(direction.getLeft()).intValue(),
