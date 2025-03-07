@@ -191,8 +191,6 @@ public class JunctionController {
   @GetMapping("/projects")
   public ResponseEntity<?> getAllProjects() {
     // TODO:
-      // 1. Change the format of project so it is in JSON that the FE can interpret
-
       // 2. Also pass an arbitrary junction to the FE which can be passed as clickedJunction when the user goes to the ranking screen
       // 3. When the user goes back to the rankings screen, the scoring algorithm will run again, however 
       // we don't want this; maybe have a flag determining where we've come from (I LIKE THIS, TRUE FROM SUMMARYSCREEN, FALSE FROM PROJECTSLEADERBOARD)
@@ -216,7 +214,7 @@ public class JunctionController {
         HashMap<Direction, Integer> directionData = weirdVPHData.get(direction.getOpposite());
         
         // TODO: Not sure if this is correct for enter, but believe the others are right
-        vphData.put("enter", outboundData.get(direction));
+        vphData.put("enter", outboundData.get(direction.getOpposite()));
         vphData.put("exitNorth", directionData.get(Direction.NORTH));
         vphData.put("exitEast", directionData.get(Direction.EAST));
         vphData.put("exitSouth", directionData.get(Direction.SOUTH));
@@ -236,13 +234,13 @@ public class JunctionController {
   @PostMapping("/model")
   public ResponseEntity<?> runSimulation(@RequestBody String body) {
     try {
-      // System.out.println("Starting simulation...");
+      System.out.println("Starting simulation...");
       ObjectMapper objectMapper = new ObjectMapper();
       JsonNode jsonNode = objectMapper.readTree(body);
       
       // Retrieving/creating a project
       HashMap<Direction, HashMap<Direction, Integer>> vehiclePerHourData = createVPHDataFromJSON(jsonNode);
-      // System.out.println("Created VPH data: " + vehiclePerHourData);
+      System.out.println("Created VPH data: " + vehiclePerHourData);
       
       Project currentProject = null;
       Junction junction = null;
@@ -261,7 +259,7 @@ public class JunctionController {
         );
       }
       
-      // System.out.println("Created new junction: " + junction.getName());
+      System.out.println("Created new junction: " + junction.getName());
       
       boolean hasPriorities = jsonNode.get("enablePrioritisation").asBoolean();
       Direction[] directionPriorityOrder = new Direction[4];
