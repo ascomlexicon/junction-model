@@ -3,6 +3,7 @@ package com.model.junction.Application;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import org.springframework.boot.jackson.JsonObjectSerializer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -70,7 +71,7 @@ public class JunctionController {
   }
   
   // Get Mappings
-  @GetMapping("/junctions")
+  @PostMapping("/junctions")
   public ResponseEntity<?> getProjectJunctions(@RequestBody String body) {
     try {
       ObjectMapper objectMapper = new ObjectMapper();
@@ -83,7 +84,92 @@ public class JunctionController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The following VPH data does not exist:\n" + vehiclePerHourData);
       }
 
-      return ResponseEntity.ok(currentProject.getScoreSortedJunctions());
+      System.out.println("Found project: " + currentProject.getProjectTitle());
+      System.out.println("Junctions: " + currentProject.getScoreSortedJunctions().toArray());
+
+      // Create a list to hold the junction data as JSON objects
+      java.util.List<HashMap<String, Object>> junctionList = new java.util.ArrayList<>();
+
+      // Process each junction in the sorted list
+      for (Junction junction : currentProject.getScoreSortedJunctions()) {
+        HashMap<String, Object> junctionData = new HashMap<>();
+        
+        // Add basic junction info
+        junctionData.put("name", junction.getName());
+        junctionData.put("score", junction.getOverallScore());
+        junctionData.put("junctionImage", junction.getJunctionImage());
+        
+        // Left turn, enter and exit lanes
+        // TODO: As this is optional, we might struggle with the case of it not being enabled
+        HashMap<String, Boolean> leftTurnLaneMap = new HashMap<>();
+        leftTurnLaneMap.put("north", junction.getQuarter(Direction.SOUTH).hasLeftTurnLane());
+        leftTurnLaneMap.put("south", junction.getQuarter(Direction.NORTH).hasLeftTurnLane());
+        leftTurnLaneMap.put("east", junction.getQuarter(Direction.WEST).hasLeftTurnLane());
+        leftTurnLaneMap.put("west", junction.getQuarter(Direction.EAST).hasLeftTurnLane());
+        junctionData.put("leftTurnLanes", leftTurnLaneMap);
+
+        HashMap<String, String> laneEnteringMap = new HashMap<>();
+        laneEnteringMap.put("north", String.valueOf(junction.getQuarter(Direction.SOUTH).lanesEntering()));
+        laneEnteringMap.put("south", String.valueOf(junction.getQuarter(Direction.NORTH).lanesEntering()));
+        laneEnteringMap.put("east", String.valueOf(junction.getQuarter(Direction.WEST).lanesEntering()));
+        laneEnteringMap.put("west", String.valueOf(junction.getQuarter(Direction.EAST).lanesEntering()));
+        junctionData.put("lanesEntering", laneEnteringMap);
+
+        HashMap<String, String> laneExitingMap = new HashMap<>();
+        laneExitingMap.put("north", String.valueOf(junction.getQuarter(Direction.NORTH).lanesExiting()));
+        laneExitingMap.put("south", String.valueOf(junction.getQuarter(Direction.SOUTH).lanesExiting()));
+        laneExitingMap.put("east", String.valueOf(junction.getQuarter(Direction.EAST).lanesExiting()));
+        laneExitingMap.put("west", String.valueOf(junction.getQuarter(Direction.WEST).lanesExiting()));
+        junctionData.put("lanesExiting", laneExitingMap);
+
+        // Statistics (TODO: MIGHT WANT TO GET THE STATISTICS FOR EACH QUARTER INDIVIDUALLY WHICH CURRENTLY WE DON'T HAVE)
+        junctionData.put("simulationResults", junction.getQuarter(Direction.NORTH).simulationResults());
+
+        // Pedestrian crossing information
+        junctionData.put("isCrossings", junction.getQuarter(Direction.NORTH).hasCrossings());
+        junctionData.put("crossingDuration", junction.getQuarter(Direction.NORTH).hasCrossings() ? junction.getQuarter(Direction.NORTH).crossingDuration() : 0);
+        junctionData.put("crossingRequestsPerHour", junction.getQuarter(Direction.NORTH).hasCrossings() ? junction.getQuarter(Direction.NORTH).crossingRequestsPerHour() : 0);
+        
+        // Direction prioritisation information
+        String[] directions = new String[4];
+
+        // If the junction has prioritisation enabled, then we need to get the order of directions
+        if (junction.getQuarter(Direction.NORTH).hasPriorities()) {
+          Direction[] directionOrder = junction.getQuarter(Direction.NORTH).directionOrder();
+          directions = new String[directionOrder.length];
+          for (int i = 0; i < directionOrder.length; i++) {
+            directions[i] = directionOrder[i].toString().toLowerCase();
+          }
+        }
+
+        junctionData.put("directionPrioritisation", directions);
+        junctionData.put("enablePrioritisation", junction.getQuarter(Direction.NORTH).hasPriorities());
+
+        // Special lane info
+        // Only one type of bus/cycle lane can be present at a junction
+        if (junction.getQuarter(Direction.NORTH).hasBusCycleLane() != "none" 
+        || junction.getQuarter(Direction.EAST).hasBusCycleLane() != "none"
+        || junction.getQuarter(Direction.SOUTH).hasBusCycleLane() != "none"
+        || junction.getQuarter(Direction.WEST).hasBusCycleLane() != "none") {
+          junctionData.put("isBusOrCycle", junction.getQuarter(Direction.NORTH).hasBusCycleLane());
+        } else {
+          junctionData.put("isBusOrCycle", "none");
+        }
+
+        // TODO: For now we've left the speed of bus/cycle, will implement later
+        // for (Direction direction : Direction.values()) {
+        //   if (junction.getQuarter(direction).hasBusCycleLane() != "none") {
+        //     junctionData.put("busCycleLaneDuration", junction.getQuarter(direction).specialVPH());
+        //     break;
+        //   }
+        // }
+
+        junctionList.add(junctionData);
+      }
+
+      return ResponseEntity.ok(junctionList);
+
+      // return ResponseEntity.ok(currentProject.getScoreSortedJunctions().toArray());
     } catch (Exception e) {
       return ResponseEntity.badRequest().body("Failed to parse JSON: " + e.getMessage());
     }
@@ -227,6 +313,7 @@ public class JunctionController {
 
       // System.out.println("Junction score: " + junction.getOverallScore());
 
+      currentProject.addJunction(junction);
       return ResponseEntity.ok(junction);
     } catch (Exception e) {
       return ResponseEntity.badRequest().body("Failed to parse JSON: " + e.getMessage() + ". Line number = " + e.getStackTrace()[0].getLineNumber());
