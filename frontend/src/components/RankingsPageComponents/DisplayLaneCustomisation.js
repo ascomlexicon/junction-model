@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './DisplayLaneCustomisation.module.css';
 
-const DisplayLaneCustomisation = ({ entering, exiting, leftTurn, busOrCycle }) => {
+const DisplayLaneCustomisation = ({ entering, exiting, leftTurn, busOrCycle, specialLanes }) => {
   return (
     <div className={styles.laneCustomisation}>
       <h2 className={styles.laneCustTitle}>Lane Customisation</h2>
@@ -33,7 +33,7 @@ const DisplayLaneCustomisation = ({ entering, exiting, leftTurn, busOrCycle }) =
       </section>
 
       {/* Left Turn Section */}
-      {/* TODO: This section may not be configured by the user */}
+      {/* TODO: This section may not be configured by the user (add a check, like what we did below with bus/cycle lanes) */}
       <section className={styles.leftTurnSection}>
         <h3>Left Turn Lanes</h3>
         <div className={styles.grid}>
@@ -49,44 +49,45 @@ const DisplayLaneCustomisation = ({ entering, exiting, leftTurn, busOrCycle }) =
       </section>
 
       {/* Bus/Cycle Lanes Section */}
-      {/* TODO: Remember, only one of these can be active for the entire junction, so will need to change this logic */}
-      {/* <section className={styles.specialLanesSection}>
+      <section className={styles.specialLanesSection}>
         <h3>Bus & Cycle Lanes</h3>
-        <div className={styles.specialLanesGrid}> */}
-          {/* Bus Lanes */}
-          {/* <div className={styles.specialLanesColumn}>
-            <h4>Bus Lanes</h4>
-            {Object.keys(dummyData.busLane).map((direction) => (
+        <div className={styles.specialLanesGrid}>
+        {busOrCycle === 'bus' ? (
+            <div className={styles.specialLanesColumn}>
+              <h4>Bus Lanes</h4>
+              {Object.keys(specialLanes).map((direction) => (
               <div key={`bus-${direction}`} className={styles.checkboxGroup}>
                 <label>
-                  <input type="checkbox" checked={dummyData.busLane[direction]} disabled />
-                  {direction.charAt(0).toUpperCase() + direction.slice(1)}
-                </label>
-              </div>
-            ))}
-          </div> */}
-
-          {/* Cycle Lanes */}
-          {/* <div className={styles.specialLanesColumn}>
-            <h4>Cycle Lanes</h4>
-            {Object.keys(dummyData.cycleLane).map((direction) => (
-              <div key={`cycle-${direction}`} className={styles.checkboxGroup}>
-                <label>
-                  <input type="checkbox" checked={dummyData.cycleLane[direction]} disabled />
+                  <input type="checkbox" checked={specialLanes[direction]} disabled />
                   {direction.charAt(0).toUpperCase() + direction.slice(1)}
                 </label>
               </div>
             ))}
           </div>
+        ) : busOrCycle === 'cycle' ? (
+          <div className={styles.specialLanesColumn}>
+            <h4>Cycle Lanes</h4>
+            {Object.keys(specialLanes).map((direction) => (
+              <div key={`cycle-${direction}`} className={styles.checkboxGroup}>
+                <label>
+                  <input type="checkbox" checked={specialLanes[direction]} disabled />
+                  {direction.charAt(0).toUpperCase() + direction.slice(1)}
+                </label>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className={styles.noSpecial}>No bus/cycle lanes configured</p>
+        )}
         </div>
-      </section> */}
+      </section>
 
-      {busOrCycle && (
+      {/* {busOrCycle != 'none' && (
         <>
-          <h3>Bus/Cycle Lane Durations</h3>
-          {/* TODO: Display the durations input by the user here */}
-        </>
-      )};
+          <h3>Bus Lane Durations</h3> */}
+          {/* TODO: Display the durations input by the user here (use template from ) */}
+        {/* </>
+      )}; */}
     </div>
   );
 };

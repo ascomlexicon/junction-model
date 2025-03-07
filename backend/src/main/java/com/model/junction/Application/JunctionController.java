@@ -141,13 +141,30 @@ public class JunctionController {
         junctionData.put("directionPrioritisation", directions);
         junctionData.put("enablePrioritisation", junction.getQuarter(Direction.NORTH).hasPriorities());
 
+        HashMap<String, Boolean> specialLanes = new HashMap<>();
+
         // Special lane info
         // Only one type of bus/cycle lane can be present at a junction
         if (junction.getQuarter(Direction.NORTH).hasBusCycleLane() != "none" 
         || junction.getQuarter(Direction.EAST).hasBusCycleLane() != "none"
         || junction.getQuarter(Direction.SOUTH).hasBusCycleLane() != "none"
         || junction.getQuarter(Direction.WEST).hasBusCycleLane() != "none") {
-          junctionData.put("isBusOrCycle", junction.getQuarter(Direction.NORTH).hasBusCycleLane());
+          for (Direction d : Direction.values()) {
+            if (junction.getQuarter(d).hasBusCycleLane() != "none") {
+              junctionData.put("isBusCycle", junction.getQuarter(d).hasBusCycleLane());
+              break;
+            }
+          }
+
+          // System.out.println(junctionData.get("isBusCycle"));
+
+          // Add whether or not a quarter includes a bus/cycle lanes
+          specialLanes.put("north", junction.getQuarter(Direction.SOUTH).hasBusCycleLane() != "none");
+          specialLanes.put("east", junction.getQuarter(Direction.WEST).hasBusCycleLane() != "none");
+          specialLanes.put("south", junction.getQuarter(Direction.NORTH).hasBusCycleLane() != "none");
+          specialLanes.put("west", junction.getQuarter(Direction.EAST).hasBusCycleLane() != "none");
+
+          junctionData.put("specialLanes", specialLanes);
         } else {
           junctionData.put("isBusOrCycle", "none");
         }
@@ -159,7 +176,6 @@ public class JunctionController {
         //     break;
         //   }
         // }
-
 
         // Hashmap for each quarter (compromise in performance for readability; this 
         // method just retrieve data, no calculations done, so still quick)
@@ -326,7 +342,22 @@ public class JunctionController {
         boolean hasLeftTurnLane = jsonNode.get("leftTurnLanes").get(enteringDirection.toString().toLowerCase()).asBoolean();
         int lanesEntering = jsonNode.get("lanesEntering").get(enteringDirection.toString().toLowerCase()).asInt();
         int lanesExiting = jsonNode.get("lanesExiting").get(enteringDirection.toString().toLowerCase()).asInt();
-        String hasBusOrCycleLane = jsonNode.get("isBusOrCycle").asText(); 
+
+        // Now this represents whether a quarter has a bus/cycle lane, not the entire junction
+        String hasBusOrCycleLane;
+
+        if (jsonNode.get("isBusOrCycle").asText() != "none") {
+          // If the quarter has a bus/cycle lane
+          if (jsonNode.get("busCycleLaneDuration").get("vphSpecial" + StringUtils.capitalize(enteringDirection.toString().toLowerCase())).asInt() != 0) {
+            hasBusOrCycleLane = jsonNode.get("isBusOrCycle").asText();
+          } else {
+            hasBusOrCycleLane = "none";
+          };
+        } else {
+          // No bus/cycle lane anywhere in the junction
+          hasBusOrCycleLane = "none";
+        }
+
         int specialVPH = hasBusOrCycleLane != "none" ? jsonNode.get("busCycleLaneDuration").get("vphSpecial" + StringUtils.capitalize(enteringDirection.toString().toLowerCase())).asInt() : 0;
         boolean hasCrossings = jsonNode.get("isCrossings").asBoolean();
         int crossingDuration = hasCrossings ? jsonNode.get("crossingDuration").asInt() : 0;
@@ -351,6 +382,8 @@ public class JunctionController {
         );
 
         JunctionQuarter quarter = new JunctionQuarter(direction, hasLeftTurnLane, lanesEntering, lanesExiting, hasBusOrCycleLane, specialVPH, hasPriorities, directionPriorityOrder, hasCrossings, crossingDuration, crossingRequestsPerHour, parameters);
+        System.out.println(quarter.hasBusCycleLane());
+        
         scoring.quarterScore(
           counter,
           outboundVPH.doubleValue(),
