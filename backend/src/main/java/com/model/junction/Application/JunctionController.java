@@ -2,6 +2,7 @@ package com.model.junction.Application;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -163,8 +164,6 @@ public class JunctionController {
       }
 
       return ResponseEntity.ok(junctionList);
-
-      // return ResponseEntity.ok(currentProject.getScoreSortedJunctions().toArray());
     } catch (Exception e) {
       return ResponseEntity.badRequest().body("Failed to parse JSON: " + e.getMessage());
     }
@@ -193,10 +192,44 @@ public class JunctionController {
   public ResponseEntity<?> getAllProjects() {
     // TODO:
       // 1. Change the format of project so it is in JSON that the FE can interpret
+
       // 2. Also pass an arbitrary junction to the FE which can be passed as clickedJunction when the user goes to the ranking screen
       // 3. When the user goes back to the rankings screen, the scoring algorithm will run again, however 
       // we don't want this; maybe have a flag determining where we've come from (I LIKE THIS, TRUE FROM SUMMARYSCREEN, FALSE FROM PROJECTSLEADERBOARD)
-    return ResponseEntity.ok(projectStorage.getAllProjects());
+    
+    java.util.List<HashMap<String, Object>> projectList = new java.util.ArrayList<>();
+
+    for (Map.Entry<String, Project> entry : projectStorage.getAllProjects().entrySet()) {
+      HashMap<String, Object> project = new HashMap<>();
+      
+      Project projectData = entry.getValue();
+
+      // Add name of project to JSON object
+      String projectName = projectData.getProjectTitle();
+      project.put("name", projectName);
+
+      HashMap<Direction, HashMap<Direction, Integer>> weirdVPHData = projectData.getVehiclePerHourData();
+      HashMap<Direction, Integer> outboundData = projectData.getTotalOutboundVPHData();
+
+      for (Direction direction : Direction.values()) {
+        HashMap<String, Object> vphData = new HashMap<>();
+        HashMap<Direction, Integer> directionData = weirdVPHData.get(direction.getOpposite());
+        
+        // TODO: Not sure if this is correct for enter, but believe the others are right
+        vphData.put("enter", outboundData.get(direction));
+        vphData.put("exitNorth", directionData.get(Direction.NORTH));
+        vphData.put("exitEast", directionData.get(Direction.EAST));
+        vphData.put("exitSouth", directionData.get(Direction.SOUTH));
+        vphData.put("exitWest", directionData.get(Direction.WEST));
+
+        project.put("vph" + StringUtils.capitalize(direction.toString().toLowerCase()), vphData);
+      }
+
+      projectList.add(project);
+    }
+
+    // System.out.println(projectStorage.getAllProjects().size());
+    return ResponseEntity.ok(projectList);
   }
 
   // Post Mappings
@@ -215,13 +248,13 @@ public class JunctionController {
       Junction junction = null;
       // Creating A Junction
       if (projectStorage.getProjectByVPH(vehiclePerHourData) == null) {
-        // System.out.println("Creating new project as no existing project found");
+        System.out.println("Creating new project as no existing project found");
         currentProject = projectStorage.createNewProject(vehiclePerHourData);
-        // System.out.println(currentProject);
+        System.out.println(currentProject);
         junction = new Junction("Junction 1", jsonNode.get("junctionImage").asText());
       } else {
         currentProject = projectStorage.getProjectByVPH(vehiclePerHourData);
-        // System.out.println("Found existing project: " + currentProject.getProjectTitle());
+        System.out.println("Found existing project: " + currentProject.getProjectTitle());
         junction = new Junction(
           "Junction " + (currentProject.getScoreSortedJunctions().size() + 1), 
           jsonNode.get("junctionImage").asText()

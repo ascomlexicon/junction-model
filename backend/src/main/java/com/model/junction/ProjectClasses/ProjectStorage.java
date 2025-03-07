@@ -49,6 +49,7 @@ public class ProjectStorage {
     
     // Put the project into storage, return the project that was put in storage
     projects.put(projectToCreate.getProjectTitle(), projectToCreate);
+    System.out.println("Projects in storage: " + projects.size());
     return projectToCreate;
   }
 

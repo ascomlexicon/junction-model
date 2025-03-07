@@ -29,7 +29,7 @@ import axios from 'axios';
 const ProjectLeaderboard = () => {
   // Used whilst the data is being served from the backend
   // When this is true, display a loading screen so the user is still engaged
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [error, setError] = useState(null);
 
@@ -44,7 +44,10 @@ const ProjectLeaderboard = () => {
     axios.get('http://localhost:8080/api/projects')
       .then((response) => {
         const allProjects = [];
-        response.data.array.forEach(element => {
+
+        console.log(response.data);
+
+        response.data.forEach(element => {
           // Convert each response to the below format
           const project = {
             name: element.name,

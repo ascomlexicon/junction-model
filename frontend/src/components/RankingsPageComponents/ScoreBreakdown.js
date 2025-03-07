@@ -11,7 +11,8 @@ const ScoreBreakdown = ({ junctionData }) => {
           <h2 className={styles.scoreBreakdownTitle}>Score Breakdown for: {junctionData.name}</h2>
           <div className={styles.overallScore}>Overall Score: {junctionData.score}</div>
           
-          <table className={styles.criteriaTable}>
+          {/* TODO: At the very least at the metrics for the whole junction, decide whether or not to include for each quarter (probably leave out) */}
+          {/* <table className={styles.criteriaTable}>
               <thead>
               <tr>
                   <th>Criteria</th>
@@ -44,8 +45,8 @@ const ScoreBreakdown = ({ junctionData }) => {
                   <td></td>
               </tr>
               </tbody>
-          </table>
-          
+          </table> */}
+
           <div className={styles.junctionImageContainer}>
               <h3>Junction Image</h3>
               {junctionData.junctionImage && (
