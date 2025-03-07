@@ -5,27 +5,6 @@ import { Link } from "react-router-dom";
 import VPHDataDisplay from './VPHDisplayData';
 import axios from 'axios';
 
-// This should be the structure of allProjects:
-// const allProjects = [{ 
-//   name: 'Coventry A', 
-//   id: 'coventry-a',
-//   vphData: {
-//     north: { entering: "1250", exitEast: "320", exitSouth: "530", exitWest: "400" },
-//     south: { entering: "1180", exitNorth: "510", exitEast: "290", exitWest: "380" },
-//     east: { entering: "980", exitNorth: "310", exitSouth: "290", exitWest: "380" },
-//     west: { entering: "1050", exitNorth: "420", exitEast: "310", exitSouth: "320" }
-//   }
-// },
-// { 
-//   name: 'Warwick', 
-//   id: 'warwick',
-//   vphData: {
-//     north: { entering: "890", exitEast: "280", exitSouth: "410", exitWest: "200" },
-//     south: { entering: "920", exitNorth: "380", exitEast: "260", exitWest: "280" },
-//     east: { entering: "750", exitNorth: "250", exitSouth: "210", exitWest: "290" },
-//     west: { entering: "820", exitNorth: "310", exitEast: "230", exitSouth: "280" }
-//   }
-// }];
 const ProjectLeaderboard = () => {
   // Used whilst the data is being served from the backend
   // When this is true, display a loading screen so the user is still engaged
@@ -53,10 +32,10 @@ const ProjectLeaderboard = () => {
             name: element.name,
             id: element.name,
             vphData: {
-              north: { entering: element.vphNorth.enter, exitEast: element.vphNorth.exitEast, exitSouth: element.vphNorth.exitSouth, exitWest: element.vphNorth.exitWest },
-              south: { entering: element.vphSouth.enter, exitNorth: element.vphSouth.exitNorth, exitEast: element.vphSouth.exitEast, exitWest: element.vphSouth.exitWest },
-              east: { entering: element.vphEast.enter, exitNorth: element.vphEast.exitNorth, exitSouth: element.vphEast.exitSouth, exitWest: element.vphEast.exitWest },
-              west: { entering: element.vphWest.enter, exitNorth: element.vphWest.exitNorth, exitEast: element.vphWest.exitEast, exitSouth: element.vphWest.exitSouth }
+              north: { enter: element.vphNorth.enter, exitEast: element.vphNorth.exitEast, exitSouth: element.vphNorth.exitSouth, exitWest: element.vphNorth.exitWest },
+              south: { enter: element.vphSouth.enter, exitNorth: element.vphSouth.exitNorth, exitEast: element.vphSouth.exitEast, exitWest: element.vphSouth.exitWest },
+              east: { enter: element.vphEast.enter, exitNorth: element.vphEast.exitNorth, exitSouth: element.vphEast.exitSouth, exitWest: element.vphEast.exitWest },
+              west: { enter: element.vphWest.enter, exitNorth: element.vphWest.exitNorth, exitEast: element.vphWest.exitEast, exitSouth: element.vphWest.exitSouth }
             }
           };
           allProjects.push(project);
