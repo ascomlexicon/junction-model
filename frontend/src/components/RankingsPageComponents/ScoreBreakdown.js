@@ -4,9 +4,8 @@ import DisplayLaneCustomisation from './DisplayLaneCustomisation';
 import DisplayPedestrianCrossing from './DisplayPedestrianCrossing';
 import DisplayDirectionPrioritisation from './DisplayDirectionPrioritisation';
 
-
 const ScoreBreakdown = ({ junctionData }) => {
-    // junctionData is a JSON object which contains 
+    console.log(junctionData);
     return(
         <div className={styles.scoreBreakdown}>
           <h2 className={styles.scoreBreakdownTitle}>Score Breakdown for: {junctionData.name}</h2>
@@ -50,9 +49,9 @@ const ScoreBreakdown = ({ junctionData }) => {
 
           <div className={styles.configurableParameters}>
               <h2 className={styles.configHeading}>Configurable Parameters</h2>
-              <DisplayLaneCustomisation entering={junctionData.lanesEntering} exiting={junctionData.lanesExiting} leftTurn={junctionData.leftTurnLanes} busOrCycle={junctionData.isBusOrCycle === 'bus' || junctionData.isBusOrCycle === 'cycle'} busCycleDurations={junctionData.busCycleLaneDuration}/>
+              <DisplayLaneCustomisation entering={junctionData.lanesEntering} exiting={junctionData.lanesExiting} leftTurn={junctionData.leftTurnLanes} busOrCycle={junctionData.isBusOrCycle === 'bus' || junctionData.isBusOrCycle === 'cycle'}/>
               <DisplayPedestrianCrossing addCrossings={junctionData.isCrossings} crossingDuration={junctionData.crossingDuration} requestsPerHour={junctionData.crossingRequestsPerHour} />
-              <DisplayDirectionPrioritisation enablePrioritisation={junctionData.lanePrioritisation.length !== 0} directions={junctionData.lanePrioritisation}/>
+              <DisplayDirectionPrioritisation enablePrioritisation={junctionData.enablePrioritisation} directions={junctionData.directionPrioritisation}/>
           </div>
 
         </div>

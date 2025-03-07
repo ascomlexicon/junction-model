@@ -3,7 +3,6 @@ package com.model.junction.Application;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import org.springframework.boot.jackson.JsonObjectSerializer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -83,9 +82,6 @@ public class JunctionController {
       if (currentProject == null) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The following VPH data does not exist:\n" + vehiclePerHourData);
       }
-
-      System.out.println("Found project: " + currentProject.getProjectTitle());
-      System.out.println("Junctions: " + currentProject.getScoreSortedJunctions().toArray());
 
       // Create a list to hold the junction data as JSON objects
       java.util.List<HashMap<String, Object>> junctionList = new java.util.ArrayList<>();
@@ -175,7 +171,7 @@ public class JunctionController {
     }
   }
 
-  @GetMapping("/name")
+  @PostMapping("/name")
   public ResponseEntity<?> getProjectNameFromVPH(@RequestBody String body) {
     try {
       ObjectMapper objectMapper = new ObjectMapper();

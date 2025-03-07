@@ -1,16 +1,7 @@
 import React from 'react';
 import styles from './DisplayLaneCustomisation.module.css';
 
-const DisplayLaneCustomisation = ({ entering, exiting, leftTurn, busOrCycle, busCycleDurations }) => {
-  // Dummy data for display
-  const dummyData = {
-    entering: { north: '2', south: '3', east: '1', west: '2' },
-    exiting: { north: '2', south: '3', east: '1', west: '2' },
-    leftTurn: { north: true, south: false, east: true, west: false },
-    busLane: { north: true, south: false, east: true, west: false },
-    cycleLane: { north: false, south: false, east: false, west: false },
-  };
-
+const DisplayLaneCustomisation = ({ entering, exiting, leftTurn, busOrCycle }) => {
   return (
     <div className={styles.laneCustomisation}>
       <h2 className={styles.laneCustTitle}>Lane Customisation</h2>
@@ -42,6 +33,7 @@ const DisplayLaneCustomisation = ({ entering, exiting, leftTurn, busOrCycle, bus
       </section>
 
       {/* Left Turn Section */}
+      {/* TODO: This section may not be configured by the user */}
       <section className={styles.leftTurnSection}>
         <h3>Left Turn Lanes</h3>
         <div className={styles.grid}>
@@ -57,11 +49,12 @@ const DisplayLaneCustomisation = ({ entering, exiting, leftTurn, busOrCycle, bus
       </section>
 
       {/* Bus/Cycle Lanes Section */}
-      <section className={styles.specialLanesSection}>
+      {/* TODO: Remember, only one of these can be active for the entire junction, so will need to change this logic */}
+      {/* <section className={styles.specialLanesSection}>
         <h3>Bus & Cycle Lanes</h3>
-        <div className={styles.specialLanesGrid}>
+        <div className={styles.specialLanesGrid}> */}
           {/* Bus Lanes */}
-          <div className={styles.specialLanesColumn}>
+          {/* <div className={styles.specialLanesColumn}>
             <h4>Bus Lanes</h4>
             {Object.keys(dummyData.busLane).map((direction) => (
               <div key={`bus-${direction}`} className={styles.checkboxGroup}>
@@ -71,10 +64,10 @@ const DisplayLaneCustomisation = ({ entering, exiting, leftTurn, busOrCycle, bus
                 </label>
               </div>
             ))}
-          </div>
+          </div> */}
 
           {/* Cycle Lanes */}
-          <div className={styles.specialLanesColumn}>
+          {/* <div className={styles.specialLanesColumn}>
             <h4>Cycle Lanes</h4>
             {Object.keys(dummyData.cycleLane).map((direction) => (
               <div key={`cycle-${direction}`} className={styles.checkboxGroup}>
@@ -86,7 +79,7 @@ const DisplayLaneCustomisation = ({ entering, exiting, leftTurn, busOrCycle, bus
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {busOrCycle && (
         <>

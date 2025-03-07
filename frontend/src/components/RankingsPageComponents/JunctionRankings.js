@@ -82,7 +82,7 @@ import axios from 'axios';
   // See VPHDisplayData
 const JunctionRankings = ({ clickedJunction = {} }) => {
   // Used whilst the data is being retrieved from the backend
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   
   const [error, setError] = useState(null);
 
@@ -96,151 +96,79 @@ const JunctionRankings = ({ clickedJunction = {} }) => {
   // Current project that all of the junctions displayed are from
   const [currentProject, setCurrentProject] = useState(null);
 
-  axios
-    .post("http://localhost:8080/api/model", clickedJunction)
-    .then((response) => {
-      console.log(response.data);
-      // Exit the loading screen when simulation completes
-      console.log("SIMULATION COMPLETE");
-      setIsLoading(false);
-    })
-    .catch((error) => {
-      console.log("ERROR SIMULATING JUNCTION");
-      if (error.response) {
-        console.log(error.response.data);
-        console.log("server responded");
-      } else if (error.request) {
-        console.log("network error");
-      } else {
-        console.log(error);
-      }
-    });
-
   // This code runs once when the component mounts
-  // useEffect(() => {
-  //   const vphData = {
-  //     vphNorth: clickedJunction.vphNorth,
-  //     vphSouth: clickedJunction.vphSouth,
-  //     vphEast: clickedJunction.vphEast,
-  //     vphWest: clickedJunction.vphWest
-  //   };
-    // FIXME: Issue with parsing the JSON, but fundamentally the backend is being reached and data is being sent (I think)
-    // Run the simulation when this page renders, at first it will be a loading screen
-    // POST 1: Send JSON object to the backend for processing
-    // axios
-    //   .post("http://localhost:8080/api/model", clickedJunction)
-    //   .then((response) => {
-    //     console.log(response.data);
-    //     // Exit the loading screen when simulation completes
-    //     console.log("SIMULATION COMPLETE");
-    //     setIsLoading(false);
-    //   })
-    //   .catch((error) => {
-    //     console.log("ERROR SIMULATING JUNCTION");
-    //     if (error.response) {
-    //       console.log(error.response.data);
-    //       console.log("server responded");
-    //     } else if (error.request) {
-    //       console.log("network error");
-    //     } else {
-    //       console.log(error);
-    //     }
-    //   });
+  useEffect(() => {
+    const vphData = {
+      vphNorth: clickedJunction.vphNorth,
+      vphSouth: clickedJunction.vphSouth,
+      vphEast: clickedJunction.vphEast,
+      vphWest: clickedJunction.vphWest
+    };
 
-    // // GET Request 1: Get all junctions with the same vph data as clickedJunction (ie from same project)
-    // axios.get("http://localhost:8080/api/junctions")
-    //   .then((response) => {
-    //     // handle success
-    //     const allJunctions = [];
+    axios
+      .post("http://localhost:8080/api/model", clickedJunction)
+      .then((response) => {
+        console.log(response.data);
+        console.log("SIMULATION COMPLETE");
 
-    //     response.data.array.forEach(element => {
-    //       // Assume for now the structure at the top of the page, ie junctions have a name that is generated in the backend
-    //       const junction = {
-    //         ...element,
-    //       };
-    //       if (junction.name === clickedJunction.name) {
-    //         // if we have found the data for the junction we initially clicked on, set this as the selected junction
-    //         setSelectedJunction(junction);
-    //       };
-    //       allJunctions.push(junction);
-    //     });
-    //     setJunctions(allJunctions);
-    //     setIsLoading(false);
-    //   })
-    //   .catch(function (error) {
-    //     // handle error
-    //     console.log(error);
-    //     console.log("ERROR GETTING ALL JUNCTIONS");
-    //     setError(error);
-    //     setIsLoading(false);
-    //   });
+        // Now trigger the GET request after the POST completes
+        return axios.post("http://localhost:8080/api/junctions", vphData);
+      }) 
+      .then((response) => {
+        // handle success
+        const allJunctions = [];
 
-    // axios
-    //   .post("http://localhost:8080/api/model", clickedJunction)
-    //   .then((response) => {
-    //     console.log(response.data);
-    //     console.log("SIMULATION COMPLETE");
+        console.log(response.data);
 
-    //     // Now trigger the GET request after the POST completes
-    //     return axios.get("http://localhost:8080/api/junctions", {params: vphData});
-    //   }) 
-    //   .then((response) => {
-    //     // handle success
-    //     const allJunctions = [];
+        // Response.data is an array of junction JSON objects
+        response.data.forEach((element) => {
+          const junction = { ...element };
 
-    //     response.data.array.forEach((element) => {
-    //       const junction = { ...element };
-    //       if (junction.name === clickedJunction.name) {
-    //         setSelectedJunction(junction);
-    //       }
-    //       allJunctions.push(junction);
-    //     });
+          // FIXME: Very scuffed, not robust
+          // if (junction.leftTurnLanes === clickedJunction.leftTurnLanes && junction.lanesEntering === clickedJunction.lanesEntering) {
+          //   setSelectedJunction(junction);
+          // }
+          allJunctions.push(junction);
+        });
 
-    //     setJunctions(allJunctions);
-    //   })
-    //   .catch((error) => {
-    //     console.log("ERROR SIMULATING JUNCTION");
-    //     if (error.response) {
-    //       console.log(error.response.data);
-    //       console.log("server responded");
-    //     } else if (error.request) {
-    //       console.log("network error");
-    //     } else {
-    //       console.log(error);
-    //     }
+        // console.log("Selected Junction: ", selectedJunction);
+        setJunctions(allJunctions);
 
-    //     setError(error);
-    //   })
-    //   .finally(() => {
-    //     setIsLoading(false); // Set loading to false at the end of both requests
-    //   });
+        return axios.post("http://localhost:8080/api/name", vphData);
+      })
+      .then((response) => {
+        // handle success (assume response.data gives us the JSON object of the project, might change to be the name)
+        // GET Request 2: Get the project that clickedJunction is from
+        setCurrentProject(response.data);
+      })
+      .catch((error) => {
+        if (error.response) {
+          console.log(error.response.data);
+          console.log("server responded");
+        } else if (error.request) {
+          console.log("network error");
+        } else {
+          console.log(error);
+        }
 
-    // GET Request 2: Get the project that clickedJunction is from
-    // Make the request with the VPH data
-    // console.log(vphData)
-
-    // axios.post("http://localhost:8080/api/name", vphData)
-    //   .then((response) => {
-    //     // handle success (assume response.data gives us the JSON object of the project, might change to be the name)
-    //     setCurrentProject(response.data);
-    //   })
-    //   .catch(function (error) {
-    //     // handle error
-    //     console.log(error);
-    //   });
-  // }, []);
+        setError(error);
+      })
+      .finally(() => {
+        setIsLoading(false); // Set loading to false at the end of both requests
+      });
+  }, []);
 
   const handleSelect = (selectedJunction) => {
     setSelectedJunction(selectedJunction);
   };
   
   // Loading screen whilst GET request is being processed
-  // TODO: Change colour scheme
   if (isLoading) {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <Slab color="#32cd32" size="medium" text="Calculating Score..." textColor="" />
+        <Slab color="#00a6fb" size="medium" text="Calculating Score..." textColor="" />
         <Link to="/MainPage" className={styles.loadingBackButton}>
+        {/* TODO: CHANGE STYLE OF THIS BUTTON */}
           Back to Junction Configuration Menu
         </Link>
       </div>
@@ -271,28 +199,20 @@ const JunctionRankings = ({ clickedJunction = {} }) => {
           <div className={styles.leftPanel}>
             <h1 className={styles.title}>Junction Rankings</h1>
             <p className={styles.subtitle}>Click on a score to see how it was calculated</p>
-            
-            {/* OLD TODO: DELETE*/}
-            <JunctionList 
-              junctions={junctions}
-              onSelect={handleSelect}
-            />
-
-            {/* NEW */}
-            {/* Using same approach for highlighting as the ProjectLeaderboard
-            => delete JunctionList component */}
-            {/* <div className={styles.junctionList}>
+            <div className={styles.junctionList}>
                 {junctions.map(junction => (
                 <div 
                     key={junction.name}
-                    className={`${styles.junctionRow} ${junction.name === selectedJunction.name ? styles.highlighted : ''}`}
+                    // TODO: This needs to be fixed
+                    // className={`${styles.junctionRow} ${junction.name === selectedJunction.name ? styles.highlighted : ''}`}
+                    className={`${styles.junctionRow}`}
                     onClick={() => handleSelect(junction)}
                 >
                     <span className={styles.junctionName}>{junction.name}</span>
                     <span className={styles.score}>{junction.score}</span>
                 </div>
                 ))}
-            </div> */}
+            </div>
             
             <button className = {styles.backButton}>
             <Link to="/Leaderboard" style={{ 
@@ -304,18 +224,11 @@ const JunctionRankings = ({ clickedJunction = {} }) => {
           </div>
           
           <div className={styles.rightPanel}>
-            {/* OLD TODO: DELETE*/}
             {selectedJunction && (
               <>
-                <ScoreBreakdown junctionName={selectedJunction.name} score={selectedJunction.score} />
+                <ScoreBreakdown junctionData={selectedJunction} />
               </>
             )}
-            {/* NEW */}
-            {/* {selectedJunction && (
-              <>
-                <ScoreBreakdown junction={selectedJunction} />
-              </>
-            )} */}
           </div>
         </>
       )}
