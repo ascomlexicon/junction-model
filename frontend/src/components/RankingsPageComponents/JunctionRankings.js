@@ -7,10 +7,6 @@ import { Link } from "react-router-dom";
 import VPHDisplayForm from './VPHDisplayForm';
 import axios from 'axios';
 
-// TODO: Need to think about the case when we render this component from the projects page
-  // See VPHDisplayData
-
-// TODO: Need to have an img tag with the junctionCanvas
 const JunctionRankings = ({ clickedJunction = {} }) => {
   // Used whilst the data is being retrieved from the backend
   const [isLoading, setIsLoading] = useState(true);
@@ -30,17 +26,17 @@ const JunctionRankings = ({ clickedJunction = {} }) => {
   // Using ref to track if effect has already run (prevents simulations running indefinitely)
   const hasRun = React.useRef(false);
 
+  const vphData = {
+    vphNorth: clickedJunction.vphNorth,
+    vphSouth: clickedJunction.vphSouth,
+    vphEast: clickedJunction.vphEast,
+    vphWest: clickedJunction.vphWest
+  };
+
   // This code runs once when the component mounts
   useEffect(() => {
     if (hasRun.current) return;
     hasRun.current = true;
-    
-    const vphData = {
-      vphNorth: clickedJunction.vphNorth,
-      vphSouth: clickedJunction.vphSouth,
-      vphEast: clickedJunction.vphEast,
-      vphWest: clickedJunction.vphWest
-    };
 
     axios
       .post("http://localhost:8080/api/model", clickedJunction)
@@ -125,7 +121,7 @@ const JunctionRankings = ({ clickedJunction = {} }) => {
           </button>
       </div>
       <div className={styles.side}>
-        <VPHDisplayForm />
+        <VPHDisplayForm vphData={vphData}/>
       </div>
 
       {error && <p>Error: {error.message}</p>}

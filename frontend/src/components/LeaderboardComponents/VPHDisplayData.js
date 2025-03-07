@@ -9,8 +9,8 @@ const DirectionDataSection = ({ title, data }) => {
       <h3 className={styles.direction}>{title}</h3>
       {Object.entries(data).map(([key, value]) => {
         // Format the key for display (e.g., "exitEast" becomes "Exit east")
-        const formattedKey = key === "entering" 
-          ? "Entering" 
+        const formattedKey = key === "enter" 
+          ? "Enter" 
           : key.replace("exit", "Exit ");
         
         return (
@@ -46,11 +46,13 @@ const VPHDataDisplay = ({ projectData }) => {
       </div>
       
       <button className={styles.configuredNote}>
-        <Link to = '/RankingsPage' className={styles.configuredBtn} style={{ 
+        <Link to='/RankingsPage' className={styles.configuredBtn} style={{ 
             display: 'block', 
             width: '100%', 
             height: '100%' 
-          }}>See configured junctions for {projectData.name}
+          }}
+        >
+          See configured junctions for {projectData.name}
         </Link>
       </button>
     </>
