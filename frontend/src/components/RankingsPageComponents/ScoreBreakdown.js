@@ -9,9 +9,8 @@ const ScoreBreakdown = ({ junctionData }) => {
     return(
         <div className={styles.scoreBreakdown}>
           <h2 className={styles.scoreBreakdownTitle}>Score Breakdown for: {junctionData.name}</h2>
-          <div className={styles.overallScore}>Overall Score: {junctionData.score}</div>
+          <div className={styles.overallScore}>Overall Score: {junctionData.score.toFixed(4)}</div>
           
-          {/* TODO: At the very least at the metrics for the whole junction, decide whether or not to include for each quarter (probably leave out) */}
           <table className={styles.criteriaTable}>
               <thead>
               <tr>
@@ -25,24 +24,24 @@ const ScoreBreakdown = ({ junctionData }) => {
               <tbody>
               <tr>
                   <td>Average Wait</td>
-                  <td>{junctionData.northMetrics.avgWaitTime}</td>
-                  <td>{junctionData.eastMetrics.avgWaitTime}</td>
-                  <td>{junctionData.southMetrics.avgWaitTime}</td>
-                  <td>{junctionData.westMetrics.avgWaitTime}</td>
+                  <td>{Math.round(junctionData.northMetrics.avgWaitTime)}</td>
+                  <td>{Math.round(junctionData.eastMetrics.avgWaitTime)}</td>
+                  <td>{Math.round(junctionData.southMetrics.avgWaitTime)}</td>
+                  <td>{Math.round(junctionData.westMetrics.avgWaitTime)}</td>
               </tr>
               <tr>
                   <td>Maximum Wait</td>
-                  <td>{junctionData.northMetrics.maxWaitTime}</td>
-                  <td>{junctionData.eastMetrics.maxWaitTime}</td>
-                  <td>{junctionData.southMetrics.maxWaitTime}</td>
-                  <td>{junctionData.westMetrics.maxWaitTime}</td>
+                  <td>{Math.round(junctionData.northMetrics.maxWaitTime)}</td>
+                  <td>{Math.round(junctionData.eastMetrics.maxWaitTime)}</td>
+                  <td>{Math.round(junctionData.southMetrics.maxWaitTime)}</td>
+                  <td>{Math.round(junctionData.westMetrics.maxWaitTime)}</td>
               </tr>
               <tr>
                   <td>Maximum Queue</td>
-                  <td>{junctionData.northMetrics.maxQueueLength}</td>
-                  <td>{junctionData.eastMetrics.maxQueueLength}</td>
-                  <td>{junctionData.southMetrics.maxQueueLength}</td>
-                  <td>{junctionData.westMetrics.maxQueueLength}</td>
+                  <td>{Math.round(junctionData.northMetrics.maxQueueLength)}</td>
+                  <td>{Math.round(junctionData.eastMetrics.maxQueueLength)}</td>
+                  <td>{Math.round(junctionData.southMetrics.maxQueueLength)}</td>
+                  <td>{Math.round(junctionData.westMetrics.maxQueueLength)}</td>
               </tr>
               </tbody>
           </table>

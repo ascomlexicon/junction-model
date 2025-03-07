@@ -142,7 +142,7 @@ const JunctionRankings = ({ clickedJunction = {} }) => {
                   onClick={() => handleSelect(junction)}
                 >
                   <span className={styles.junctionName}>{junction.name}</span>
-                  <span className={styles.score}>{junction.score}</span>
+                  <span className={styles.score}>{junction.score.toFixed(2)}</span>
                 </div>
               ))}
             </div>
