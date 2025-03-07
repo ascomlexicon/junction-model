@@ -23,21 +23,21 @@ const ScoreBreakdown = ({ junctionData }) => {
               </thead>
               <tbody>
               <tr>
-                  <td>Average Wait</td>
-                  <td>{Math.round(junctionData.northMetrics.avgWaitTime)}</td>
-                  <td>{Math.round(junctionData.eastMetrics.avgWaitTime)}</td>
-                  <td>{Math.round(junctionData.southMetrics.avgWaitTime)}</td>
-                  <td>{Math.round(junctionData.westMetrics.avgWaitTime)}</td>
+                  <td>Average Wait <i>(mins:secs)</i></td>
+                  <td>{Math.floor((junctionData.northMetrics.avgWaitTime * 240 / 60000))}:{Math.floor((junctionData.northMetrics.avgWaitTime * 240 / 1000) % 60).toString().padStart(2, '0')}</td>
+                  <td>{Math.floor((junctionData.eastMetrics.avgWaitTime * 240 / 60000))}:{Math.floor((junctionData.eastMetrics.avgWaitTime * 240 / 1000) % 60).toString().padStart(2, '0')}</td>
+                  <td>{Math.floor((junctionData.southMetrics.avgWaitTime * 240 / 60000))}:{Math.floor((junctionData.southMetrics.avgWaitTime * 240 / 1000) % 60).toString().padStart(2, '0')}</td>
+                  <td>{Math.floor((junctionData.westMetrics.avgWaitTime * 240 / 60000))}:{Math.floor((junctionData.westMetrics.avgWaitTime * 240 / 1000) % 60).toString().padStart(2, '0')}</td>
               </tr>
               <tr>
-                  <td>Maximum Wait</td>
-                  <td>{Math.round(junctionData.northMetrics.maxWaitTime)}</td>
-                  <td>{Math.round(junctionData.eastMetrics.maxWaitTime)}</td>
-                  <td>{Math.round(junctionData.southMetrics.maxWaitTime)}</td>
-                  <td>{Math.round(junctionData.westMetrics.maxWaitTime)}</td>
+                  <td>Maximum Wait <i>(mins:secs)</i></td>
+                  <td>{Math.floor((junctionData.northMetrics.maxWaitTime * 240 / 60000))}:{Math.floor((junctionData.northMetrics.maxWaitTime * 240 / 1000) % 60).toString().padStart(2, '0')}</td>
+                  <td>{Math.floor((junctionData.eastMetrics.maxWaitTime * 240 / 60000))}:{Math.floor((junctionData.eastMetrics.maxWaitTime * 240 / 1000) % 60).toString().padStart(2, '0')}</td>
+                  <td>{Math.floor((junctionData.southMetrics.maxWaitTime * 240 / 60000))}:{Math.floor((junctionData.southMetrics.maxWaitTime * 240 / 1000) % 60).toString().padStart(2, '0')}</td>
+                  <td>{Math.floor((junctionData.westMetrics.maxWaitTime * 240 / 60000))}:{Math.floor((junctionData.westMetrics.maxWaitTime * 240 / 1000) % 60).toString().padStart(2, '0')}</td>
               </tr>
               <tr>
-                  <td>Maximum Queue</td>
+                  <td>Maximum Queue <i>(# cars)</i></td>
                   <td>{Math.round(junctionData.northMetrics.maxQueueLength)}</td>
                   <td>{Math.round(junctionData.eastMetrics.maxQueueLength)}</td>
                   <td>{Math.round(junctionData.southMetrics.maxQueueLength)}</td>
@@ -59,7 +59,7 @@ const ScoreBreakdown = ({ junctionData }) => {
 
           <div className={styles.configurableParameters}>
               <h2 className={styles.configHeading}>Configurable Parameters</h2>
-              <DisplayLaneCustomisation entering={junctionData.lanesEntering} exiting={junctionData.lanesExiting} leftTurn={junctionData.leftTurnLanes} busOrCycle={junctionData.isBusOrCycle === 'bus' || junctionData.isBusOrCycle === 'cycle'}/>
+              <DisplayLaneCustomisation entering={junctionData.lanesEntering} exiting={junctionData.lanesExiting} leftTurn={junctionData.leftTurnLanes} busOrCycle={junctionData.isBusOrCycle}/>
               <DisplayPedestrianCrossing addCrossings={junctionData.isCrossings} crossingDuration={junctionData.crossingDuration} requestsPerHour={junctionData.crossingRequestsPerHour} />
               <DisplayDirectionPrioritisation enablePrioritisation={junctionData.enablePrioritisation} directions={junctionData.directionPrioritisation}/>
           </div>
