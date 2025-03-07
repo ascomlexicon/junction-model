@@ -131,18 +131,20 @@ const JunctionRankings = ({ clickedJunction = {} }) => {
             <h1 className={styles.title}>Junction Rankings</h1>
             <p className={styles.subtitle}>Click on a score to see how it was calculated</p>
             <div className={styles.junctionList}>
-                {junctions.map(junction => (
+              {[...junctions]
+                .sort((a, b) => b.score - a.score)
+                .map(junction => (
                 <div 
-                    key={junction.name}
-                    // TODO: This needs to be fixed
-                    // className={`${styles.junctionRow} ${junction.name === selectedJunction.name ? styles.highlighted : ''}`}
-                    className={`${styles.junctionRow}`}
-                    onClick={() => handleSelect(junction)}
+                  key={junction.name}
+                  // TODO: This needs to be fixed
+                  // className={`${styles.junctionRow} ${junction.name === selectedJunction.name ? styles.highlighted : ''}`}
+                  className={`${styles.junctionRow}`}
+                  onClick={() => handleSelect(junction)}
                 >
-                    <span className={styles.junctionName}>{junction.name}</span>
-                    <span className={styles.score}>{junction.score}</span>
+                  <span className={styles.junctionName}>{junction.name}</span>
+                  <span className={styles.score}>{junction.score}</span>
                 </div>
-                ))}
+              ))}
             </div>
             
             <button className = {styles.backButton}>
