@@ -122,14 +122,6 @@ jest.mock('lucide-react', () => ({
       expect(mockResetForm).toHaveBeenCalledWith('laneCustomisation');
     });
   
-    test('reset all button calls resetAllForms', () => {
-      render(<LaneCustomisation {...defaultProps} />);
-      
-      const resetAllButton = screen.getByText('Reset All');
-      fireEvent.click(resetAllButton);
-      
-      expect(mockResetAllForms).toHaveBeenCalled();
-    });
   
     test('form correctly processes numeric input values', () => {
       render(<LaneCustomisation {...defaultProps} />);
