@@ -5,7 +5,6 @@ import DisplayPedestrianCrossing from './DisplayPedestrianCrossing';
 import DisplayDirectionPrioritisation from './DisplayDirectionPrioritisation';
 
 const ScoreBreakdown = ({ junctionData }) => {
-    console.log(junctionData);
     return(
         <div className={styles.scoreBreakdown}>
           <h2 className={styles.scoreBreakdownTitle}>Score Breakdown for: {junctionData.name}</h2>

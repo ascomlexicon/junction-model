@@ -118,9 +118,6 @@ public class JunctionController {
         laneExitingMap.put("west", String.valueOf(junction.getQuarter(Direction.WEST).lanesExiting()));
         junctionData.put("lanesExiting", laneExitingMap);
 
-        // Statistics (TODO: MIGHT WANT TO GET THE STATISTICS FOR EACH QUARTER INDIVIDUALLY WHICH CURRENTLY WE DON'T HAVE)
-        junctionData.put("simulationResults", junction.getQuarter(Direction.NORTH).simulationResults());
-
         // Pedestrian crossing information
         junctionData.put("isCrossings", junction.getQuarter(Direction.NORTH).hasCrossings());
         junctionData.put("crossingDuration", junction.getQuarter(Direction.NORTH).hasCrossings() ? junction.getQuarter(Direction.NORTH).crossingDuration() : 0);
@@ -233,11 +230,6 @@ public class JunctionController {
   
   @GetMapping("/projects")
   public ResponseEntity<?> getAllProjects() {
-    // TODO:
-      // 2. Also pass an arbitrary junction to the FE which can be passed as clickedJunction when the user goes to the ranking screen
-      // 3. When the user goes back to the rankings screen, the scoring algorithm will run again, however 
-      // we don't want this; maybe have a flag determining where we've come from (I LIKE THIS, TRUE FROM SUMMARYSCREEN, FALSE FROM PROJECTSLEADERBOARD)
-    
     java.util.List<HashMap<String, Object>> projectList = new java.util.ArrayList<>();
 
     for (Map.Entry<String, Project> entry : projectStorage.getAllProjects().entrySet()) {

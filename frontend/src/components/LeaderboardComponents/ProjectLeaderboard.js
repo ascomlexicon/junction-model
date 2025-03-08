@@ -24,7 +24,7 @@ const ProjectLeaderboard = () => {
       .then((response) => {
         const allProjects = [];
 
-        console.log(response.data);
+        // console.log(response.data);
 
         response.data.forEach(element => {
           // Convert each response to the below format
@@ -100,7 +100,6 @@ const ProjectLeaderboard = () => {
             </div>
           
             <div className={styles.rightPanel}>
-              {/* Use the reusable VPH data component */}
               <VPHDataDisplay projectData={selectedProject} />
             </div>
           </div>

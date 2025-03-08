@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import VPHDisplayForm from './VPHDisplayForm';
 import axios from 'axios';
 
-const JunctionRankings = ({ clickedJunction = {} }) => {
+const JunctionRankings = ({ clickedJunction = {}, fromSummary }) => {
   // Used whilst the data is being retrieved from the backend
   const [isLoading, setIsLoading] = useState(true);
   
@@ -38,55 +38,98 @@ const JunctionRankings = ({ clickedJunction = {} }) => {
     if (hasRun.current) return;
     hasRun.current = true;
 
-    axios
-      .post("http://localhost:8080/api/model", clickedJunction)
-      .then((response) => {
-        console.log(response.data);
-        console.log("SIMULATION COMPLETE");
+    if (fromSummary) {
+      // Run simulation along with other requests if we have come from 
+      // the summary screen
+      axios
+        .post("http://localhost:8080/api/model", clickedJunction)
+        .then((response) => {
+          console.log(response.data);
+          console.log("SIMULATION COMPLETE");
 
-        // Now trigger the GET request after the POST completes
-        return axios.post("http://localhost:8080/api/junctions", vphData);
-      }) 
-      .then((response) => {
-        // handle success
-        const allJunctions = [];
+          // Now trigger the GET request after the POST completes
+          return axios.post("http://localhost:8080/api/junctions", vphData);
+        }) 
+        .then((response) => {
+          // handle success
+          const allJunctions = [];
 
-        console.log(response.data);
+          console.log(response.data);
 
-        // Response.data is an array of junction JSON objects
-        response.data.forEach((element) => {
-          const junction = { ...element };
+          // Response.data is an array of junction JSON objects
+          response.data.forEach((element) => {
+            const junction = { ...element };
 
-          // FIXME: Very scuffed, not robust
-          // if (junction.leftTurnLanes === clickedJunction.leftTurnLanes && junction.lanesEntering === clickedJunction.lanesEntering) {
-          //   setSelectedJunction(junction);
-          // }
-          allJunctions.push(junction);
+            // FIXME: Very scuffed, not robust
+            // if (junction.leftTurnLanes === clickedJunction.leftTurnLanes && junction.lanesEntering === clickedJunction.lanesEntering) {
+            //   setSelectedJunction(junction);
+            // }
+            allJunctions.push(junction);
+          });
+
+          setJunctions(allJunctions);
+
+          return axios.post("http://localhost:8080/api/name", vphData);
+        })
+        .then((response) => {
+          // GET Request 2: Get the project that clickedJunction is from
+          setCurrentProject(response.data);
+        })
+        .catch((error) => {
+          if (error.response) {
+            console.log(error.response.data);
+            console.log("server responded");
+          } else if (error.request) {
+            console.log("network error");
+          } else {
+            console.log(error);
+          }
+
+          setError(error);
+        })
+        .finally(() => {
+          setIsLoading(false); // Set loading to false at the end of both requests
         });
+      } else {
+        // Don't run junction simulation if we are moving from the projects page
+        axios
+        .post("http://localhost:8080/api/junctions", vphData)
+        .then((response) => {
+          // handle success
+          const allJunctions = [];
 
-        setJunctions(allJunctions);
+          console.log(response.data);
 
-        return axios.post("http://localhost:8080/api/name", vphData);
-      })
-      .then((response) => {
-        // GET Request 2: Get the project that clickedJunction is from
-        setCurrentProject(response.data);
-      })
-      .catch((error) => {
-        if (error.response) {
-          console.log(error.response.data);
-          console.log("server responded");
-        } else if (error.request) {
-          console.log("network error");
-        } else {
-          console.log(error);
-        }
+          // Response.data is an array of junction JSON objects
+          response.data.forEach((element) => {
+            const junction = { ...element };
+            allJunctions.push(junction);
+          });
 
-        setError(error);
-      })
-      .finally(() => {
-        setIsLoading(false); // Set loading to false at the end of both requests
-      });
+          setJunctions(allJunctions);
+
+          return axios.post("http://localhost:8080/api/name", vphData);
+        })
+        .then((response) => {
+          // GET Request 2: Get the project that clickedJunction is from
+          setCurrentProject(response.data);
+        })
+        .catch((error) => {
+          if (error.response) {
+            console.log(error.response.data);
+            console.log("server responded");
+          } else if (error.request) {
+            console.log("network error");
+          } else {
+            console.log(error);
+          }
+
+          setError(error);
+        })
+        .finally(() => {
+          setIsLoading(false); // Set loading to false at the end of both requests
+        });
+      }
   }, []);
 
   const handleSelect = (selectedJunction) => {
@@ -98,8 +141,7 @@ const JunctionRankings = ({ clickedJunction = {} }) => {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
         <Slab color="#00a6fb" size="medium" text="Calculating Score..." textColor="" />
-        <Link to="/MainPage" className={styles.loadingBackButton}>
-        {/* TODO: CHANGE STYLE OF THIS BUTTON */}
+        <Link to="/MainPage" className={styles.loadingBackBtn}>
           Back to Junction Configuration Menu
         </Link>
       </div>

@@ -4,10 +4,14 @@ import JunctionRankings from "../components/RankingsPageComponents/JunctionRanki
 
 function RankingsPage(){
     const location = useLocation();
-    const junctionData = location.state;
+    const junctionData = location.state.clickedJunction;
+    const fromSummary = location.state.fromSummary;
+
+    // console.log("Received junction data:", junctionData);
+    // console.log("Coming from summary page:", fromSummary);
 
     return(
-        <JunctionRankings clickedJunction={junctionData}/>
+        <JunctionRankings clickedJunction={junctionData} fromSummary={fromSummary}/>
     )
 }
 

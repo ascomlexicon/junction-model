@@ -20,9 +20,9 @@ function Summary({ formData, setActiveStep }) {
     // Attach image to the current configuration of the junction
     formData.junctionImage = junctionImage;
 
-    console.log(formData);
+    // console.log(formData);
 
-    navigate('/RankingsPage', { state: formData });
+    navigate('/RankingsPage', { state: { clickedJunction: formData, fromSummary: true } });
   };
   
   const handleBack = () => {
