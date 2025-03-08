@@ -283,6 +283,7 @@ public class JunctionController {
       // Creating A Junction
       if (projectStorage.getProjectByVPH(vehiclePerHourData) == null) {
         System.out.println("Creating new project as no existing project found");
+        
         currentProject = projectStorage.createNewProject(vehiclePerHourData);
         System.out.println(currentProject);
         junction = new Junction("Junction 1", jsonNode.get("junctionImage").asText());
