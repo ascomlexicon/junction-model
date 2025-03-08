@@ -89,4 +89,7 @@ button a {
   justify-content: center;
 }
 
-
+.error {
+  color: red;
+  text-align: center;
+}
