@@ -79,7 +79,4 @@ describe(JunctionList, () => {
       fireEvent.click(screen.getByText('Junction A')); 
     }).not.toThrow(); // Should not cause an error
   });
-
-  // TODO: Check for duplicate junction names (not sure how yet but will figure it out,
-  // more important when communicating with the backend, waiting on @Jethro)
 });
