@@ -266,30 +266,6 @@ public class JunctionController {
     return ResponseEntity.ok(projectList);
   }
 
-  @GetMapping("/name")
-  public ResponseEntity<?> getProjectNameFromVPH(@RequestBody String body) {
-    try {
-      ObjectMapper objectMapper = new ObjectMapper();
-      JsonNode jsonNode = objectMapper.readTree(body);
-      
-      HashMap<Direction, HashMap<Direction, Integer>> vehiclePerHourData = createVPHDataFromJSON(jsonNode);
-      Project currentProject = projectStorage.getProjectByVPH(vehiclePerHourData);
-
-      if (currentProject == null) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The following VPH data does not exist:\n" + vehiclePerHourData);
-      }
-      
-      return ResponseEntity.ok(currentProject.getProjectTitle());
-    } catch (Exception e) {
-      return ResponseEntity.badRequest().body("Failed to parse JSON: " + e.getMessage());
-    }
-  }
-  
-  @GetMapping("/projects")
-  public ResponseEntity<?> getAllProjects() {
-    return ResponseEntity.ok(projectStorage.getAllProjects());
-  }
-
   // Post Mappings
   @PostMapping("/model")
   public ResponseEntity<?> runSimulation(@RequestBody String body) {
