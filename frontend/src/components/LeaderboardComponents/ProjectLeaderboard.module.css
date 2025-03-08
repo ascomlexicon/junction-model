@@ -36,12 +36,12 @@
   border: 1px solid #ddd;
   align-self: right;
   transition: background-color 0.3s;
-  background-color: #f5f5f5;
+  background-color: rgba(248, 189, 80, 0.825);
   color: black;
 }
 
 .backButton:hover {
-  background-color: #eeeeee;
+  background-color: orange;
 }
 
 .container {
