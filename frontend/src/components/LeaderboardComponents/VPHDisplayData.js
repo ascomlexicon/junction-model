@@ -43,7 +43,6 @@ const VPHDataDisplay = ({ projectData }) => {
 
   const handleNavigateToRankings = () => {
     const vphData = getVPH(projectData);
-    console.log("Navigating with VPH data:", vphData);
     
     navigate('/RankingsPage', {
       state: {

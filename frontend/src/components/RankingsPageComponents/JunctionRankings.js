@@ -59,11 +59,10 @@ const JunctionRankings = ({ clickedJunction = {}, fromSummary }) => {
           // Response.data is an array of junction JSON objects
           response.data.forEach((element) => {
             const junction = { ...element };
-
-            // FIXME: Very scuffed, not robust
-            // if (junction.leftTurnLanes === clickedJunction.leftTurnLanes && junction.lanesEntering === clickedJunction.lanesEntering) {
-            //   setSelectedJunction(junction);
-            // }
+            if (junction.junctionImage === clickedJunction.junctionImage) {
+              console.log("hereeee!!");
+              setSelectedJunction(junction);
+            }
             allJunctions.push(junction);
           });
 
