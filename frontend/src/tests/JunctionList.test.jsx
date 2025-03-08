@@ -1,7 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import JunctionList from '../components/RankingsPageComponents/JunctionList';
 
-// FIXME: Potentially all redundant if we get rid of JunctionList component
 describe(JunctionList, () => {
   const mockJunctions = [
     { name: 'Junction A', score: 95, highlight: true },

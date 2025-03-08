@@ -143,17 +143,15 @@ public class JunctionController {
         // Special lane info
         // Only one type of bus/cycle lane can be present at a junction
         if (junction.getQuarter(Direction.NORTH).hasBusCycleLane() != "none" 
-        || junction.getQuarter(Direction.EAST).hasBusCycleLane() != "none"
-        || junction.getQuarter(Direction.SOUTH).hasBusCycleLane() != "none"
-        || junction.getQuarter(Direction.WEST).hasBusCycleLane() != "none") {
+          || junction.getQuarter(Direction.EAST).hasBusCycleLane() != "none"
+          || junction.getQuarter(Direction.SOUTH).hasBusCycleLane() != "none"
+          || junction.getQuarter(Direction.WEST).hasBusCycleLane() != "none") {
           for (Direction d : Direction.values()) {
             if (junction.getQuarter(d).hasBusCycleLane() != "none") {
               junctionData.put("isBusCycle", junction.getQuarter(d).hasBusCycleLane());
               break;
             }
           }
-
-          // System.out.println(junctionData.get("isBusCycle"));
 
           // Add whether or not a quarter includes a bus/cycle lanes
           specialLanes.put("north", junction.getQuarter(Direction.SOUTH).hasBusCycleLane() != "none");
@@ -166,13 +164,17 @@ public class JunctionController {
           junctionData.put("isBusOrCycle", "none");
         }
 
-        // TODO: For now we've left the speed of bus/cycle, will implement later
-        // for (Direction direction : Direction.values()) {
-        //   if (junction.getQuarter(direction).hasBusCycleLane() != "none") {
-        //     junctionData.put("busCycleLaneDuration", junction.getQuarter(direction).specialVPH());
-        //     break;
-        //   }
-        // }
+        // Special VPH figures
+        HashMap<String, Integer> busCycleLaneDuration = new HashMap<>();
+
+        for (Direction direction : Direction.values()) {
+          if (junction.getQuarter(direction).hasBusCycleLane() != "none") {
+            busCycleLaneDuration.put(direction.getOpposite().toString(), junction.getQuarter(direction).specialVPH());
+            break;
+          }
+        }
+
+        junctionData.put("busCycleLaneDuration", busCycleLaneDuration);
 
         // Hashmap for each quarter (compromise in performance for readability; this 
         // method just retrieve data, no calculations done, so still quick)

@@ -26,7 +26,6 @@ const ScoreBreakdown = ({ junctionData, junctionVPH }) => {
     };
 
     const junctionMetrics = calculateJunctionMetrics();
-    console.log(junctionMetrics.totalAvgWaitTime);
 
     return(
         <div className={styles.scoreBreakdown}>
@@ -88,7 +87,7 @@ const ScoreBreakdown = ({ junctionData, junctionVPH }) => {
 
           <div className={styles.configurableParameters}>
               <h2 className={styles.configHeading}>Configurable Parameters</h2>
-              <DisplayLaneCustomisation entering={junctionData.lanesEntering} exiting={junctionData.lanesExiting} leftTurn={junctionData.leftTurnLanes} busOrCycle={junctionData.isBusCycle} specialLanes={junctionData.specialLanes}/>
+              <DisplayLaneCustomisation entering={junctionData.lanesEntering} exiting={junctionData.lanesExiting} leftTurn={junctionData.leftTurnLanes} busOrCycle={junctionData.isBusCycle} specialLanes={junctionData.specialLanes} busCycleLaneDuration={junctionData.busCycleLaneDuration}/>
               <DisplayPedestrianCrossing addCrossings={junctionData.isCrossings} crossingDuration={junctionData.crossingDuration} requestsPerHour={junctionData.crossingRequestsPerHour} />
               <DisplayDirectionPrioritisation enablePrioritisation={junctionData.enablePrioritisation} directions={junctionData.directionPrioritisation}/>
           </div>

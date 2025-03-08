@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './DisplayLaneCustomisation.module.css';
 
-const DisplayLaneCustomisation = ({ entering, exiting, leftTurn, busOrCycle, specialLanes }) => {
+const DisplayLaneCustomisation = ({ entering, exiting, leftTurn, busOrCycle, specialLanes, busCycleLaneDuration }) => {
   return (
     <div className={styles.laneCustomisation}>
       <h2 className={styles.laneCustTitle}>Lane Customisation</h2>
@@ -49,45 +49,57 @@ const DisplayLaneCustomisation = ({ entering, exiting, leftTurn, busOrCycle, spe
       </section>
 
       {/* Bus/Cycle Lanes Section */}
-      <section className={styles.specialLanesSection}>
-        <h3>Bus & Cycle Lanes</h3>
-        <div className={styles.specialLanesGrid}>
+      <section className={styles.leftTurnSection}>
         {busOrCycle === 'bus' ? (
-            <div className={styles.specialLanesColumn}>
-              <h4>Bus Lanes</h4>
+          <>
+            <h3>Bus Lanes</h3>
+            <div className={styles.grid}>
               {Object.keys(specialLanes).map((direction) => (
-              <div key={`bus-${direction}`} className={styles.checkboxGroup}>
-                <label>
-                  <input type="checkbox" checked={specialLanes[direction]} disabled />
-                  {direction.charAt(0).toUpperCase() + direction.slice(1)}
-                </label>
-              </div>
-            ))}
-          </div>
+                <div key={`bus-${direction}`} className={styles.checkboxGroup}>
+                  <label>
+                    <input type="checkbox" checked={specialLanes[direction]} disabled />
+                    {direction.charAt(0).toUpperCase() + direction.slice(1)}
+                  </label>
+                </div>
+              ))}
+            </div>
+
+            <div className={styles.specialDurations}>
+              <h3>Bus Lane Durations</h3>
+              {Object.keys(busCycleLaneDuration).map((direction) => (
+                <div key={`specialVPH-${direction}`} className={styles.inputGroup}>
+                  <label className={styles.label}>From {direction.charAt(0) + direction.slice(1).toLowerCase()}: {busCycleLaneDuration[direction]} buses</label>
+                </div>
+              ))}
+            </div>
+          </>
         ) : busOrCycle === 'cycle' ? (
-          <div className={styles.specialLanesColumn}>
-            <h4>Cycle Lanes</h4>
-            {Object.keys(specialLanes).map((direction) => (
-              <div key={`cycle-${direction}`} className={styles.checkboxGroup}>
-                <label>
-                  <input type="checkbox" checked={specialLanes[direction]} disabled />
-                  {direction.charAt(0).toUpperCase() + direction.slice(1)}
-                </label>
-              </div>
-            ))}
-          </div>
+          <>
+            <h3>Cycle Lanes</h3>
+            <div className={styles.grid}>
+              {Object.keys(specialLanes).map((direction) => (
+                <div key={`cycle-${direction}`} className={styles.checkboxGroup}>
+                  <label>
+                    <input type="checkbox" checked={specialLanes[direction]} disabled />
+                    {direction.charAt(0).toUpperCase() + direction.slice(1)}
+                  </label>
+                </div>
+              ))}
+            </div>
+
+            <div className={styles.specialDurations}>
+              <h3>Cycle Lane Durations</h3>
+              {Object.keys(busCycleLaneDuration).map((direction) => (
+                <div key={`specialVPH-${direction}`} className={styles.inputGroup}>
+                  <label className={styles.label}>From {direction.charAt(0) + direction.slice(1).toLowerCase()}: {busCycleLaneDuration[direction]} bikes</label>
+                </div>
+              ))}
+            </div>
+          </>
         ) : (
           <p className={styles.noSpecial}>No bus/cycle lanes configured</p>
         )}
-        </div>
       </section>
-
-      {/* {busOrCycle != 'none' && (
-        <>
-          <h3>Bus Lane Durations</h3> */}
-          {/* TODO: Display the durations input by the user here (use template from ) */}
-        {/* </>
-      )}; */}
     </div>
   );
 };
