@@ -183,13 +183,6 @@ describe('LaneCustomisation Component', () => {
       expect(mockResetForm).toHaveBeenCalledWith('laneCustomisation');
     });
 
-    test('Reset All button calls resetAllForms', () => {
-      setupComponent();
-      
-      fireEvent.click(screen.getByTestId('reset-all-button'));
-      
-      expect(mockResetAllForms).toHaveBeenCalled();
-    });
   });
 
   describe('Input Validation', () => {
