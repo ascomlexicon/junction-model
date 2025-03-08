@@ -676,7 +676,7 @@ const LaneCustomisation = ({ setActiveStep, saveFormData, resetForm, resetAllFor
 
       {/* Left Turn Section */}
       <section className="left-turn-section">
-        {/* TODO add info icon */}
+        {/* TODO: add info icon */}
         <h3>Left Turn Lanes</h3>
         {Object.keys(laneData.leftTurn).map((direction) => {
           const entryLanes = parseInt(laneData.entering[direction]) || 0;

@@ -19,7 +19,7 @@ function DisplayDirectionPrioritisation({ enablePrioritisation, directions }) {
           <p className={styles.subjectToChange}>Priority is subject to change based on traffic conditions.</p>
         </div>
       ) : (
-        <p className={styles.noPrioritisation}>No lane prioritisation.</p>
+        <p className={styles.noPrioritisation}>No direction prioritisation</p>
       )}
     </div>
   );

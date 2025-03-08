@@ -6,7 +6,6 @@ import LaneCustomisation from '../components/MainPageComponents/LaneCustomisatio
 import PedestrianCrossing from '../components/MainPageComponents/PedestrianCrossing';
 import DirectionPrioritisation from '../components/MainPageComponents/DirectionPrioritisation';
 import Summary from '../components/MainPageComponents/Summary';
-import JSONViewer from './JSONViewer';
 import JunctionCanvas from '../components/JunctionVisualisationComponents/Canvas/JunctionCanvas';
 
 // New component for instructions
@@ -282,7 +281,6 @@ function MainPage() {
                     {renderForm()}
                 </div>
             </div>
-            {/* <JSONViewer data={completeJSON} /> */}
         </div>
     );
 }

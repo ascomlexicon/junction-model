@@ -250,7 +250,6 @@ public class JunctionController {
         HashMap<String, Object> vphData = new HashMap<>();
         HashMap<Direction, Integer> directionData = weirdVPHData.get(direction.getOpposite());
         
-        // TODO: Not sure if this is correct for enter, but believe the others are right
         vphData.put("enter", outboundData.get(direction.getOpposite()));
         vphData.put("exitNorth", directionData.get(Direction.NORTH));
         vphData.put("exitEast", directionData.get(Direction.EAST));

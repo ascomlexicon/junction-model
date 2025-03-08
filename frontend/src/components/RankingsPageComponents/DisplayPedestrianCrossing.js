@@ -12,7 +12,7 @@ function DisplayPedestrianCrossing({ addCrossings, crossingDuration, requestsPer
           <p><strong>Requests per Hour:</strong> {requestsPerHour}</p>
         </div>
       ) : (
-        <p className={styles.noCrossing}>No pedestrian crossing.</p>
+        <p className={styles.noCrossing}>No pedestrian crossing</p>
       )}
     </div>
   );

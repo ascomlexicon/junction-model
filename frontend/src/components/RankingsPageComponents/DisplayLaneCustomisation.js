@@ -33,7 +33,6 @@ const DisplayLaneCustomisation = ({ entering, exiting, leftTurn, busOrCycle, spe
       </section>
 
       {/* Left Turn Section */}
-      {/* TODO: This section may not be configured by the user (add a check, like what we did below with bus/cycle lanes) */}
       <section className={styles.leftTurnSection}>
         <h3>Left Turn Lanes</h3>
         <div className={styles.grid}>
@@ -48,8 +47,8 @@ const DisplayLaneCustomisation = ({ entering, exiting, leftTurn, busOrCycle, spe
         </div>
       </section>
 
-      {/* Bus/Cycle Lanes Section */}
-      <section className={styles.leftTurnSection}>
+      {/* Bus/Cycle Lanes Section (leftTurnSection is for styling) */}
+      <section className={styles.specialLanesSection}>
         {busOrCycle === 'bus' ? (
           <>
             <h3>Bus Lanes</h3>
