@@ -60,8 +60,7 @@ const ProjectLeaderboard = () => {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
         <Slab color="#00a6fb" size="medium" text="Loading Projects..." textColor="" />
-        <Link to="/MainPage" className={styles.backButton} style={{ marginTop: '20px' }}>
-          {/* TODO: CHANGE STYLE OF THIS BUTTON */}
+        <Link to="/MainPage" className={styles.loadingBackBtn}>
           Back to Junction Configuration Menu
         </Link>
       </div>
