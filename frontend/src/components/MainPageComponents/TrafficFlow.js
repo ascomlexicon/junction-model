@@ -173,6 +173,8 @@ function TrafficFlow({ setActiveStep, saveFormData, resetForm, resetAllForms, fo
                         outgoingDirection3="West"
                         onUpdate={(data) => handleInputUpdate('north', data)}
                         values={trafficData.north}
+                        data-testid="north-junction-input" 
+
                     />
                 </div>
                 <div className="form-cell">
@@ -184,6 +186,8 @@ function TrafficFlow({ setActiveStep, saveFormData, resetForm, resetAllForms, fo
                         outgoingDirection3="West"
                         onUpdate={(data) => handleInputUpdate('south', data)}
                         values={trafficData.south}
+                        data-testid="south-junction-input" 
+
                     />
                 </div>
                 
@@ -197,6 +201,8 @@ function TrafficFlow({ setActiveStep, saveFormData, resetForm, resetAllForms, fo
                         outgoingDirection3="West"
                         onUpdate={(data) => handleInputUpdate('east', data)}
                         values={trafficData.east}
+                        data-testid="East-junction-input"  
+
                     />
                 </div>
                 <div className="form-cell">
@@ -208,6 +214,8 @@ function TrafficFlow({ setActiveStep, saveFormData, resetForm, resetAllForms, fo
                         outgoingDirection3="East"
                         onUpdate={(data) => handleInputUpdate('west', data)}
                         values={trafficData.west}
+                        data-testid="west-junction-input"  
+
                     />
                 </div>
             </div>
@@ -215,7 +223,7 @@ function TrafficFlow({ setActiveStep, saveFormData, resetForm, resetAllForms, fo
             <div className="button-container">
                 <BackButton onClick={handleBack} label="Back to Instructions" />
                 <ResetVPHButton onClick={handleResetVPH} />
-                <ResetAllButton onClick={resetAllForms} />
+                <ResetAllButton onConfirm={resetAllForms} />
                 <SaveNextButton onClick={handleSaveNext} disabled={!isValid} />
             </div>
         </div>

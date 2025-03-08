@@ -54,26 +54,27 @@ function JunctionInput({
 				/>
 			</div>
 			<div className="outgoing-section">
-				{[
-					{ direction: outgoingDirection1 },
-					{ direction: outgoingDirection2 },
-					{ direction: outgoingDirection3 }
+			{[
+				{ direction: outgoingDirection1 },
+				{ direction: outgoingDirection2 },
+				{ direction: outgoingDirection3 }
 				].map(({ direction }) => (
-					<div key={direction} className="direction-input">
-						<label className="direction-label">
-							<span className="label-text">Exit {direction}:</span>
-						</label>
-						<input
-							type="number"
-							value={values[direction.toLowerCase()]}
-							onChange={(e) => handleOutgoingChange(direction, e.target.value)}
-							disabled={!values.enter}
-							className={`input-field ${
-								!values.enter ? 'input-disabled' :
-								!isValid ? 'input-invalid' : 'input-valid'
-							}`}
-						/>
-					</div>
+				<div key={direction} className="direction-input">
+					<label className="direction-label" htmlFor={`exit-${direction.toLowerCase()}`}>
+					<span className="label-text">Exit {direction}:</span>
+					</label>
+					<input
+						id={`exit-${direction.toLowerCase()}`} // Add an ID to match the label
+						type="number"
+						value={values[direction.toLowerCase()]}
+						onChange={(e) => handleOutgoingChange(direction, e.target.value)}
+						disabled={!values.enter}
+						className={`input-field ${
+							!values.enter ? 'input-disabled' :
+							!isValid ? 'input-invalid' : 'input-valid'
+						}`}
+					/>
+				</div>
 				))}
 			</div>
 			{values.enter && (

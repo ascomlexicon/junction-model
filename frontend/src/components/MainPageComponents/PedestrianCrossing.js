@@ -182,7 +182,7 @@ function PedestrianCrossing({ setActiveStep, saveFormData, resetForm, resetAllFo
       <div className="button-container">
         <BackButton onClick={handleBack} label="Back to Lane Customisation" />
         <ResetCrossingsButton onClick={handleResetChanges} />
-        <ResetAllButton onClick={resetAllForms} />
+        <ResetAllButton onConfirm={resetAllForms} />
         <SaveNextButton onClick={handleSaveNext} disabled={!isValid} />
       </div>
     </div>
