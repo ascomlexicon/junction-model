@@ -34,17 +34,23 @@ const DisplayLaneCustomisation = ({ entering, exiting, leftTurn, busOrCycle, spe
 
       {/* Left Turn Section */}
       <section className={styles.leftTurnSection}>
-        <h3>Left Turn Lanes</h3>
-        <div className={styles.grid}>
-          {Object.keys(leftTurn).map((direction) => (
-            <div key={`left-turn-${direction}`} className={styles.checkboxGroup}>
-              <label>
-                <input type="checkbox" checked={leftTurn[direction]} disabled />
-                {direction.charAt(0).toUpperCase() + direction.slice(1)}
-              </label>
+        {Object.values(leftTurn).some(value => value) ? (
+          <>
+            <h3>Left Turn Lanes</h3>
+            <div className={styles.grid}>
+              {Object.keys(leftTurn).map((direction) => (
+                <div key={`left-turn-${direction}`} className={styles.checkboxGroup}>
+                  <label>
+                    <input type="checkbox" checked={leftTurn[direction]} disabled />
+                    {direction.charAt(0).toUpperCase() + direction.slice(1)}
+                  </label>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </>
+        ) : (
+          <div className={styles.noSpecial} style={{padding: '10px'}}>No left turn lanes</div>
+        )}
       </section>
 
       {/* Bus/Cycle Lanes Section (leftTurnSection is for styling) */}
