@@ -168,6 +168,12 @@
   padding: 10px;
 }
 
+h3 {
+  font-size: 30px;
+  border-bottom: 2px solid #eee;
+  padding: 10px;
+}
+
 .junctionImage {
   width: 100%;
 }

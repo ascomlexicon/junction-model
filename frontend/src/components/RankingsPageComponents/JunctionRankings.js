@@ -199,7 +199,7 @@ const JunctionRankings = ({ clickedJunction = {}, fromSummary }) => {
           <div className={styles.rightPanel}>
             {selectedJunction && (
               <>
-                <ScoreBreakdown junctionData={selectedJunction} />
+                <ScoreBreakdown junctionData={selectedJunction} junctionVPH={vphData}/>
               </>
             )}
           </div>

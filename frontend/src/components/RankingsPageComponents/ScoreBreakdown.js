@@ -4,12 +4,42 @@ import DisplayLaneCustomisation from './DisplayLaneCustomisation';
 import DisplayPedestrianCrossing from './DisplayPedestrianCrossing';
 import DisplayDirectionPrioritisation from './DisplayDirectionPrioritisation';
 
-const ScoreBreakdown = ({ junctionData }) => {
+const ScoreBreakdown = ({ junctionData, junctionVPH }) => {
+    const calculateJunctionMetrics = () => {
+        const directions = ['North', 'East', 'South', 'West'];
+        const metrics = ['avgWaitTime', 'maxWaitTime', 'maxQueueLength'];
+        const results = {};
+        
+        const totalVPH = directions.reduce((sum, dir) => 
+            sum + junctionVPH[`vph${dir}`].enter, 0);
+        
+        metrics.forEach(metric => {
+            const weightedSum = directions.reduce((sum, dir) => 
+                sum + (junctionVPH[`vph${dir}`].enter * 
+                      junctionData[`${dir.toLowerCase()}Metrics`][metric]), 0);
+            
+            results[`total${metric.charAt(0).toUpperCase() + metric.slice(1)}`] = 
+                weightedSum / totalVPH;
+        });
+        
+        return results;
+    };
+
+    const junctionMetrics = calculateJunctionMetrics();
+    console.log(junctionMetrics.totalAvgWaitTime);
+
     return(
         <div className={styles.scoreBreakdown}>
           <h2 className={styles.scoreBreakdownTitle}>Score Breakdown for: {junctionData.name}</h2>
           <div className={styles.overallScore}>Overall Score: {junctionData.score.toFixed(4)}</div>
-          
+          <h3>Simulation Results</h3>
+
+          <div className={styles.entireJunctionMetrics}>
+            <p>Overall Average Wait Time <i>(mins:secs)</i>: {Math.floor((junctionMetrics.totalAvgWaitTime * 240 / 60000))}:{Math.floor((junctionMetrics.totalAvgWaitTime * 240 / 1000) % 60).toString().padStart(2, '0')}</p>
+            <p>Overall Maximum Wait Time <i>(mins:secs)</i>: {Math.floor((junctionMetrics.totalMaxWaitTime * 240 / 60000))}:{Math.floor((junctionMetrics.totalMaxWaitTime * 240 / 1000) % 60).toString().padStart(2, '0')}</p>
+            <p>Overall Maximum Queue Length <i>(# cars)</i>: {Math.round(junctionMetrics.totalMaxQueueLength)}</p>
+          </div>
+
           <table className={styles.criteriaTable}>
               <thead>
               <tr>
