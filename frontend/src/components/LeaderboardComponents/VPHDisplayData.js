@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from '../LeaderboardComponents/ProjectLeaderboard.module.css';
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // A reusable component to display VPH data for a single direction
 const DirectionDataSection = ({ title, data }) => {
@@ -9,8 +10,8 @@ const DirectionDataSection = ({ title, data }) => {
       <h3 className={styles.direction}>{title}</h3>
       {Object.entries(data).map(([key, value]) => {
         // Format the key for display (e.g., "exitEast" becomes "Exit east")
-        const formattedKey = key === "entering" 
-          ? "Entering" 
+        const formattedKey = key === "enter" 
+          ? "Enter" 
           : key.replace("exit", "Exit ");
         
         return (
@@ -24,8 +25,33 @@ const DirectionDataSection = ({ title, data }) => {
   );
 };
 
+// Returns vph to be passed to junction leaderboard
+const getVPH = (projectData) => {
+  const vphData = {
+    vphNorth: projectData.vphData.north,
+    vphSouth: projectData.vphData.south,
+    vphEast: projectData.vphData.east,
+    vphWest: projectData.vphData.west
+  }
+
+  return vphData;
+}
+
 // The main VPH data display component
 const VPHDataDisplay = ({ projectData }) => {
+  const navigate = useNavigate();
+
+  const handleNavigateToRankings = () => {
+    const vphData = getVPH(projectData);
+    
+    navigate('/RankingsPage', {
+      state: {
+        clickedJunction: vphData,
+        fromSummary: false
+      }
+    });
+  };
+
   if (!projectData) {
     return (
       <div className={styles.noSelection}>
@@ -45,13 +71,16 @@ const VPHDataDisplay = ({ projectData }) => {
         <DirectionDataSection title="West" data={projectData.vphData.west} />
       </div>
       
-      <button className={styles.configuredNote}>
-        <Link to = '/RankingsPage' className={styles.configuredBtn} style={{ 
-            display: 'block', 
-            width: '100%', 
-            height: '100%' 
-          }}>See configured junctions for {projectData.name}
-        </Link>
+      <button 
+        className={styles.configuredNote}
+        onClick={handleNavigateToRankings}
+        style={{
+          display: 'block',
+          width: '100%',
+          cursor: 'pointer'
+        }}
+      >
+        See configured junctions for {projectData.name}
       </button>
     </>
   );

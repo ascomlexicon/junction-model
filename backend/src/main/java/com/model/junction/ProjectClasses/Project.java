@@ -43,7 +43,7 @@ public class Project {
   }
   
   public HashMap<Direction, Integer> getTotalOutboundVPHData() {
-    if (this.outboundTotalVPHData != null || !this.outboundTotalVPHData.isEmpty()) {
+    if (this.outboundTotalVPHData != null && !this.outboundTotalVPHData.isEmpty()) {
       return this.outboundTotalVPHData;
     } else if (this.vehiclePerHourData == null) {
       HashMap<Direction, Integer> defaultOutBound = new HashMap<Direction, Integer>();

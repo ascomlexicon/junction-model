@@ -8,30 +8,21 @@ function Summary({ formData, setActiveStep }) {
 
   const handleClick = async (e) => {
     e.preventDefault();
-    try {
-      // TODO: Set API endpoint URL
-      const response = await fetch('/api/simulate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
-  
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      
-      // Optionally, handle the returned data:
-      // TODO: This is only for testing
-      const result = await response.json();
-      console.log('Simulation result:', result);
-      
-      // TODO: Will probably have an intermediate page which is a loading screen
-      navigate('/RankingsPage');
-    } catch (error) {
-      console.error('Error sending JSON data:', error);
-    }
 
-    navigate('/RankingsPage');
+    // Convert the canvas element to a data URL
+    const canvas = document.querySelector('.junction-graphic');
+    if (!canvas) {
+      console.error("Canvas element not found");
+      return;
+    }
+    const junctionImage = canvas.toDataURL('image/png');
+
+    // Attach image to the current configuration of the junction
+    formData.junctionImage = junctionImage;
+
+    // console.log(formData);
+
+    navigate('/RankingsPage', { state: { clickedJunction: formData, fromSummary: true } });
   };
   
   const handleBack = () => {

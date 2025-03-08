@@ -104,13 +104,12 @@
   cursor: pointer;
   align-self: right;
   background-color: #f5f5f5;
-  color: #616161;
+  background-color: rgba(248, 189, 80, 0.825);
   border: 1px solid #ddd;
 }
 
 .backButton:hover {
-  background-color: #eeeeee;
-  color: #424242;
+  background-color: orange;
 }
 
 .criteriaTable, .trafficFlow {
@@ -137,7 +136,6 @@
   margin: 20px 0;
 }
 
-/* TODO: Currently no formulas are displayed */
 .formulaBox {
   background-color: white;
   height: 40px;
@@ -160,4 +158,33 @@
 .scoreBreakdownTitle {
   font-size: 36px;
   margin: 10px 0;
+}
+
+.junctionImageContainer h3 {
+  font-size: 30px;
+  border-bottom: 2px solid #eee;
+  padding: 10px;
+}
+
+.junctionImage {
+  width: 100%;
+}
+
+.loadingBackBtn {
+  text-decoration: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  font-size: 14px;
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid #ddd;
+  align-self: right;
+  transition: background-color 0.3s;
+  background-color: #f5f5f5;
+  color: black;
+  margin: 10px;
+}
+
+.loadingBackBtn:hover {
+  background-color: #eeeeee;
 }

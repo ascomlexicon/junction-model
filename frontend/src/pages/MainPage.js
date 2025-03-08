@@ -6,7 +6,6 @@ import LaneCustomisation from '../components/MainPageComponents/LaneCustomisatio
 import PedestrianCrossing from '../components/MainPageComponents/PedestrianCrossing';
 import DirectionPrioritisation from '../components/MainPageComponents/DirectionPrioritisation';
 import Summary from '../components/MainPageComponents/Summary';
-import JSONViewer from './JSONViewer';
 import JunctionCanvas from '../components/JunctionVisualisationComponents/Canvas/JunctionCanvas';
 
 // New component for instructions
@@ -51,7 +50,8 @@ function MainPage() {
       vphNorth: {},
       vphSouth: {},
       vphEast: {},
-      vphWest: {}
+      vphWest: {},
+      junctionImage: null
     });
     
     // State to store form data
@@ -126,10 +126,7 @@ function MainPage() {
       setCompleteJSON(newJSON);
     };
 
-    // Save form data
-    // TODO: Change the way in which this is used
-      //  This saves multiple copies of the JSON file in the state
-      // We only need to save the form data once, need to rethink design, starting with traffic flow
+    // Save data associated with each form
     const saveFormData = (formName, data) => {
       setFormData(prev => ({
         ...prev,
@@ -202,7 +199,8 @@ function MainPage() {
         vphNorth: {},
         vphSouth: {},
         vphEast: {},
-        vphWest: {}
+        vphWest: {},
+        junctionImage: null
       });
 
       setFormData({
@@ -283,7 +281,6 @@ function MainPage() {
                     {renderForm()}
                 </div>
             </div>
-            {/* <JSONViewer data={completeJSON} /> */}
         </div>
     );
 }

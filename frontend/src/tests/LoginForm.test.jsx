@@ -28,11 +28,6 @@ describe(LoginForm, () => {
     expect(screen.getByRole('button', { name: /login/i })).toBeInTheDocument();
   });
 
-  // TODO: Not sure how to currently test these, as there is no collection of 
-  // "allowed" emails and passwords.
-  // 3. Test if login button enabled when there is a correct email and password
-  // 4. Test if login button disabled when there is a incorrect email and password
-
   it('allows email and password to be entered', () => {    
     const emailInput = screen.getByLabelText(/email:/i);
     const passwordInput = screen.getByLabelText(/password:/i);

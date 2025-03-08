@@ -18,31 +18,31 @@ import java.util.concurrent.atomic.AtomicLong;
 public class JunctionSimulationLogic {
   // all longs and integers have been replaced with AtomicInteger and AtomicLong because this allows us to update them in the threads
   // safely without race conditions being a thing because otherwise the variables might be overwritten
-  private static final AtomicInteger carsEntered = new AtomicInteger(0); // Counts the number of cars that have entered a junction quarter
-  private static final AtomicInteger quarterCarsExited = new AtomicInteger(0);
-  private static final AtomicLong averageWaitTime = new AtomicLong(0);
-  private static final AtomicLong maximumWaitingTime = new AtomicLong(0);
-  private static final AtomicInteger maximumQueueLength = new AtomicInteger(0);
-  private static final Random random = new Random(); // Random number generator
-  private static double interArrivalTime = 0; // Inter-arrival time in seconds
-  private static long exponentialTimeInterval = 0; // Exponential time interval
-  private static long simulationStartTime = System.nanoTime(); // Start time of the simulation
-  private static final AtomicInteger totalCarsExited = new AtomicInteger(0); /* count car exitings */
+  private final AtomicInteger carsEntered = new AtomicInteger(0); // Counts the number of cars that have entered a junction quarter
+  private final AtomicInteger quarterCarsExited = new AtomicInteger(0);
+  private final AtomicLong averageWaitTime = new AtomicLong(0);
+  private final AtomicLong maximumWaitingTime = new AtomicLong(0);
+  private final AtomicInteger maximumQueueLength = new AtomicInteger(0);
+  private final Random random = new Random(); // Random number generator
+  private double interArrivalTime = 0; // Inter-arrival time in seconds
+  private long exponentialTimeInterval = 0; // Exponential time interval
+  private long simulationStartTime = System.nanoTime(); // Start time of the simulation
+  private final AtomicInteger totalCarsExited = new AtomicInteger(0); /* count car exitings */
 
   // MODIFICATIONS
   enum LaneType {
     FORWARD_ONLY, RIGHT_ONLY, LEFT_ONLY, ALL_DIRECTIONS, LEFT_FORWARD, RIGHT_FORWARD
   }
   /* Bus lane modification */
-  private static final AtomicBoolean leftLane = new AtomicBoolean(false);
-  private static final AtomicBoolean busCycleLane = new AtomicBoolean(false);
+  private final AtomicBoolean leftLane = new AtomicBoolean(false);
+  private final AtomicBoolean busCycleLane = new AtomicBoolean(false);
   /* Bus lane modification END */
 
-  private static ConcurrentLinkedQueue<Long>[] outboundCars;
-  private static List<LaneType> laneTypes= Collections.synchronizedList(new ArrayList<>());
+  private ConcurrentLinkedQueue<Long>[] outboundCars;
+  private List<LaneType> laneTypes= Collections.synchronizedList(new ArrayList<>());
   
   //public static void main(String[] args) {
-  public static double[] runSimulation(int exitingForward, int exitingRight, int exitingLeft, int numberOfLanes, boolean leftLaneBool, boolean busCycleLaneBool, int busCyclesPerHour, boolean puffinCrossing, int puffinCrossingDuration, int puffinCrossingsPerHour, String direction, boolean prioritiesEnabled, String[] lanePrioritiesAsStrings) {
+  public double[] runSimulation(int exitingForward, int exitingRight, int exitingLeft, int numberOfLanes, boolean leftLaneBool, boolean busCycleLaneBool, int busCyclesPerHour, boolean puffinCrossing, int puffinCrossingDuration, int puffinCrossingsPerHour, String direction, boolean prioritiesEnabled, String[] lanePrioritiesAsStrings) {
     // "KEY"
     //int exitingForward = 400; // cars exiting straight forward
     // "KEY"
@@ -428,7 +428,7 @@ public class JunctionSimulationLogic {
   }
 
   // updates our metrics when cars exit the queue
-  public static void exitQueue(Long enterTime) {
+  public void exitQueue(Long enterTime) {
     if (enterTime != null) {
       totalCarsExited.incrementAndGet(); /* count cars exiting */
       long waitingTime = System.nanoTime() - enterTime;
@@ -440,7 +440,7 @@ public class JunctionSimulationLogic {
   }
 
   // calculates the time to the next green light
-  private static long calculateTimeToNextGreen(long currentWaitTime, boolean puffinCrossing, int crossingsPerHour, long crossingInterval, long crossingDuration){
+  private long calculateTimeToNextGreen(long currentWaitTime, boolean puffinCrossing, int crossingsPerHour, long crossingInterval, long crossingDuration){
     long nextGreenTime = System.nanoTime() + currentWaitTime;
 
     if (puffinCrossing){
@@ -459,13 +459,13 @@ public class JunctionSimulationLogic {
   }
 
   // converts real time to simulation time (1 second real time = 240 seconds simulation time)
-  private static long convertToSimulationTime(long realTime){
+  private long convertToSimulationTime(long realTime){
     return realTime * 1_000_000_000 / 240;
   }
 
   /* START OF SHAHAD CODE */
   //helper methode for findShortestLane
-  private static boolean isLaneValidForDirection(int laneIndex, LaneType direction) {
+  private boolean isLaneValidForDirection(int laneIndex, LaneType direction) {
     return laneTypes.get(laneIndex) == direction ||
     laneTypes.get(laneIndex) == LaneType.ALL_DIRECTIONS ||
     (direction == LaneType.FORWARD_ONLY && laneTypes.get(laneIndex) == LaneType.RIGHT_FORWARD) ||
@@ -474,7 +474,7 @@ public class JunctionSimulationLogic {
     (direction == LaneType.LEFT_ONLY && laneTypes.get(laneIndex) == LaneType.LEFT_FORWARD&&!(busCycleLane.get())) ; /* Bus lane modification */
   }
         
-  private static int findShortestLane(LaneType direction) {
+  private int findShortestLane(LaneType direction) {
     int bestLane = -1;
     int minSize = Integer.MAX_VALUE;
 
@@ -492,7 +492,7 @@ public class JunctionSimulationLogic {
   }
     
   //adding cars to shortest valid lane
-  private static void distributeCars(int numCars, LaneType direction) {
+  private void distributeCars(int numCars, LaneType direction) {
     for (int i = 0; i < numCars; i++) {
       int bestLane = findShortestLane(direction);
       outboundCars[bestLane].add(System.nanoTime());
@@ -503,7 +503,7 @@ public class JunctionSimulationLogic {
 
   /* Bus lane modification (if conditions) */
   //create lanes based on number of lanes
-  private static void initializeLanes(int numberOfLanes) {
+  private void initializeLanes(int numberOfLanes) {
     outboundCars = new ConcurrentLinkedQueue[numberOfLanes];
 
     for (int i = 0; i < numberOfLanes; i++) {
@@ -561,7 +561,7 @@ public class JunctionSimulationLogic {
   }
 
   // Poisson distribution generator(this algorithm proposed by D. Knuth:)
-  private static int generatePoisson(double lambda) {
+  private int generatePoisson(double lambda) {
       double L = Math.exp(-lambda); 
       double p = 1.0;
       int k = 0;

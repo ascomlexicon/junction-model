@@ -1,69 +1,72 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../LeaderboardComponents/ProjectLeaderboard.module.css';
+import { Slab } from 'react-loading-indicators';
 import { Link } from "react-router-dom";
-import VPHDataDisplay from './VPHDisplayData'; // Import the VPH data component
+import VPHDataDisplay from './VPHDisplayData';
+import axios from 'axios';
 
 const ProjectLeaderboard = () => {
-  // Sample project data with VPH information
-  const [projects, setProjects] = useState([
-    { 
-      name: 'Coventry A', 
-      id: 'coventry-a',
-      vphData: {
-        north: { entering: "1250", exitEast: "320", exitSouth: "530", exitWest: "400" },
-        south: { entering: "1180", exitNorth: "510", exitEast: "290", exitWest: "380" },
-        east: { entering: "980", exitNorth: "310", exitSouth: "290", exitWest: "380" },
-        west: { entering: "1050", exitNorth: "420", exitEast: "310", exitSouth: "320" }
-      }
-    },
-    { 
-      name: 'Warwick', 
-      id: 'warwick',
-      vphData: {
-        north: { entering: "890", exitEast: "280", exitSouth: "410", exitWest: "200" },
-        south: { entering: "920", exitNorth: "380", exitEast: "260", exitWest: "280" },
-        east: { entering: "750", exitNorth: "250", exitSouth: "210", exitWest: "290" },
-        west: { entering: "820", exitNorth: "310", exitEast: "230", exitSouth: "280" }
-      }
-    },
-    { 
-      name: 'Leamington North', 
-      id: 'leamington-north',
-      vphData: {
-        north: { entering: "780", exitEast: "230", exitSouth: "350", exitWest: "200" },
-        south: { entering: "820", exitNorth: "310", exitEast: "240", exitWest: "270" },
-        east: { entering: "690", exitNorth: "210", exitSouth: "230", exitWest: "250" },
-        west: { entering: "750", exitNorth: "280", exitEast: "190", exitSouth: "280" }
-      }
-    },
-    { 
-      name: 'Leamington South', 
-      id: 'leamington-south',
-      vphData: {
-        north: { entering: "830", exitEast: "250", exitSouth: "380", exitWest: "200" },
-        south: { entering: "860", exitNorth: "320", exitEast: "260", exitWest: "280" },
-        east: { entering: "720", exitNorth: "240", exitSouth: "210", exitWest: "270" },
-        west: { entering: "790", exitNorth: "300", exitEast: "220", exitSouth: "270" }
-      }
-    },
-    { 
-      name: 'Kings Cross', 
-      id: 'kings-cross',
-      vphData: {
-        north: { entering: "1520", exitEast: "490", exitSouth: "620", exitWest: "410" },
-        south: { entering: "1430", exitNorth: "580", exitEast: "410", exitWest: "440" },
-        east: { entering: "1290", exitNorth: "430", exitSouth: "380", exitWest: "480" },
-        west: { entering: "1350", exitNorth: "520", exitEast: "390", exitSouth: "440" }
-      }
-    }
-  ]);
+  // Used whilst the data is being served from the backend
+  // When this is true, display a loading screen so the user is still engaged
+  const [isLoading, setIsLoading] = useState(true);
 
+  const [error, setError] = useState(null);
+
+  // All of the projects stored in the backend
+  const [projects, setProjects] = useState([]);
+
+  // Project clicked on by the user, initially set to null
   const [selectedProject, setSelectedProject] = useState(null);
+
+  // GET Request 3: Get all projects stored in the backend
+  useEffect(() => {
+    axios.get('http://localhost:8080/api/projects')
+      .then((response) => {
+        const allProjects = [];
+
+        // console.log(response.data);
+
+        response.data.forEach(element => {
+          // Convert each response to the below format
+          const project = {
+            name: element.name,
+            id: element.name,
+            vphData: {
+              north: { enter: element.vphNorth.enter, exitEast: element.vphNorth.exitEast, exitSouth: element.vphNorth.exitSouth, exitWest: element.vphNorth.exitWest },
+              south: { enter: element.vphSouth.enter, exitNorth: element.vphSouth.exitNorth, exitEast: element.vphSouth.exitEast, exitWest: element.vphSouth.exitWest },
+              east: { enter: element.vphEast.enter, exitNorth: element.vphEast.exitNorth, exitSouth: element.vphEast.exitSouth, exitWest: element.vphEast.exitWest },
+              west: { enter: element.vphWest.enter, exitNorth: element.vphWest.exitNorth, exitEast: element.vphWest.exitEast, exitSouth: element.vphWest.exitSouth }
+            }
+          };
+          allProjects.push(project);
+        });
+        setProjects(allProjects);
+        setIsLoading(false);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+        setError(error);
+        setIsLoading(false);
+      });
+  }, []);
 
   const handleSelectProject = (project) => {
     setSelectedProject(project);
   };
   
+  // Loading screen whilst GET request is being processed
+  if (isLoading) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <Slab color="#00a6fb" size="medium" text="Loading Projects..." textColor="" />
+        <Link to="/MainPage" className={styles.loadingBackBtn}>
+          Back to Junction Configuration Menu
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.pageContainer}>
       {/* Page Header with Title and Back Button */}
@@ -74,28 +77,34 @@ const ProjectLeaderboard = () => {
         </Link>
       </div>
       
-      <div className={styles.container}>
-        <div className={styles.leftPanel}>
-          <h1 className={styles.title}>Projects</h1>
-          <p className={styles.subtitle}>Please select a project to view VPH data</p>
+      {error && <p>Error: {error.message}</p>}
+
+      {!isLoading && !error && (
+        <>
+          <div className={styles.container}>
+          <div className={styles.leftPanel}>
+            <h1 className={styles.title}>Projects</h1>
+            <p className={styles.subtitle}>Please select a project to view VPH data</p>
+            
+            <div className={styles.junctionList}>
+              {projects.map((project) => (
+                <div 
+                  key={project.id}
+                  className={`${styles.junctionRow} ${selectedProject && selectedProject.id === project.id ? styles.highlighted : ''}`}
+                  onClick={() => handleSelectProject(project)}
+                >
+                  <span>{project.name}</span>
+                </div>
+              ))}
+            </div>
+            </div>
           
-          <div className={styles.junctionList}>
-            {projects.map((project) => (
-              <div 
-                key={project.id}
-                className={`${styles.junctionRow} ${selectedProject && selectedProject.id === project.id ? styles.highlighted : ''}`}
-                onClick={() => handleSelectProject(project)}
-              >
-                <span>{project.name}</span>
-              </div>
-            ))}
+            <div className={styles.rightPanel}>
+              <VPHDataDisplay projectData={selectedProject} />
+            </div>
           </div>
-        </div>
-        
-        <div className={styles.rightPanel}>
-          <VPHDataDisplay projectData={selectedProject} />
-        </div>
-      </div>
+        </>
+      )};
     </div>
   );
 };

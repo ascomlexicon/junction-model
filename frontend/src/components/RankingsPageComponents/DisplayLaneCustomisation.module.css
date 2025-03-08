@@ -62,7 +62,7 @@
 }
 
 .specialLanesColumn {
-  padding: 15px;
+  padding-left: 15px;
   background: white;
   border-radius: 8px;
   border: 1px solid #ddd;
@@ -75,4 +75,14 @@
 
 .laneCustTitle {
   text-align: center;
+}
+
+.noSpecial {
+  font-size: 16px;
+  color: #666;
+  text-align: center;
+}
+
+.specialDurations h3 {
+  margin-top: 10px;
 }

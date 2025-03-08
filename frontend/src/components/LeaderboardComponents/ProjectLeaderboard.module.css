@@ -36,12 +36,12 @@
   border: 1px solid #ddd;
   align-self: right;
   transition: background-color 0.3s;
-  background-color: #f5f5f5;
+  background-color: rgba(248, 189, 80, 0.825);
   color: black;
 }
 
 .backButton:hover {
-  background-color: #eeeeee;
+  background-color: orange;
 }
 
 .container {
@@ -179,4 +179,23 @@
 
 .projectName {
   color: black;
+}
+
+.loadingBackBtn {
+  text-decoration: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  font-size: 14px;
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid #ddd;
+  align-self: right;
+  transition: background-color 0.3s;
+  background-color: #f5f5f5;
+  color: black;
+  margin: 10px;
+}
+
+.loadingBackBtn:hover {
+  background-color: #eeeeee;
 }
